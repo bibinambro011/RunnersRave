@@ -1,0 +1,184 @@
+<%-include("./partials/userheader")-%>
+<section class="pt-150 pb-150">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 m-auto">
+       
+         
+            <div
+              class="login_wrap widget-taber-content p-30 background-white border-radius-5"
+            >
+              <div class="padding_eight_all bg-white">
+                <div class="heading_s1">
+                  <h3 class="mb-30">Create an Account</h3>
+                </div>
+                <p class="mb-50 font-sm">
+                  Your personal data will be used to support your
+                  experience throughout this website, to manage access to
+                  your account, and for other purposes described in our
+                  privacy policy
+                </p>
+                <p><p><%=locals.errordata ? errordata:''%></p></p>
+                <form method="post" name="myform" action="/user_registration" onsubmit="return validateform()">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                     
+                      name="username"
+                      placeholder="Username"
+                    />
+                    <span id="username-error" style="color: red;"></span>
+                  </div>
+                  <div class="form-group">
+                    <input
+                      type="text"
+                   
+                      name="email"
+                      placeholder="Email"
+                    />
+                    <span id="email-error" style="color: red";></span>
+                  </div>
+                  <div class="form-group">
+                    <input
+                     
+                      type="tel"
+                      name="phone" pattern="[0-9]{10}" 
+                      placeholder="Enter your mobile number"
+                    />
+                    <span id="tel-error" style="color: red";></span>
+                  </div>
+                  <div class="form-group">
+                    <input
+                     
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                    />
+                    <span id="password-error" style="color: red";></span>
+                  </div>
+                  <div class="form-group">
+                    <input
+                     
+                      type="password"
+                      name="password"
+                      placeholder="Confirm password"
+                    />
+                    <span id="confirm-password-error" style="color: red";></span>
+                  </div>
+                
+              
+                  <div class="login_footer form-group">
+                    <div class="chek-form">
+                      <div class="custome-checkbox">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="checkbox"
+                          id="exampleCheckbox12"
+                          value=""
+                        />
+                        <label
+                          class="form-check-label"
+                          for="exampleCheckbox12"
+                          ><span
+                            >I agree to terms &amp; Policy.</span
+                          ></label
+                        >
+                      </div>
+                    </div>
+                    <a href="page-privacy-policy.html"
+                      ><i class="fi-rs-book-alt mr-5 text-muted"></i>Lean
+                      more</a
+                    >
+                  </div>
+                  <div class="form-group">
+                    <button
+                      type="submit"
+                      class="btn btn-fill-out btn-block hover-up"
+                      name="login"
+                    >
+                      Submit &amp; Register
+                    </button>
+                  </div>
+                </form>
+                <div class="divider-text-center mt-15 mb-15">
+                  <span> or</span>
+                </div>
+            
+                <div class="text-muted text-center">
+                  Already have an account? <a href="/signin">Sign in now</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+
+
+
+<script>
+function validateform() {
+// Reset previous error messages
+document.getElementById('username-error').innerText = '';
+document.getElementById('email-error').innerText = '';
+document.getElementById('tel-error').innerText = '';
+document.getElementById('password-error').innerText = '';
+document.getElementById('confirm-password-error').innerText = '';
+
+// Retrieve form inputs
+var username = document.forms['myform']['username'].value;
+var email = document.forms['myform']['email'].value;
+var phone = document.forms['myform']['phone'].value;
+var password = document.forms['myform']['password'].value;
+var confirmPassword = document.forms['myform']['confirmpassword'].value;
+
+// Validation for username
+if (username === '' || username.trim() === '') {
+document.getElementById('username-error').innerText = 'Username is required.';
+return false;
+}
+
+// Validation for email
+var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!email.match(emailRegex)) {
+document.getElementById('email-error').innerText = 'Enter a valid email address.';
+return false;
+}
+
+// Validation for phone number
+var phoneRegex = /^[0-9]{10}$/;
+if (!phone.match(phoneRegex)) {
+document.getElementById('tel-error').innerText = 'Enter a valid 10-digit phone number.';
+return false;
+}
+
+// Validation for password
+if (password.length < 6) {
+document.getElementById('password-error').innerText = 'Password must be at least 6 characters long.';
+return false;
+}
+
+// Validation for confirm password
+if (confirmPassword !== password) {
+document.getElementById('confirm-password-error').innerText = 'Passwords do not match.';
+return false;
+}
+
+// Validation for checkbox
+if (!document.forms['myform']['checkbox'].checked) {
+alert('Please agree to the terms & policy.');
+return false;
+}
+
+return true; // Form is valid, allow submission
+}
+</script>
+<%-include("footer")-%>
+
+
+

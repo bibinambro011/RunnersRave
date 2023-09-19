@@ -1,0 +1,180 @@
+<%-include("../partials/userheader")-%>
+
+
+<body>
+  <section class="product-tabs pt-25 pb-20 wow fadeIn animated">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="widget-category mb-30">
+            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
+              CATEGORY
+            </h5>
+            <ul class="categories">
+              <li><a href="shop-grid-right.html">RUNNING SHOES</a></li>
+              <li><a href="shop-grid-right.html">SPIKES</a></li>
+              <li><a href="shop-grid-right.html"> BOOTS</a></li>
+            </ul>
+          </div>
+          <div class="widget-category mb-30">
+            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
+              BRANDS
+            </h5>
+            <ul class="categories">
+              <li><a href="shop-grid-right.html">ADIDAS</a></li>
+              <li><a href="shop-grid-right.html">NIKE</a></li>
+              <li><a href="shop-grid-right.html"> PUMA</a></li>
+              <li><a href="shop-grid-right.html">UNDER ARMOUR</a></li>
+              <li><a href="shop-grid-right.html">ASICS</a></li>
+            </ul>
+          </div>
+          <div class="widget-category mb-30">
+            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
+              SORT BY
+            </h5>
+            <ul class="categories">
+              <li><a href="shop-grid-right.html">POPULARITY</a></li>
+              <li><a href="shop-grid-right.html">AVERAGE RATING</a></li>
+              <li><a href="shop-grid-right.html">PRICE: LOW TO HIGH</a></li>
+              <li><a href="shop-grid-right.html">PRICE: HIGH TO LOW</a></li>
+            </ul>
+          </div>
+          <div class="widget-category mb-30">
+            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
+              PRICE RANGE
+            </h5>
+            <ul class="categories">
+              <li><a href="shop-grid-right.html">$0-$200</a></li>
+              <li><a href="shop-grid-right.html">$200-$400</a></li>
+              <li><a href="shop-grid-right.html">$400-$600</a></li>
+              <li><a href="shop-grid-right.html">$600-$800</a></li>
+              <li><a href="shop-grid-right.html">800$+</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-9">
+          <div class="tab-header">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="nav-tab-one"
+                  data-bs-toggle="tab"
+                  data-bs-target="#tab-one"
+                  type="button"
+                  role="tab"
+                  aria-controls="tab-one"
+                  aria-selected="true"
+                >
+                  Featured
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="nav-tab-two"
+                  data-bs-toggle="tab"
+                  data-bs-target="#tab-two"
+                  type="button"
+                  role="tab"
+                  aria-controls="tab-two"
+                  aria-selected="false"
+                >
+                  Popular
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="nav-tab-three"
+                  data-bs-toggle="tab"
+                  data-bs-target="#tab-three"
+                  type="button"
+                  role="tab"
+                  aria-controls="tab-three"
+                  aria-selected="false"
+                >
+                  New added
+                </button>
+              </li>
+            </ul>
+            <a href="#" class="view-more d-none d-md-flex"
+              >View More<i class="fi-rs-angle-double-small-right"></i
+            ></a>
+          </div>
+          <!--End nav-tabs-->
+          <div class="tab-content wow fadeIn animated" id="myTabContent">
+            <% products.forEach((product, index) => { %> <% if (index % 3 === 0)
+            { %>
+            <div class="row product-grid-4">
+              <% } %>
+              <div class="col-lg-4 col-md-4 col-12 col-sm-6">
+                <div class="product-cart-wrap mb-30">
+                  <div
+                    class="product-img-action-wrap"
+                    style="width: 200px; height: 200px"
+                  >
+                    <div class="product-img product-img-zoom">
+                      <a href="/shop-product-right.html/<%= product._id %>">
+                        <img
+                          src="data:<%= product.img[0].contentType %>;base64,<%= product.img[0].data.toString('base64') %>"
+                          alt="<%= product.name %>"
+                          class="img-fluid rounded"
+                        />
+                      </a>
+                    </div>
+                    <!-- <div class="product-action-1">
+                                                <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                            </div> -->
+                    <!-- <div class="product-badges product-badges-position product-badges-mrg">
+                                                <span class="hot">Hot</span>
+                                            </div> -->
+                  </div>
+                  <div class="product-content-wrap">
+                    <div class="product-category">
+                      <a href="shop-grid-right.html"
+                        ><%= product.category[0] %></a
+                      >
+                    </div>
+                    <h2>
+                      <a href="shop-product-right.html"><%= product.name %></a>
+                    </h2>
+                    <!-- <div class="rating-result" title="90%">
+                                                <span>
+                                                    <span>90%</span>
+                                                </span>
+                                            </div> -->
+                    <div class="product-price">
+                      <span><%= product.selling_price %></span>
+                      <span class="old-price"><%= product.price %></span>
+                    </div>
+                    <div class="product-action-1 show">
+                      <a
+                        aria-label="Add To Cart"
+                        class="action-btn hover-up"
+                        href="shop-cart.html"
+                        ><i class="fi-rs-shopping-bag-add"></i
+                      ></a>
+                      <a
+                        aria-label="Add To Wishlist"
+                        class="action-btn hover-up"
+                        href="shop-wishlist.html"
+                        ><i class="fi-rs-heart"></i
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% if (index % 3 === 2 || index === products.length - 1) { %>
+            </div>
+            <% } %> <% }); %>
+          </div>
+
+          <%-include("../partials/userfooter")-%>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>

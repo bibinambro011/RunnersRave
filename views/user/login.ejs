@@ -1,0 +1,104 @@
+<%-include("../partials/userheader")-%>
+<div style="text-align: center;">
+<section class="pt-150 pb-150">
+  <div class="container">
+  
+      <div class="col-lg-4 m-auto">
+        <div class="row">
+         
+            <div
+              class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5"
+            >
+              <div class="padding_eight_all bg-white">
+                <div class="heading_s1">
+                  <h3 class="mb-30">Login</h3>
+                  <p id="para"><%=locals.errordata ? errordata:''%></p>
+                </div>
+              
+
+
+            <form
+  method="post"
+  name="myform"
+  action="/login"
+  onsubmit="return validateform();"
+>
+  <div class="form-group">
+    <input type="text" name="email" placeholder="Your Email" />
+    <span id="emailerror" style="color: red;"></span>
+  </div>
+  <div class="form-group">
+    <input type="password" name="password" placeholder="Password" />
+    <span id="passworderror" style="color: red;"></span>
+  </div>
+  <div class="login_footer form-group">
+    <div class="chek-form">
+      <div class="custome-checkbox">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          name="checkbox"
+          id="exampleCheckbox1"
+          value=""
+        />
+        <label class="form-check-label" for="exampleCheckbox1"
+          ><span>Remember me</span></label
+        >
+      </div>
+    </div>
+    <a class="text-muted" href="/forgotpassword">Forgot password?</a>
+  </div>
+  <div class="form-group">
+    <button
+      type="submit"
+      class="btn btn-fill-out btn-block hover-up"
+      name="login"
+    >
+      Log in
+    </button>
+  </div>
+  <h6>New User ? <a href="/registerpage">create an account</a></h6>
+</form>
+</div>
+</div>
+</div>
+<div class="col-lg-1"></div>
+</div>
+<script>
+  var newname = document.myform.email;
+  const para=document.getElementById("para")
+  newname.addEventListener("click",(e)=>{
+    para.innerText=" ";
+  })
+  function validateform() {
+    var name = document.myform.email.value;
+    var password = document.myform.password.value;
+
+    if (name == null || name == "") {
+      document.getElementById("emailerror").innerText="Name can't be blank"
+     
+      return false;
+    }else if (password.length < 6 ) {
+      if(name !==null || password !==""){
+      document.getElementById("emailerror").innerText="";
+      
+    }
+      document.getElementById("passworderror").innerText="Password must be at least 6 characters long."
+     
+      return false;
+    }
+
+    // If the form passes validation, return true to allow submission
+    return true;
+  }
+</script>
+
+      
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%-include("../partials/userfooter")-%>
+
