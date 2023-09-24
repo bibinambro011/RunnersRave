@@ -1,180 +1,671 @@
-<%-include("../partials/userheader")-%>
 
+        
+        <%-include("../partials/userheader")-%>
+        
 
-<body>
-  <section class="product-tabs pt-25 pb-20 wow fadeIn animated">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-3">
-          <div class="widget-category mb-30">
-            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
-              CATEGORY
-            </h5>
-            <ul class="categories">
-              <li><a href="shop-grid-right.html">RUNNING SHOES</a></li>
-              <li><a href="shop-grid-right.html">SPIKES</a></li>
-              <li><a href="shop-grid-right.html"> BOOTS</a></li>
-            </ul>
-          </div>
-          <div class="widget-category mb-30">
-            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
-              BRANDS
-            </h5>
-            <ul class="categories">
-              <li><a href="shop-grid-right.html">ADIDAS</a></li>
-              <li><a href="shop-grid-right.html">NIKE</a></li>
-              <li><a href="shop-grid-right.html"> PUMA</a></li>
-              <li><a href="shop-grid-right.html">UNDER ARMOUR</a></li>
-              <li><a href="shop-grid-right.html">ASICS</a></li>
-            </ul>
-          </div>
-          <div class="widget-category mb-30">
-            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
-              SORT BY
-            </h5>
-            <ul class="categories">
-              <li><a href="shop-grid-right.html">POPULARITY</a></li>
-              <li><a href="shop-grid-right.html">AVERAGE RATING</a></li>
-              <li><a href="shop-grid-right.html">PRICE: LOW TO HIGH</a></li>
-              <li><a href="shop-grid-right.html">PRICE: HIGH TO LOW</a></li>
-            </ul>
-          </div>
-          <div class="widget-category mb-30">
-            <h5 class="section-title style-1 mb-30 wow fadeIn animated">
-              PRICE RANGE
-            </h5>
-            <ul class="categories">
-              <li><a href="shop-grid-right.html">$0-$200</a></li>
-              <li><a href="shop-grid-right.html">$200-$400</a></li>
-              <li><a href="shop-grid-right.html">$400-$600</a></li>
-              <li><a href="shop-grid-right.html">$600-$800</a></li>
-              <li><a href="shop-grid-right.html">800$+</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-9">
-          <div class="tab-header">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link active"
-                  id="nav-tab-one"
-                  data-bs-toggle="tab"
-                  data-bs-target="#tab-one"
-                  type="button"
-                  role="tab"
-                  aria-controls="tab-one"
-                  aria-selected="true"
-                >
-                  Featured
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link"
-                  id="nav-tab-two"
-                  data-bs-toggle="tab"
-                  data-bs-target="#tab-two"
-                  type="button"
-                  role="tab"
-                  aria-controls="tab-two"
-                  aria-selected="false"
-                >
-                  Popular
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link"
-                  id="nav-tab-three"
-                  data-bs-toggle="tab"
-                  data-bs-target="#tab-three"
-                  type="button"
-                  role="tab"
-                  aria-controls="tab-three"
-                  aria-selected="false"
-                >
-                  New added
-                </button>
-              </li>
-            </ul>
-            <a href="#" class="view-more d-none d-md-flex"
-              >View More<i class="fi-rs-angle-double-small-right"></i
-            ></a>
-          </div>
-          <!--End nav-tabs-->
-          <div class="tab-content wow fadeIn animated" id="myTabContent">
-            <% products.forEach((product, index) => { %> <% if (index % 3 === 0)
-            { %>
-            <div class="row product-grid-4">
-              <% } %>
-              <div class="col-lg-4 col-md-4 col-12 col-sm-6">
-                <div class="product-cart-wrap mb-30">
-                  <div
-                    class="product-img-action-wrap"
-                    style="width: 200px; height: 200px"
-                  >
-                    <div class="product-img product-img-zoom">
-                      <a href="/shop-product-right.html/<%= product._id %>">
-                        <img
-                          src="data:<%= product.img[0].contentType %>;base64,<%= product.img[0].data.toString('base64') %>"
-                          alt="<%= product.name %>"
-                          class="img-fluid rounded"
-                        />
-                      </a>
-                    </div>
-                    <!-- <div class="product-action-1">
-                                                <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-                                            </div> -->
-                    <!-- <div class="product-badges product-badges-position product-badges-mrg">
-                                                <span class="hot">Hot</span>
-                                            </div> -->
-                  </div>
-                  <div class="product-content-wrap">
-                    <div class="product-category">
-                      <a href="shop-grid-right.html"
-                        ><%= product.category[0] %></a
-                      >
-                    </div>
-                    <h2>
-                      <a href="shop-product-right.html"><%= product.name %></a>
-                    </h2>
-                    <!-- <div class="rating-result" title="90%">
-                                                <span>
-                                                    <span>90%</span>
-                                                </span>
-                                            </div> -->
-                    <div class="product-price">
-                      <span><%= product.selling_price %></span>
-                      <span class="old-price"><%= product.price %></span>
-                    </div>
-                    <div class="product-action-1 show">
-                      <a
-                        aria-label="Add To Cart"
-                        class="action-btn hover-up"
-                        href="shop-cart.html"
-                        ><i class="fi-rs-shopping-bag-add"></i
-                      ></a>
-                      <a
-                        aria-label="Add To Wishlist"
-                        class="action-btn hover-up"
-                        href="shop-wishlist.html"
-                        ><i class="fi-rs-heart"></i
-                      ></a>
-                    </div>
-                  </div>
+    <div class="mobile-header-active mobile-header-wrapper-style">
+        <div class="mobile-header-wrapper-inner">
+            <div class="mobile-header-top">
+                <div class="mobile-header-logo">
+                    <a href="index.html"><img src="/imgs/theme/logo.svg" alt="logo"></a>
                 </div>
-              </div>
-              <% if (index % 3 === 2 || index === products.length - 1) { %>
+                <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+                    <button class="close-style search-close">
+                        <i class="icon-top"></i>
+                        <i class="icon-bottom"></i>
+                    </button>
+                </div>
             </div>
-            <% } %> <% }); %>
-          </div>
-
-          <%-include("../partials/userfooter")-%>
+            <div class="mobile-header-content-area">
+                <div class="mobile-search search-style-3 mobile-header-border">
+                    <form action="#">
+                        <input type="text" placeholder="Search for items…">
+                        <button type="submit"><i class="fi-rs-search"></i></button>
+                    </form>
+                </div>
+                
+                <div class="mobile-header-info-wrap mobile-header-border">
+                    <div class="single-mobile-header-info mt-30">
+                        <a  href="page-contact.html"> Our location </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="page-login-register.html">Log In  </a>
+                        <a href="page-login-register.html"> Sign Up </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="#">(+01) - 2345 - 6789 </a>
+                    </div>
+                </div>
+                <div class="mobile-social-icon">
+                    <h5 class="mb-15 text-grey-4">Follow Us</h5>
+                    <a href="#"><img src="/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
+    <main class="main">       
+        <section class="home-slider position-relative pt-50">
+            <div class="hero-slider-1 dot-style-1 dot-style-1-position-1">
+                <div class="single-hero-slider single-animation-wrap">
+                    <div class="container">
+                        <div class="row align-items-center slider-animated-1">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="hero-slider-content-2">
+                                    <h4 class="animated">Trade-in offer</h4>
+                                    <h2 class="animated fw-900">Supper value deals</h2>
+                                    <h1 class="animated fw-900 text-brand">On all products</h1>
+                                    <p class="animated">Save more with coupons & up to 70% off</p>
+                                    <a class="animated btn btn-brush btn-brush-3" href="shop-product-right.html"> Shop Now </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-6">
+                                <div class="single-slider-img single-slider-img-1">
+                                    <img class="animated slider-1-1" src="/imgs/slider/slider-1.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-hero-slider single-animation-wrap">
+                    <div class="container">
+                        <div class="row align-items-center slider-animated-1">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="hero-slider-content-2">
+                                    <h4 class="animated">Hot promotions</h4>
+                                    <h2 class="animated fw-900">Fashion Trending</h2>
+                                    <h1 class="animated fw-900 text-7">Great Collection</h1>
+                                    <p class="animated">Save more with coupons & up to 20% off</p>
+                                    <a class="animated btn btn-brush btn-brush-2" href="shop-product-right.html"> Discover Now </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-6">
+                                <div class="single-slider-img single-slider-img-1">
+                                    <img class="animated slider-1-2" src="/imgs/slider/slider-2.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-hero-slider single-animation-wrap">
+                    <div class="container">
+                        <div class="row align-items-center slider-animated-1">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="hero-slider-content-2">
+                                    <h4 class="animated">Upcoming Offer</h4>
+                                    <h2 class="animated fw-900">Big Deals From</h2>
+                                    <h1 class="animated fw-900 text-8">Manufacturer</h1>
+                                    <p class="animated">Clothing, Shoes, Bags, Wallets...</p>
+                                    <a class="animated btn btn-brush btn-brush-1" href="shop-product-right.html"> Shop Now </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-6">
+                                <div class="single-slider-img single-slider-img-1">
+                                    <img class="animated slider-1-3" src="/imgs/slider/slider-3.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-arrow hero-slider-1-arrow"></div>
+        </section>
+       
+        <section class="product-tabs section-padding position-relative wow fadeIn animated">
+            <div class="bg-square"></div>
+            <div class="container">
+                <div class="tab-header">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
+                        </li>
+                    </ul>
+                    <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
+                </div>
+                <!--End nav-tabs-->
+                <div class="tab-content wow fadeIn animated" id="myTabContent">
+                    <% products.forEach((product, index) => { %> <% if (index % 3 === 0)
+                    { %>
+                    <div class="row product-grid-4">
+                      <% } %>
+                      <div class="col-lg-4 col-md-4 col-12 col-sm-6">
+                        <div class="product-cart-wrap mb-30">
+                          <div
+                            class="product-img-action-wrap"
+                            style="width: 200px; height: 200px"
+                          >
+                            <div class="product-img product-img-zoom">
+                              <a href="/product/<%= product._id %>">
+                                <img
+                                  src="<%= product.images[0] %>"
+                                  alt="<%= product.name %>"
+                                  class="img-fluid rounded"
+                                />
+                              </a>
+                            </div>
+                           
+                          </div>
+                          <div class="product-content-wrap">
+                            <div class="product-category">
+                              <a href="shop-grid-right.html"
+                                ><%= product.category %></a
+                              >
+                            </div>
+                            <h2>
+                              <a href="shop-product-right.html"><%= product.name %></a>
+                            </h2>
+                            <!-- <div class="rating-result" title="90%">
+                                                        <span>
+                                                            <span>90%</span>
+                                                        </span>
+                                                    </div> -->
+                            <div class="product-price">
+                              <span><%= product.selling_price %></span>
+                              <span class="old-price"><%= product.price %></span>
+                            </div>
+                            <div class="product-action-1 show">
+                              <a
+                                aria-label="Add To Cart"
+                                class="action-btn hover-up"
+                                href="/addtocart"
+                                ><i class="fi-rs-shopping-bag-add"></i
+                              ></a>
+                              <a
+                                aria-label="Add To Wishlist"
+                                class="action-btn hover-up"
+                                href="/addtowishlist"
+                                ><i class="fi-rs-heart"></i
+                              ></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <% if (index % 3 === 2 || index === products.length - 1) { %>
+                    </div>
+                    <% } %> <% }); %>
+                  </div>                        
+                        
+                        
+                    </div>
+                    <!--En tab one (Featured)-->
+                   
+                    <!--En tab two (Popular)-->
+                 
+                    <!--En tab three (New added)-->
+                </div>
+                <!--End tab-content-->
+            </div>
+        </section>
+        <section class="banner-2 section-padding pb-0">
+            <div class="container">
+                <div class="banner-img banner-big wow fadeIn animated f-none">
+                    <img src="/imgs/banner/banner-4.png" alt="">
+                    <div class="banner-text d-md-block d-none">
+                        <h4 class="mb-15 mt-40 text-brand">Repair Services</h4>
+                        <h1 class="fw-600 mb-20">We're an Apple <br>Authorised Service Provider</h1>
+                        <a href="shop-grid-right.html" class="btn">Learn More <i class="fi-rs-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+      
+        <section class="banners mb-15">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="banner-img wow fadeIn animated">
+                            <img src="/imgs/banner/banner-1.png" alt="">
+                            <div class="banner-text">
+                                <span>Smart Offer</span>
+                                <h4>Save 20% on <br>Woman Bag</h4>
+                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="banner-img wow fadeIn animated">
+                            <img src="/imgs/banner/banner-2.png" alt="">
+                            <div class="banner-text">
+                                <span>Sale off</span>
+                                <h4>Great Summer <br>Collection</h4>
+                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </section>
+       
+        
+        
+       
+        <section class="section-padding">
+            <div class="container pt-25 pb-20">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h3 class="section-title mb-20"><span>From</span> blog</h3>
+                        <div class="post-list mb-4 mb-lg-0">
+                            <article class="wow fadeIn animated">
+                                <div class="d-md-flex d-block">
+                                    <div class="post-thumb d-flex mr-15">
+                                        <a class="color-white" href="blog-post-fullwidth.html">
+                                            <img src="/imgs/blog/blog-2.jpg" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="post-content">
+                                        <div class="entry-meta mb-10 mt-10">
+                                            <a class="entry-meta meta-2" href="blog-category-fullwidth.html"><span class="post-in font-x-small">Fashion</span></a>
+                                        </div>
+                                        <h4 class="post-title mb-25 text-limit-2-row">
+                                            <a href="blog-post-fullwidth.html">Qualcomm is developing a Nintendo Switch-like console, report says</a>
+                                        </h4>
+                                        <div class="entry-meta meta-1 font-xs color-grey mt-10 pb-10">
+                                            <div>
+                                                <span class="post-on">14 April 2021</span>
+                                                <span class="hit-count has-dot">12M Views</span>
+                                            </div>
+                                            <a href="blog-post-right.html">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="wow fadeIn animated">
+                                <div class="d-md-flex d-block">
+                                    <div class="post-thumb d-flex mr-15">
+                                        <a class="color-white" href="blog-post-fullwidth.html">
+                                            <img src="/imgs/blog/blog-1.jpg" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="post-content">
+                                        <div class="entry-meta mb-10 mt-10">
+                                            <a class="entry-meta meta-2" href="blog-category-fullwidth.html"><span class="post-in font-x-small">Healthy</span></a>
+                                        </div>
+                                        <h4 class="post-title mb-25 text-limit-2-row">
+                                            <a href="blog-post-fullwidth.html">Not even the coronavirus can derail 5G's global momentum</a>
+                                        </h4>
+                                        <div class="entry-meta meta-1 font-xs color-grey mt-10 pb-10">
+                                            <div>
+                                                <span class="post-on">14 April 2021</span>
+                                                <span class="hit-count has-dot">12M Views</span>
+                                            </div>
+                                            <a href="blog-post-right.html">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="banner-img banner-1 wow fadeIn animated">
+                                    <img src="/imgs/banner/banner-5.jpg" alt="">
+                                    <div class="banner-text">
+                                        <span>Accessories</span>
+                                        <h4>Save 17% on <br>Autumn Hat</h4>
+                                        <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="banner-img mb-15 wow fadeIn animated">
+                                    <img src="/imgs/banner/banner-6.jpg" alt="">
+                                    <div class="banner-text">
+                                        <span>Big Offer</span>
+                                        <h4>Save 20% on <br>Women's socks</h4>
+                                        <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                                <div class="banner-img banner-2 wow fadeIn animated">
+                                    <img src="/imgs/banner/banner-7.jpg" alt="">
+                                    <div class="banner-text">
+                                        <span>Smart Offer</span>
+                                        <h4>Save 20% on <br>Eardrop</h4>
+                                        <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="banner-bg wow fadeIn animated" style="background-image: url('/imgs/banner/banner-8.jpg')">
+                            <div class="banner-content">
+                                <h5 class="text-grey-4 mb-15">Shop Today’s Deals</h5>
+                                <h2 class="fw-600">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mb-45">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-sm-5 mb-md-0">
+                        <div class="banner-img wow fadeIn animated mb-md-4 mb-lg-0">
+                            <img src="/imgs/banner/banner-10.jpg" alt="">
+                            <div class="banner-text">
+                                <span>Shoes Zone</span>
+                                <h4>Save 17% on <br>All Items</h4>
+                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-sm-5 mb-md-0">
+                        <h4 class="section-title style-1 mb-30 wow fadeIn animated">Deals & Outlet</h4>
+                        <div class="product-list-small wow fadeIn animated">
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-3.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Fish Print Patched T-shirt</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-4.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Vintage Floral Print Dress</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-5.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Multi-color Stripe Circle Print T-Shirt</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-sm-5 mb-md-0">
+                        <h4 class="section-title style-1 mb-30 wow fadeIn animated">Top Selling</h4>
+                        <div class="product-list-small wow fadeIn animated">
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-6.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Geometric Printed Long Sleeve Blosue</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-7.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Print Patchwork Maxi Dress</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-8.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Daisy Floral Print Straps Jumpsuit</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="section-title style-1 mb-30 wow fadeIn animated">Hot Releases</h4>
+                        <div class="product-list-small wow fadeIn animated">
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-9.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Floral Print Casual Cotton Dress</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-1.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Ruffled Solid Long Sleeve Blouse</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="row align-items-center">
+                                <figure class="col-md-4 mb-0">
+                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-2.jpg" alt=""></a>
+                                </figure>
+                                <div class="col-md-8 mb-0">
+                                    <h4 class="title-small">
+                                        <a href="shop-product-right.html">Multi-color Print V-neck T-Shirt</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        <span>$238.85 </span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="main">
+        <section class="newsletter p-30 text-white wow fadeIn animated">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 mb-md-3 mb-lg-0">
+                        <div class="row align-items-center">
+                            <div class="col flex-horizontal-center">
+                                <img class="icon-email" src="/imgs/theme/icons/icon-email.svg" alt="">
+                                <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
+                            </div>
+                            <div class="col my-4 my-md-0 des">
+                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <!-- Subscribe Form -->
+                        <form class="form-subcriber d-flex wow fadeIn animated">
+                            <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
+                            <button class="btn bg-dark text-white" type="submit">Subscribe</button>
+                        </form>
+                        <!-- End Subscribe Form -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widget-about font-md mb-md-5 mb-lg-0">
+                            <div class="logo logo-width-1 wow fadeIn animated">
+                                <a href="index.html"><img src="/imgs/theme/logo.svg" alt="logo"></a>
+                            </div>
+                            <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                            <p class="wow fadeIn animated">
+                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                            </p>
+                            <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                                <a href="#"><img src="/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                <a href="#"><img src="/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                <a href="#"><img src="/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                <a href="#"><img src="/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                                <a href="#"><img src="/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">About</h5>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms &amp; Conditions</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support Center</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2  col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                        <ul class="footer-list wow fadeIn animated">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Order</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                        <div class="row">
+                            <div class="col-md-8 col-lg-12">
+                                <p class="wow fadeIn animated">From App Store or Google Play</p>
+                                <div class="download-app wow fadeIn animated">
+                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active" src="/imgs/theme/app-store.jpg" alt=""></a>
+                                    <a href="#" class="hover-up"><img src="/imgs/theme/google-play.jpg" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                                <img class="wow fadeIn animated" src="/imgs/theme/payment-method.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container pb-20 wow fadeIn animated">
+            <div class="row">
+                <div class="col-12 mb-20">
+                    <div class="footer-bottom"></div>
+                </div>
+                <div class="col-lg-6">
+                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2021, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+                </div>
+                <div class="col-lg-6">
+                    <p class="text-lg-end text-start font-sm text-muted mb-0">
+                        Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-10">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS-->
+    <script src="/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/js/plugins/slick.js"></script>
+    <script src="/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="/js/plugins/wow.js"></script>
+    <script src="/js/plugins/jquery-ui.js"></script>
+    <script src="/js/plugins/perfect-scrollbar.js"></script>
+    <script src="/js/plugins/magnific-popup.js"></script>
+    <script src="/js/plugins/select2.min.js"></script>
+    <script src="/js/plugins/waypoints.js"></script>
+    <script src="/js/plugins/counterup.js"></script>
+    <script src="/js/plugins/jquery.countdown.min.js"></script>
+    <script src="/js/plugins/images-loaded.js"></script>
+    <script src="/js/plugins/isotope.js"></script>
+    <script src="/js/plugins/scrollup.js"></script>
+    <script src="/js/plugins/jquery.vticker-min.js"></script>
+    <script src="/js/plugins/jquery.theia.sticky.js"></script>
+    <script src="/js/plugins/jquery.elevatezoom.js"></script>
+    <!-- Template  JS -->
+    <script src="/js/main.js"></script>
+    <script src="/js/shop.js"></script>
+
+   
 </body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:25:49 GMT -->
+</html>

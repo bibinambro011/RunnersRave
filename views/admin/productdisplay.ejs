@@ -1,0 +1,57 @@
+<%-include("../partials/adminheader")-%>
+<a href="productpage" class="btn btn-warning btn-sm mr-1 mt-10 ml-50"
+  >Add product</a
+>
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Product Details</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped mx-auto">
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Description</th>
+          <th scope="col">Price</th>
+          <th scope="col">Size</th>
+          <th scope="col">Category</th>
+          <th scope="col">Image</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(function(product) { %>
+         
+        <tr>
+          <td><%= product.name %></td>
+          <td><%= product.description %></td>
+          <td>$<%= product.price %></td>
+          <td><%= product.size %></td>
+          <td><%= product.category %></td>
+          <td>
+            <img
+            src="<%= product.images[0] %>"
+              alt="<%= product.name %>"
+              class="img-fluid rounded"
+              style="max-width: 100px"
+            />
+          </td>
+          <td>
+            <a
+              href="/admin/edit-product/<%= product._id %>"
+              class="btn btn-warning btn-sm mr-1"
+              >Edit</a
+            >
+
+            <!-- <a
+              href="/admin/delete-product/<%= product._id %>"
+              class="btn btn-danger btn-sm"
+              >Delete</a
+            > -->
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%-include("../partials/adminfooter")-%>
+

@@ -17,9 +17,55 @@
     <link rel="shortcut icon" type="image/x-icon" href="/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> 
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css">  
+    
+    
 </head>
 
 <body>
+    <header class="header-area header-style-1 header-height-2">
+        <div class="header-top header-top-ptb-1 d-none d-lg-block">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info">
+                            <ul>
+                                <li><i class="fi-rs-smartphone"></i> <a href="#">(+01) - 2345 - 6789</a></li>
+                                <li><i class="fi-rs-marker"></i><a  href="page-contact.html">Our location</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-4">
+                        <div class="text-center">
+                            <div id="news-flash" class="d-inline-block">
+                                <ul>
+                                    <li>Get great devices up to 50% off <a href="shop-grid-right.html">View details</a></li>
+                                    <li>Supper Value Deals - Save more with coupons</li>
+                                    <li>Trendy 25silver jewelry, save up 35% off today <a href="shop-grid-right.html">Shop now</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info header-info-right">
+                            <ul>
+                                <li>
+                                    <a class="language-dropdown-active" href="#"> <i class="fi-rs-world"></i> English <i class="fi-rs-angle-small-down"></i></a>
+                                    <ul class="language-dropdown">
+                                        <li><a href="#"><img src="/imgs/theme/flag-fr.png" alt="">Français</a></li>
+                                        <li><a href="#"><img src="/imgs/theme/flag-dt.png" alt="">Deutsch</a></li>
+                                        <li><a href="#"><img src="/imgs/theme/flag-ru.png" alt="">Pусский</a></li>
+                                    </ul>
+                                </li>
+                                <li><i class="fi-rs-user"></i><a href="/login">Log In</a></li>
+                                <li><i class="fi-rs-user"></i><a href="/signup">Sign Up</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     <header class="header-area header-style-5">
        
         <div class="header-bottom sticky-bar sticky-white-bg">
@@ -31,22 +77,26 @@
                     <div class="main-menu main-menu-grow main-menu-padding-1 main-menu-lh-1 main-menu-mrg-1 hm3-menu-padding d-none d-lg-block hover-boder">
                         <nav>
                             <ul>
-                                <li><a class="active" href="/userhome">Home <i class="fi-rs-angle-down"></i></a>
+                                <li><a class="active" href="/userhome">Home </i></a>
                                     
                                 </li>
-                                <li><a href="/aboutpage">about <i class="fi-rs-angle-down"></i></a>
+                                <li><a href="/aboutpage">about</a>
                                    
                                 </li>
                                
-                                <li><a href="blog-category-grid.html">accounts <i class="fi-rs-angle-down"></i></a>
+                                <li><a href="/useraccount">Account <i class="fi-rs-angle-down"></i></a>
                                     <ul class="sub-menu">
                                         <li><a href="blog-category-grid.html">contact</a></li>
                                         <li><a href="/accountpage">My account</a></li>
-                                        <li><a href="/userloginacc">login</a></li>
+                                        <li><a href="/login">login</a></li>
                                         <li><a href="/logout">logout</a></li>
                                       
                                     </ul>
                                 </li>
+                            </li>
+                            <li><a href="/shop">Shop</a>
+                               
+                            </li>
                                
                                
                             </ul>
@@ -54,22 +104,49 @@
                     </div>
                     <div class="header-action-right">
                         <div class="search-style-2">
-                            <!-- <form action="#"> -->
-                                <input type="text" placeholder="Search for items…">
-                            <!-- </form> -->
+                            <form action="/productsearch" method="post">
+                                <input type="text" placeholder="Search for items…" name="search">
+                               
+                            </form>
                         </div>
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="/show_wishlist">
                                     <img class="svgInject" alt="Evara" src="/imgs/theme/icons/icon-heart.svg">
                                     
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="shop-cart.html">
+                                <a class="mini-cart-icon" href="/show_cart">
                                     <img alt="Evara" src="/imgs/theme/icons/icon-cart.svg">
                                     
                                 </a>
+                               
+                             
+                                </div>
+                                <div class="header-action-icon-2">
+                                    <a class="mini-cart-icon" href="/login">
+                                       <h5>login</h5>
+                                        
+                                    </a>
+                                    
+                                    </div>
+                                   
+                                    <div class="header-action-icon-2">
+                                        <a class="mini-cart-icon" href="/logout">
+                                           <h5>logout </h5>
+                                         
+                                            
+                                        </a>
+                                        
+                                        </div> 
+                                        
+                                        <div>
+                                            <a href="/useraccount" style="margin-left: 20px;"><i class="fa-solid fa-user fa-xl"></i></i></a>
+                                        </div>
+                                       
+                                       
+                               
                                
     </header>
     <div class="mobile-header-active mobile-header-wrapper-style">
@@ -149,7 +226,7 @@
         </div>
     </div>
     <main class="main">
-        <div class="page-header breadcrumb-wrap">
+        <!-- <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
                     <a href="/userhome" rel="nofollow">Home</a>
@@ -157,5 +234,5 @@
                     <span></span> Account
                 </div>
             </div>
-        </div>
+        </div> -->
       

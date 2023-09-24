@@ -15,12 +15,12 @@ const userSchema = new mongoose.Schema({
       },
     
       password: {
-        type: String,
+        type: [],
         required: true,
       },
-      is_blocked: {
+      status: {
         type: Boolean,
-        default: false,
+        default: true,
       }
     },
     {timestamps:true}

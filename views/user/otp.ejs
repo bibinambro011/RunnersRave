@@ -1,0 +1,37 @@
+<%-include("../partials/userheader")-%>
+
+<p><%=locals.errordata ? errordata:''%>
+<form action="/verifyotp">
+  <label for="">enter your received OTP</label>
+  <input type="text" id="verify" name="otp" />
+  <button type="submit">verify</button>
+  <button >Time :<span id="timer">30 </span> seconds</button>
+ 
+
+</form>
+<form action="/regenerateotp" method="get">
+  <button>regenerate OTP</button>
+</form>
+
+<%-include("../partials/userfooter")-%>
+<script>
+  let seconds = 30;
+
+  const countdown = () => {
+    const timerElement = document.getElementById('timer');
+
+    const intervalId = setInterval(() => {
+      seconds--;
+      timerElement.innerText = seconds;
+
+      if (seconds === 0) {
+        clearInterval(intervalId);
+        timerElement.innerText = 'Time\'s up!';
+      }
+    }, 1000);
+  };
+
+ 
+  countdown();
+</script>
+ 

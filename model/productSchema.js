@@ -20,7 +20,8 @@ const productschema = new mongoose.Schema({
       type: Date, default: Date.now()
     },
     category: {
-      type: [],
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"CategoryCollection",
       required:true
     },
     size: {
@@ -40,12 +41,23 @@ const productschema = new mongoose.Schema({
       type: Number,
       required: true,
     },
-    img: [
+    status:{
+      default:"unblocked",
+      type:String
+    },
+    // img: [
+    //   {
+    //     data: Buffer,
+    //     contentType: String,
+    //   },
+    // ],
+    images: [
       {
-        data: Buffer,
-        contentType: String,
-      },
+        type: String  // Assuming you store image URLs as strings
+      }
     ],
   });
   module.exports = mongoose.model("productCollection", productschema);
+  
+
   

@@ -1,0 +1,107 @@
+<%-include("../partials/adminheader")-%>
+
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                       
+                    </div>
+                </div>
+                <form action="/admin/uploadEditedProduct" method="POST" enctype="multipart/form-data">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label for="product_title" class="form-label">Product title</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_title" name="name" value="<%= product.name %>">
+                            </div>
+                            <div class="row gx-3">
+                                <div class="col-md-4  mb-3">
+                                    <label for="product_sku" class="form-label">size</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_sku" name="size" value="<%= product.size %>">
+                                </div>
+                                <div class="col-md-4  mb-3">
+                                    <label for="product_color" class="form-label">price</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_color" name="price" value="<%= product.price %>">
+                                </div>
+                                <div class="col-md-4  mb-3">
+                                    <label for="product_size" class="form-label">selling price</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_size" name="selling_price" value="<%= product.selling_price %>">
+                                </div>
+                            </div>
+                            <!-- <div class="mb-4">
+                                <label for="product_brand" class="form-label">Brand</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_brand" name="brand">
+                            </div> -->
+                            <div class="mb-4">
+                                <label class="form-label">Brand</label>
+                                <select class="form-select" name="brand">
+                                    <option value="ADIDAS">ADIDAS</option>
+                                    <option value="NIKE">NIKE</option>
+                                    <option value="Published">PUMA</option>
+                                    <option value="ASICS">ASICS</option>
+                                    <option value="UNDER ARMOUR">UNDER ARMOUR</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_brand" class="form-label">stock</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_brand" name="stock" value="<%= product.stock %>">
+                        </div>
+                    </div>
+                    </div> <!-- card end// -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div>
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" class="form-control" rows="4" name="description" value="<%= product.description %>"></textarea>
+                            </div>
+                        </div>
+                    </div> <!-- card end// -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div>
+                                <label class="form-label">Images</label>
+                                <input
+                                type="file"
+                                id="productImage"
+                                name="images"
+                                accept="image/*"
+                                multiple
+                                required
+                              />
+                            </div>
+                        </div>
+                    </div> <!-- card end// -->
+                </div>
+                <div class="col-lg-3">
+                    <div class="card mb-4">
+                       
+                            <div class="mb-4">
+                                <label class="form-label">gender</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="gender" value="<%= product.gender %>">
+                               
+                            </div>
+                            
+                           
+                            <div class="mb-4">
+                                <label class="form-label">Categories</label>
+                                <select class="form-select" name="category">
+                                  <% categorydata.forEach(category => { %>
+                                    <option value="<%= category._id %>"><%= category.name %></option>
+                                  <% }); %>
+                                </select>
+                            </div>
+                            
+                           
+                    
+                        </div>
+                        <button type="submit" class="btn btn-primary">submit</button>
+                    </form>
+                    </div> 
+                </div>
+            </div>
+        </section>
+<%-include("../partials/adminfooter")-%>

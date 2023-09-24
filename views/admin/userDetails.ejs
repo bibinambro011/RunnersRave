@@ -1,0 +1,52 @@
+<%-include("../partials/adminheader")-%>
+
+<div class="container mt-4">
+  <h2 class="text-center mb-4">User Details</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped mx-auto">
+      <thead>
+        <tr>
+          <th scope="col">username</th>
+          <th scope="col">email</th>
+          <th scope="col">status</th>
+          <th scope="col">phone</th>
+          <th scope="col">password</th>
+        
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(function(user) { %>
+            
+        <tr>
+
+          <td><%= user.username %></td>
+          <td><%= user.email %></td>
+          <td><%= user.status %></td>
+          <td><%= user.phone %></td>
+          <td><%= user.password[0] %></td>
+         
+        
+          <td>
+           <%if (user.status==true){%>
+            <a
+              href="/admin/delete-user/<%= user._id %>"
+              class="btn btn-danger btn-sm"
+              >block</a>
+            <%}else{%>
+            <a
+              href="/admin/unblock-user/<%= user._id %>"
+              class="btn btn-success btn-sm"
+              >un block</a
+            >
+            <% } %>
+
+          </td>
+        </tr>
+        
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%-include("../partials/adminfooter")-%>
+
