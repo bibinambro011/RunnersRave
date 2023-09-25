@@ -2,7 +2,7 @@
 <html lang="en">
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-account-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:33 GMT -->
+
 <head>
     <meta charset="utf-8">
     <title>Evara Dashboard</title>
@@ -24,19 +24,23 @@
         <section class="content-main mt-80 mb-80">
             <div class="card mx-auto card-login">
                 <div class="card-body">
+                   <h5><%=locals.data ? data:''%></h5>
                     <h4 class="card-title mb-4"> Admin Sign in</h4>
-                    <form action="/admin/login" method="post">
+                    <form action="/admin/login" method="post" id="loginForm">
                         <div class="mb-3">
-                            <input class="form-control" placeholder="Username or email" type="text" name="email">
+                          <input class="form-control" placeholder="Username or email" type="text" name="email" id="email" required>
+                          <p><span id="emailerror" style="color:red"></span></p>
                         </div> <!-- form-group// -->
                         <div class="mb-3">
-                            <input class="form-control" placeholder="Password" type="password" name="password">
+                          <input class="form-control" placeholder="Password" type="password" name="password" id="password" required>
+                          <p><span id="passworderror" style="color:red"></span></p>
                         </div> <!-- form-group// -->
-                        
+                      
                         <div class="mb-4">
-                            <button type="submit" class="btn btn-primary w-100"> Login </button>
+                          <button type="submit" class="btn btn-primary w-100" onclick="validateForm(event)">Login</button>
                         </div> <!-- form-group// -->
-                    </form>
+                      </form>
+                      
                   
                 </div>
             </div>
@@ -48,8 +52,44 @@
     <script src="adminassets/assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="adminassets/assets/js/main.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-account-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:33 GMT -->
+<script>
+    function validateForm(event) {
+      event.preventDefault();  // Prevent the form from submitting by default
+  
+      // Reset any previous error messages
+      $('#emailerror').text('');
+      $('#passworderror').text('');
+  
+      const email = $('#email').val();
+      const password = $('#password').val();
+  
+      let valid = true;
+  
+      // Validate email
+      if (!email) {
+        $('#emailerror').text('Please enter your email.');
+        valid = false;
+        return false
+      }
+  
+      // Validate password
+      if (!password) {
+        $('#passworderror').text('Please enter your password.');
+        valid = false;
+        return false
+      }
+  
+      if (valid) {
+        // Submit the form if validation passes
+        $('#loginForm').submit();
+      }
+    }
+  </script>
+    
+  
 </html>

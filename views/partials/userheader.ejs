@@ -25,9 +25,9 @@
 
 <body>
     <header class="header-area header-style-1 header-height-2">
-        <div class="header-top header-top-ptb-1 d-none d-lg-block">
-            <div class="container">
-                <div class="row align-items-center">
+        <!-- <div class="header-top header-top-ptb-1 d-none d-lg-block">
+            <div class="container"> -->
+                <!-- <div class="row align-items-center">
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info">
                             <ul>
@@ -35,8 +35,8 @@
                                 <li><i class="fi-rs-marker"></i><a  href="page-contact.html">Our location</a></li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-4">
+                    </div> -->
+                    <!-- <div class="col-xl-6 col-lg-4">
                         <div class="text-center">
                             <div id="news-flash" class="d-inline-block">
                                 <ul>
@@ -46,10 +46,10 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4">
-                        <div class="header-info header-info-right">
-                            <ul>
+                    </div> -->
+                    <!-- <div class="col-xl-3 col-lg-4">
+                        <div class="header-info header-info-right"> -->
+                            <!-- <ul>
                                 <li>
                                     <a class="language-dropdown-active" href="#"> <i class="fi-rs-world"></i> English <i class="fi-rs-angle-small-down"></i></a>
                                     <ul class="language-dropdown">
@@ -60,12 +60,12 @@
                                 </li>
                                 <li><i class="fi-rs-user"></i><a href="/login">Log In</a></li>
                                 <li><i class="fi-rs-user"></i><a href="/signup">Sign Up</a></li>
-                            </ul>
-                        </div>
+                            </ul> -->
+                        <!-- </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     <header class="header-area header-style-5">
        
         <div class="header-bottom sticky-bar sticky-white-bg">
@@ -86,7 +86,7 @@
                                
                                 <li><a href="/useraccount">Account <i class="fi-rs-angle-down"></i></a>
                                     <ul class="sub-menu">
-                                        <li><a href="blog-category-grid.html">contact</a></li>
+                                        <!-- <li><a href="blog-category-grid.html">contact</a></li> -->
                                         <li><a href="/accountpage">My account</a></li>
                                         <li><a href="/login">login</a></li>
                                         <li><a href="/logout">logout</a></li>
@@ -124,26 +124,26 @@
                                
                              
                                 </div>
-                                <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="/login">
-                                       <h5>login</h5>
-                                        
-                                    </a>
-                                    
-                                    </div>
-                                   
+                                <% if (isAuthenticated==true) { %>
+                                    <!-- Show logout button if user is authenticated -->
                                     <div class="header-action-icon-2">
-                                        <a class="mini-cart-icon" href="/logout">
-                                           <h5>logout </h5>
-                                         
-                                            
-                                        </a>
-                                        
-                                        </div> 
+                                      <a class="mini-cart-icon" href="/logout">
+                                        <h5>Logout</h5>
+                                      </a>
+                                    </div>
+                                  <% } else { %>
+                                    <!-- Show login button if user is not authenticated -->
+                                    <div class="header-action-icon-2">
+                                      <a class="mini-cart-icon" href="/login">
+                                        <h5>Login</h5>
+                                      </a>
+                                    </div>
+                                  <% } %>
                                         
                                         <div>
                                             <a href="/useraccount" style="margin-left: 20px;"><i class="fa-solid fa-user fa-xl"></i></i></a>
                                         </div>
+                                        
                                        
                                        
                                
@@ -226,13 +226,4 @@
         </div>
     </div>
     <main class="main">
-        <!-- <div class="page-header breadcrumb-wrap">
-            <div class="container">
-                <div class="breadcrumb">
-                    <a href="/userhome" rel="nofollow">Home</a>
-                    <span></span> Pages
-                    <span></span> Account
-                </div>
-            </div>
-        </div> -->
       

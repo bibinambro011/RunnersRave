@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-router.get("/", controller.login);
+router.get("/",middleware.adminexist, controller.login);
 router.post("/login", controller.dashboard);
 router.get("/home",middleware.islogin,controller.homepage)
 router.get("/login", controller.loginpage);

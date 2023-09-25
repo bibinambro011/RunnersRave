@@ -28,13 +28,18 @@ exports.login = async (req, res) => {
 
 exports.dashboard = async (req, res) => {
   const data = await adminCollection.findOne({ email: req.body.email });
+  if(data){
+    if (data.email == req.body.email && data.password == req.body.password) {
+      console.log("before session");
+      req.session.adminuser = req.body.email;
+      res.render("admin/dashboard.ejs");
+    }
+  }
 
-  if (data.email == req.body.email && data.password == req.body.password) {
-    console.log("before session");
-    req.session.adminuser = req.body.email;
-    res.render("admin/dashboard.ejs");
-  } else {
-    res.redirect("/admin");
+   else {
+  
+    res.render("admin/login",{data:"credentials are wromg"});
+   
   }
 };
 exports.homepage=async(req,res)=>{

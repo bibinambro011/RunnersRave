@@ -1,6 +1,6 @@
-<%-include("../partials/userheader")-%>
 
-<p><%=locals.errordata ? errordata:''%>
+
+<!-- <p><%=locals.errordata ? errordata:''%>
 <form action="/verifyotp">
   <label for="">enter your received OTP</label>
   <input type="text" id="verify" name="otp" />
@@ -11,9 +11,80 @@
 </form>
 <form action="/regenerateotp" method="get">
   <button>regenerate OTP</button>
-</form>
+</form> -->
 
-<%-include("../partials/userfooter")-%>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OTP Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .form-container {
+      max-width: 400px;
+      margin: auto;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-container button {
+      padding: 10px 20px;
+      border: none;
+      color: #fff;
+      background-color: #007BFF;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: #0056b3;
+    }
+
+    .timer-button {
+      margin-left: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <p><%= locals.errordata ? locals.errordata : '' %></p>
+  <form action="/verifyotp">
+    <label for="verify">Enter your received OTP:</label>
+    <input type="text" id="verify" name="otp" />
+    <button type="submit">Verify</button>
+    <button class="timer-button">Time: <span id="timer">30</span> seconds</button>
+  </form>
+
+  <form action="/regenerateotp" method="get">
+    <button>Regenerate OTP</button>
+  </form>
+</div>
+
+</body>
+</html>
+
+
 <script>
   let seconds = 30;
 
@@ -34,4 +105,3 @@
  
   countdown();
 </script>
- 

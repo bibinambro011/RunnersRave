@@ -3,11 +3,11 @@ const router = express.Router();
 const middleware = require("../middleware/userAuth");
 const controller = require("../controller/userController");
 
-router.get("/",controller.userhome );
+router.get("/",middleware.userexist,controller.userhome );
 router.get("/userhome",middleware.userexist,controller.userhome)
 router.get("/signup", controller.registerpage);
-router.get("/login", controller.loginpage);
-router.post("/login", controller.userlogin);
+router.get("/login",middleware.userexist, controller.loginpage);
+router.post("/login",middleware.userexist, controller.userlogin);
 router.get("/logout", middleware.islogout, controller.userlogout);
 router.post("/user_registration", controller.user_registration);
 router.get("/shop",controller.shop);

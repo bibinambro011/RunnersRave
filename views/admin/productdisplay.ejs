@@ -1,11 +1,15 @@
 <%-include("../partials/adminheader")-%>
-<a href="productpage" class="btn btn-warning btn-sm mr-1 mt-10 ml-50"
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" >
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+ 
+
+<!-- <a href="productpage" class="btn btn-warning btn-sm mr-1 mt-10 ml-50"
   >Add product</a
->
+> -->
 <div class="container mt-4">
   <h2 class="text-center mb-4">Product Details</h2>
   <div class="table-responsive">
-    <table class="table table-bordered table-striped mx-auto">
+    <table class="table table-bordered table-striped mx-auto" id="myTable">
       <thead>
         <tr>
           <th scope="col">Product</th>
@@ -38,14 +42,9 @@
             <a
               href="/admin/edit-product/<%= product._id %>"
               class="btn btn-warning btn-sm mr-1"
-              >Edit</a
-            >
+              >Edit</a>
 
-            <!-- <a
-              href="/admin/delete-product/<%= product._id %>"
-              class="btn btn-danger btn-sm"
-              >Delete</a
-            > -->
+           
           </td>
         </tr>
         <% }) %>
@@ -53,5 +52,11 @@
     </table>
   </div>
 </div>
-<%-include("../partials/adminfooter")-%>
+<script>
+$(document).ready( function () {
+  $('#myTable').DataTable();
+} );
+</script>
 
+
+<%-include("../partials/adminfooter")-%>

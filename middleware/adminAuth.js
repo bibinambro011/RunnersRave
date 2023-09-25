@@ -14,13 +14,13 @@ const islogout = async (req, res, next) => {
 };
 
 
-// const adminexist=async(req,res,next)=>{
-//     if(req.session.adminuser || !req.session.adminuser){
-//         res.redirect("/")
+const adminexist=async(req,res,next)=>{
+    if(req.session.adminuser ){
+        res.redirect("/admin/home")
 
-//     }else{
-//         next()
-//     }
-// }
+    }else{
+      next()
+    }
+}
 
-module.exports={islogin,islogout}
+module.exports={islogin,islogout,adminexist}

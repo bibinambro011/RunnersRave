@@ -1,11 +1,13 @@
+const Product=require("../model/productSchema")
+
 const islogin = async (req, res, next) => {
   if (req.session.user) {
     next();
   } else {
-    res.redirect("/");
+    res.redirect("/userhome");
   }
 };
-cartAuth=async(req,res,next)=>{
+const cartAuth=async(req,res,next)=>{
   if(req.session.user){
     next()
   }else{
@@ -19,11 +21,27 @@ const islogout = async (req, res, next) => {
 };
 
 const userexist=async(req,res,next)=>{
-  if(req.session.user || !req.session.user){
-    res.redirect("/")
+  if(req.session.user){
+  if(req.session.user){
+    isAuthenticated=true;
+    const products = await Product.find({status:"unblocked"});
+  res.render("user/home.ejs", { products,isAuthenticated });
+  }else{
+    const isAuthenticated=false;
+  const products = await Product.find({status:"unblocked"});
+  res.render("user/home.ejs", { products,isAuthenticated });
+}
+  }else{
+    next()
+  }
+  
+}
+const useraccountAuth=async(req,res,next)=>{
+  if(!req.session.user){
+    res.redirect("/login")
   }else{
     next()
   }
 }
 
-module.exports = { islogin, islogout,userexist,cartAuth };
+module.exports = { islogin, islogout,userexist,cartAuth,userexist,useraccountAuth };

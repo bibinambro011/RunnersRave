@@ -158,31 +158,7 @@
         </section> <!-- content-main end// -->
 
         <script>
-          const itemsPerPage = 10; // Number of items per page
-const totalItems = 90; // Total number of items
-const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-const paginationElement = document.getElementById('pagination');
-
-for (let page = 1; page <= totalPages; page++) {
-    const li = document.createElement('li');
-    li.classList.add('page-item');
     
-    const a = document.createElement('a');
-    a.classList.add('page-link');
-    a.textContent = page;
-    a.href = '#'; // Update with the appropriate link
-    
-    a.addEventListener('click', () => {
-        // Handle click event to load data for the selected page
-        // You can make an AJAX request to load the page's content
-        // Update the page content based on the selected page
-        // ...
-    });
-    
-    li.appendChild(a);
-    paginationElement.appendChild(li);
-}
 
         </script>
         <%-include("../partials/adminfooter")-%>

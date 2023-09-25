@@ -5,7 +5,7 @@ const category=require("../model/categorySchema")
 
 const twilio = require("twilio");
 const accountSid = "AC7ed272bfc72e23f5ea62dde1140be05b";
-const authToken = "749cc57169849c25c55ea0088dc33b46";
+const authToken = "847740e965bff24e69d8ca6aac7eaedc";
 
 const client = twilio(accountSid, authToken);
 let generatedotp = "";
@@ -52,7 +52,7 @@ const user_registration = async (req, res) => {
     res.render("user/otp.ejs", { otp }); // Render the OTP page
   } catch (error) {
     console.error("Error sending OTP:", error);
-    res.render("login.ejs", {
+    res.render("user/login.ejs", {
       errordata: "Failed to send OTP enter a valid number",
     });
   }
@@ -74,6 +74,7 @@ const regenerateOtp = async (req, res) => {
       from: "(469) 557-2151", // Replace with your Twilio phone number
       to: recipientPhoneNumber,
     });
+    
     res.render("user/otp.ejs", { otp }); // Render the OTP page
   } catch (error) {
     console.error("Error sending OTP:", error);
@@ -95,6 +96,7 @@ const verify_otp = async (req, res) => {
     if (userdata) {
       res.render("user/register.ejs", { errordata: "email already exist" });
     } else if (!userdata) {
+      
       // console.log(data);
       await User.insertMany(data);
       res.redirect("/login");
@@ -104,15 +106,32 @@ const verify_otp = async (req, res) => {
 
 const loginpage = async (req, res) => {
   
+    res.render("user/login.ejs");
  
-  res.render("user/login.ejs");
+ 
+  
 };
 
 const registerpage = async (req, res) => {
-  res.render("user/register.ejs");
+  if(req.session.user){
+    const isAuthenticated=true;
+    res.render("user/register.ejs",{isAuthenticated});
+  }else{
+    const isAuthenticated=false
+    res.render("user/register.ejs",{isAuthenticated});
+  }
+  
 };
 const signin = async (req, res) => {
-  res.render("user/login.ejs");
+  if(req.session.user){
+    const isAuthenticated=true;
+  res.render("user/login.ejs",{isAuthenticated});
+
+  }else{
+    const isAuthenticated=false;
+    res.render("user/login.ejs",{isAuthenticated});
+  }
+ 
 };
 let username=""
 const userlogin = async (req, res) => {
@@ -122,40 +141,64 @@ const userlogin = async (req, res) => {
   };
 
   let user = await User.findOne({ email: userdata.email });
-  console.log(user);
+  
 
   if (user) {
     if (user.email == userdata.email && user.password[0] == userdata.password) {
       req.session.user = userdata;
+      const isAuthenticated=true
       username=user.username;
       const products = await Product.find();
 
-      res.render("user/home.ejs", { products });
+      res.render("user/home.ejs", { products,isAuthenticated });
     }
   } else {
-    res.render("user/login.ejs", { errordata: "credentials are wrong" });
+    const isAuthenticated=false
+    res.render("user/login.ejs", { errordata: "credentials are wrong",isAuthenticated });
   }
 };
 const userlogout = async (req, res) => {
   res.redirect("/login");
 };
 const productpage = async (req, res) => {
-
-  const id = req.params.id;
+  if(req.session.user){
+    const isAuthenticated=true;
+    const id = req.params.id;
   const product = await Product.findOne({ _id: id });
-  res.render("user/productpage.ejs", { product });
+  res.render("user/productpage.ejs", { product,isAuthenticated });
+  }else{
+    const id = req.params.id;
+    const isAuthenticated=false
+    const product = await Product.findOne({ _id: id });
+    res.render("user/productpage.ejs", { product,isAuthenticated });
+  }
+
+ 
 };
 
 const userhome = async (req, res) => {
+  if(req.session.user){
+    const isAuthenticated=true;
+    const products = await Product.find({status:"unblocked"});
+  res.render("user/home.ejs", { products,isAuthenticated });
+  }else{
+    const isAuthenticated=false;
   const products = await Product.find({status:"unblocked"});
-  res.render("user/home.ejs", { products });
-};
+  res.render("user/home.ejs", { products,isAuthenticated });
+}};
 const shop = async (req, res) => {
+  if(req.session.user){
+    const isAuthenticated=true;
+    const categorydata=await category.find()
+ 
+    const products = await Product.find({status:"unblocked"});
+    res.render("user/shop.ejs", { products,categorydata,isAuthenticated });
+  }else{
   const categorydata=await category.find()
-  console.log(categorydata)
+  const isAuthenticated=false
   const products = await Product.find({status:"unblocked"});
-  res.render("user/shop.ejs", { products,categorydata });
-};
+  res.render("user/shop.ejs", { products,categorydata,isAuthenticated });
+}};
 
 // exports.resetpassword = async (req, res) => {
 //   const data = await collection.findOne({ email: req.body.email });
@@ -178,21 +221,45 @@ const productCategory=async(req,res)=>{
   res.render("user/shop.ejs",{products,categorydata})
 }
 const useraccount=async (req,res)=>{
-  res.render("user/page-account.ejs",{username})
+  if(req.session.user){
+    const isAuthenticated=true;
+    res.render("user/page-account.ejs",{username,isAuthenticated})
+  }else{
+    const isAuthenticated=false
+    res.render("user/page-account.ejs",{username,isAuthenticated})
+  }
+  
 }
 const addtowishlist=async(req,res)=>{
   res.render("user/wishlist.ejs")
 }
 const productsearch=async(req,res)=>{
  
+  if(req.session.user){
+    const isAuthenticated=true;
     const name = req.body.search;
     const regex = new RegExp(`^${name}`, "i");
     const products = await Product.find({ name: { $regex: regex } }).exec();
-    res.render("user/home", { products });
+    res.render("user/home", { products,isAuthenticated });
+  }else{
+    const isAuthenticated=false;
+    const name = req.body.search;
+    const regex = new RegExp(`^${name}`, "i");
+    const products = await Product.find({ name: { $regex: regex } }).exec();
+    res.render("user/home", { products,isAuthenticated });
+  }
+    
   
 }
 const aboutpage=async(req,res)=>{
-  res.render("user/aboutpage")
+  if(req.session.user){
+    const isAuthenticated=true;
+    res.render("user/aboutpage",{isAuthenticated})
+  }else{
+    const isAuthenticated=false
+    res.render("user/aboutpage",{isAuthenticated})
+  }
+  
 }
 const showwishlist=async(req,res)=>{
   res.render("user/wishlist.ejs")
