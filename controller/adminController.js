@@ -12,10 +12,10 @@ const path=require("path")
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'assets/uploads');  // Save images to the 'uploads' directory
+    cb(null, 'assets/uploads'); 
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));  // Append a timestamp and file extension
+    cb(null, Date.now() + path.extname(file.originalname));  
   }
 });
   
@@ -30,15 +30,17 @@ exports.dashboard = async (req, res) => {
   const data = await adminCollection.findOne({ email: req.body.email });
   if(data){
     if (data.email == req.body.email && data.password == req.body.password) {
-      console.log("before session");
+     
       req.session.adminuser = req.body.email;
       res.render("admin/dashboard.ejs");
+    }else{
+      res.redirect("/admin");
     }
   }
 
    else {
   
-    res.render("admin/login",{data:"credentials are wromg"});
+    res.redirect("/admin");
    
   }
 };
@@ -78,7 +80,7 @@ exports.productadd = async (req, res) => {
       console.log("category id is =>"+category)
   
       await product.save();
-      // res.send("Product uploaded successfully.");
+      
       const products=await Product.find()
       res.render("admin/productlist.ejs",{products})
     } catch (error) {
@@ -105,59 +107,6 @@ exports.editproduct = async (req, res) => {
   res.render("admin/editproduct.ejs", { product,categorydata });
 };
 
-// module.exports.updateProduct = async (req, res) => {
-//   console.log("Before updation");
-//   console.log(req.body);
-
-//   const {
-//     name,
-//     description,
-//     price,
-//     size,
-//     category,
-//     selling_price,
-//     gender,
-//     brand,
-//     stock,
-//     status,
-//   } = req.body;
-//   const images = req.files;
-
-//   if (!images || images.length === 0) {
-//     return res.status(400).send("No images uploaded.");
-//   }
-
-//   const imgArray = images.map((image) => ({
-//     data: image.buffer,
-//     contentType: image.mimetype,
-//   }));
-
-//   try {
-//     const updateData = {
-//       name,
-//       description,
-//       price,
-//       size,
-//       category,
-//       selling_price,
-//       gender,
-//       brand,
-//       stock,
-//       status,
-//       img: imgArray, // Save an array of images
-//     };
-
-//     // Assuming updateId is passed as a parameter or retrieved from req.params
-//     updateId = updateId;
-
-//     await Product.findByIdAndUpdate(updateId, { $set: updateData });
-
-//     res.redirect("/admin/productlist");
-//   } catch (error) {
-//     console.error("Error updating product:", error);
-//     res.status(500).send("Error updating product.");
-//   }
-// };
 
 
 exports.updateProduct=async(req,res)=>{
@@ -306,3 +255,4 @@ exports.adminproductsearch=async(req,res)=>{
   const products = await Product.find({ name: { $regex: regex } }).exec();
   res.render("admin/productlist", { products });
 }
+

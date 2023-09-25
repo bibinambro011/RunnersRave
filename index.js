@@ -13,7 +13,6 @@ const sessions = require("express-session");
 const { v4: uuidv4 } = require("uuid");
 
 const publicfolder = path.join(__dirname + "/assets");
-console.log(publicfolder);
 
 app.use(nocache());
 app.use(loger("dev"));
@@ -35,6 +34,9 @@ app.set("view engine", "ejs");
 
 app.use("/", userRoute);
 app.use("/admin", adminroutes);
+app.get("*", (req, res) => {
+  res.status(404).send("Page not found");
+});
 
 db.connectToDatabase();
 app.listen(3000, () => {
