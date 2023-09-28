@@ -82,7 +82,8 @@ exports.productadd = async (req, res) => {
       await product.save();
       
       const products=await Product.find()
-      res.render("admin/productlist.ejs",{products})
+      // res.render("admin/productlist.ejs",{products})
+      res.redirect("/admin/productlistredirection")
     } catch (error) {
       console.error("Error uploading product:", error);
       res.status(500).send("Error uploading product.");
@@ -105,6 +106,7 @@ exports.editproduct = async (req, res) => {
   const product = await Product.findOne({ _id: id });
 
   res.render("admin/editproduct.ejs", { product,categorydata });
+  
 };
 
 
@@ -254,5 +256,9 @@ exports.adminproductsearch=async(req,res)=>{
   const regex = new RegExp(`^${name}`, "i");
   const products = await Product.find({ name: { $regex: regex } }).exec();
   res.render("admin/productlist", { products });
+}
+exports.productredirection=async(req,res)=>{
+  const products=await Product.find();
+  res.render("admin/productlist.ejs",{products})
 }
 

@@ -59,7 +59,7 @@
                                     <h2 class="animated fw-900">Supper value deals</h2>
                                     <h1 class="animated fw-900 text-brand">On all products</h1>
                                     <p class="animated">Save more with coupons & up to 70% off</p>
-                                    <a class="animated btn btn-brush btn-brush-3" href="shop-product-right.html"> Shop Now </a>
+                                    <a class="animated btn btn-brush btn-brush-3" href="/shop"> Shop Now </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
@@ -79,7 +79,7 @@
                                     <h2 class="animated fw-900">Fashion Trending</h2>
                                     <h1 class="animated fw-900 text-7">Great Collection</h1>
                                     <p class="animated">Save more with coupons & up to 20% off</p>
-                                    <a class="animated btn btn-brush btn-brush-2" href="shop-product-right.html"> Discover Now </a>
+                                    <a class="animated btn btn-brush btn-brush-2" href="/shop"> Discover Now </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
@@ -99,7 +99,7 @@
                                     <h2 class="animated fw-900">Big Deals From</h2>
                                     <h1 class="animated fw-900 text-8">Manufacturer</h1>
                                     <p class="animated">Clothing, Shoes, Bags, Wallets...</p>
-                                    <a class="animated btn btn-brush btn-brush-1" href="shop-product-right.html"> Shop Now </a>
+                                    <a class="animated btn btn-brush btn-brush-1" href="/shop"> Shop Now </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
@@ -140,8 +140,8 @@
                       <div class="col-lg-4 col-md-4 col-12 col-sm-6">
                         <div class="product-cart-wrap mb-30">
                           <div
-                            class="product-img-action-wrap"
-                            style="width: 200px; height: 200px"
+                            class="product-img-action-wrap img-fluid mx-auto display-block"
+                            style="width: 300; height: 310px;"
                           >
                             <div class="product-img product-img-zoom">
                               <a href="/product/<%= product._id %>">
@@ -163,11 +163,11 @@
                             <h2>
                               <a href="shop-product-right.html"><%= product.name %></a>
                             </h2>
-                            <!-- <div class="rating-result" title="90%">
+                            <div class="rating-result" title="90%">
                                                         <span>
                                                             <span>90%</span>
                                                         </span>
-                                                    </div> -->
+                                                    </div>
                             <div class="product-price">
                               <span><%= product.selling_price %></span>
                               <span class="old-price"><%= product.price %></span>
@@ -176,7 +176,7 @@
                               <a
                                 aria-label="Add To Cart"
                                 class="action-btn hover-up"
-                                href="/addtocart"
+                                href="/addtocart/<%= product._id %>"
                                 ><i class="fi-rs-shopping-bag-add"></i
                               ></a>
                               <a

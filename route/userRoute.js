@@ -15,7 +15,8 @@ router.get("/logout", middleware.islogout, controller.userlogout);
 router.post("/user_registration", controller.user_registration);
 router.get("/shop", controller.shop);
 router.get("/product/:id", controller.productpage);
-router.get("/addtocart", middleware.cartAuth, controller.addtocart);
+router.get("/addtocart/:id", middleware.cartAuth, controller.addtocart);
+router.post("/addtocart",middleware.cartAuth,controller.cartadd)
 router.get("/verifyotp", controller.verify_otp);
 router.get("/productCategory/:id", controller.productCategory);
 router.get("/useraccount", middleware.islogin, controller.useraccount);
@@ -26,8 +27,5 @@ router.get("/show_wishlist", middleware.cartAuth, controller.showwishlist);
 router.get("/show_cart", middleware.cartAuth, controller.showcart);
 
 router.get("/regenerateotp", controller.regenerateOtp);
-router.get("*", (req, res) => {
-  res.status(404).send("Page not found");
-});
 
 module.exports = router;

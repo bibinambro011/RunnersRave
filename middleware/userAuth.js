@@ -14,13 +14,7 @@ const cartAuth=async(req,res,next)=>{
     res.redirect("/login")
   }
 }
-const registermiddleware=async(req,res,next)=>{
-  if(req.session.user){
-    next()
-  }else{
-    res.redirect("/login")
-  }
-}
+
 
 const islogout = async (req, res, next) => {
   req.session.user=null;
@@ -45,4 +39,4 @@ const userexist=async(req,res,next)=>{
 }
 
 
-module.exports = { islogin, islogout,userexist,cartAuth,userexist,registermiddleware };
+module.exports = { islogin, islogout,userexist,cartAuth,userexist };

@@ -69,5 +69,5 @@ router.post(
   upload.array("images", 5),
   controller.updateProduct
 );
-
+router.get("/productlistredirection",controller.productredirection)
 module.exports = router;

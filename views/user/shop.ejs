@@ -115,8 +115,8 @@
               <div class="col-lg-4 col-md-4 col-12 col-sm-6">
                 <div class="product-cart-wrap mb-30">
                   <div
-                    class="product-img-action-wrap"
-                    style="width: 200px; height: 200px"
+                    class="product-img-action-wrap img-fluid"
+                    style="width: 350px; height: 310px;"
                   >
                     <div class="product-img product-img-zoom">
                       <a href="/product/<%= product._id %>">
@@ -138,14 +138,14 @@
                     <h2>
                       <a href="shop-product-right.html"><%= product.name %></a>
                     </h2>
-                    <!-- <div class="rating-result" title="90%">
+                    <div class="rating-result" title="90%">
                                                 <span>
                                                     <span>90%</span>
                                                 </span>
-                                            </div> -->
+                                            </div>
                     <div class="product-price">
-                      <span><%= product.selling_price %></span>
-                      <span class="old-price"><%= product.price %></span>
+                      <span>Rs<%= product.selling_price %></span>
+                      <span class="old-price">Rs<%= product.price %></span>
                     </div>
                     <div class="product-action-1 show">
                       <a

@@ -1,9 +1,10 @@
-const process = require("dotenv").config();
 const Product = require("../model/productSchema");
 const User = require("../model/userSchema");
 const category = require("../model/categorySchema");
+const cartCollection = require("../model/cartSchema");
 const bcrypt = require("bcrypt");
 const twilio = require("twilio");
+require("dotenv").config();
 
 const accountSid = "AC7ed272bfc72e23f5ea62dde1140be05b";
 const authToken = "847740e965bff24e69d8ca6aac7eaedc";
@@ -217,7 +218,7 @@ const productpage = async (req, res) => {
     const isAuthenticated = true;
     const id = req.params.id;
     const product = await Product.findOne({ _id: id });
-    res.render("user/productpage.ejs", { product, isAuthenticated });
+    res.render("user/productpage", { product, isAuthenticated });
   } else {
     const id = req.params.id;
     const isAuthenticated = false;
@@ -253,30 +254,53 @@ const shop = async (req, res) => {
 };
 
 const addtocart = async (req, res) => {
-  if (req.session.user) {
-    isAuthenticated = true;
-    res.render("user/cart.ejs", { isAuthenticated });
-  } else {
-    const isAuthenticated = false;
-    res.render("user/cart.ejs", { isAuthenticated });
+  let useremail = req.session.user.email;
+  const data = await User.find({ email: useremail });
+  try {
+    if (req.session.user) {
+      let productId = req.params.id;
+      let quantity = 2;
+
+      const newItem = {
+        product: productId,
+        quantity: quantity,
+      };
+
+      const newCart = new cartCollection({
+        user: data[0]._id,
+        items: [newItem],
+        total: quantity,
+      });
+
+      const savedCart = await newCart.save();
+      console.log("Cart saved successfully:", savedCart);
+
+      const isAuthenticated = true;
+      res.render("user/cart.ejs", { isAuthenticated });
+    } else {
+      const isAuthenticated = false;
+      res.render("user/cart.ejs", { isAuthenticated });
+    }
+  } catch (err) {
+    console.error("Error saving cart:", err);
+    // Handle the error and respond accordingly
+    res.status(500).send("Internal Server Error");
   }
 };
 
 const productCategory = async (req, res) => {
   const id = req.params.id;
-  if(req.session.user){
-    const isAuthenticated=true;
+  if (req.session.user) {
+    const isAuthenticated = true;
     const categorydata = await category.find();
     const products = await Product.find({ category: id });
-  res.render("user/shop.ejs", { products, categorydata,isAuthenticated });
-  }else{
-    const isAuthenticated=false
+    res.render("user/shop.ejs", { products, categorydata, isAuthenticated });
+  } else {
+    const isAuthenticated = false;
     const categorydata = await category.find();
-  const products = await Product.find({ category: id,status:"unblocked" });
-  res.render("user/shop.ejs", { products, categorydata,isAuthenticated });
+    const products = await Product.find({ category: id, status: "unblocked" });
+    res.render("user/shop.ejs", { products, categorydata, isAuthenticated });
   }
-  
-  
 };
 const useraccount = async (req, res) => {
   if (req.session.user) {
@@ -332,6 +356,12 @@ const showwishlist = async (req, res) => {
 const showcart = async (req, res) => {
   res.render("user/shopcart");
 };
+const cartadd = async (req, res) => {
+  const data = req.body;
+  
+  console.log("data in the body is =>", data);
+  
+};
 module.exports = {
   productsearch,
   addtowishlist,
@@ -352,4 +382,5 @@ module.exports = {
   aboutpage,
   showwishlist,
   showcart,
+  cartadd,
 };

@@ -43,7 +43,7 @@ const productschema = new mongoose.Schema({
     },
     status:{
       default:"unblocked",
-      type:String
+      type:String,
     },
     // img: [
     //   {
@@ -60,4 +60,3 @@ const productschema = new mongoose.Schema({
   module.exports = mongoose.model("productCollection", productschema);
   
 
-  
