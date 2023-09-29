@@ -7,6 +7,13 @@ const islogin = async (req, res, next) => {
     res.redirect("/userhome");
   }
 };
+const cartislogin=async(req,res,next)=>{
+  if(! req.session.user){
+    res.json({ redirectUrl: "/login" }); // Modify the URL as needed
+  }else {
+    next()
+  }
+}
 const cartAuth=async(req,res,next)=>{
   if(req.session.user){
     next()
@@ -39,4 +46,4 @@ const userexist=async(req,res,next)=>{
 }
 
 
-module.exports = { islogin, islogout,userexist,cartAuth,userexist };
+module.exports = { islogin, islogout,userexist,cartAuth,userexist,cartislogin };

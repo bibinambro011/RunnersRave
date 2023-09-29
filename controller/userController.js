@@ -213,10 +213,12 @@ const userlogin = async (req, res) => {
 const userlogout = async (req, res) => {
   res.redirect("/login");
 };
+let prodId = "";
 const productpage = async (req, res) => {
   if (req.session.user) {
     const isAuthenticated = true;
     const id = req.params.id;
+    prodId = id;
     const product = await Product.findOne({ _id: id });
     res.render("user/productpage", { product, isAuthenticated });
   } else {
@@ -254,37 +256,57 @@ const shop = async (req, res) => {
 };
 
 const addtocart = async (req, res) => {
-  let useremail = req.session.user.email;
-  const data = await User.find({ email: useremail });
-  try {
-    if (req.session.user) {
-      let productId = req.params.id;
-      let quantity = 2;
+  if (req.session.user) {
+    let useremail = req.session.user.email;
+    let id = req.params.id;
 
+    const productId = id;
+
+    const productdetails = await Product.find({ _id: id });
+    const quantity = 1;
+    const data = await User.find({ email: useremail });
+    const userid = data[0]._id;
+    console.log("user id is =>", data[0]._id);
+    const cartuser = await cartCollection.find({ user: data[0]._id });
+    console.log("cart user is =>", cartuser);
+    if (!cartuser || cartuser.length === 0) {
+      console.log("not cart user ");
       const newItem = {
         product: productId,
         quantity: quantity,
       };
-
       const newCart = new cartCollection({
         user: data[0]._id,
         items: [newItem],
         total: quantity,
       });
-
       const savedCart = await newCart.save();
-      console.log("Cart saved successfully:", savedCart);
-
       const isAuthenticated = true;
       res.render("user/cart.ejs", { isAuthenticated });
     } else {
-      const isAuthenticated = false;
+      const existingUser = await cartCollection.find({});
+      const cartuser = await cartCollection.find({
+        user: existingUser[0].user,
+      });
+      console.log("cart user is ==>", cartuser);
+      console.log("existing user is =>", existingUser);
+      console.log(existingUser.user);
+      console.log(existingUser[0].user);
+      const newItem = {
+        product: productId,
+        quantity: quantity,
+      };
+      await cartCollection.updateOne(
+        { user: existingUser[0].user },
+        { $push: { items: newItem }, $inc: { total: quantity } }
+      );
+      const isAuthenticated = true;
       res.render("user/cart.ejs", { isAuthenticated });
+      console.log("successfully updated");
     }
-  } catch (err) {
-    console.error("Error saving cart:", err);
-    // Handle the error and respond accordingly
-    res.status(500).send("Internal Server Error");
+  } else {
+    const isAuthenticated = false;
+    res.render("user/login", { isAuthenticated });
   }
 };
 
@@ -354,14 +376,122 @@ const showwishlist = async (req, res) => {
   }
 };
 const showcart = async (req, res) => {
-  res.render("user/shopcart");
+  try {
+    if (req.session.user) {
+      console.log("show cart get called==>");
+      const userdata = await User.find({ email: req.session.user.email });
+      const userid = userdata[0]._id;
+      const cart = await cartCollection.findOne({ user: userid });
+
+      if (!cart) {
+        throw new Error("Cart not found for this user.");
+      }
+
+      const cartItems = [];
+
+      for (const cartItem of cart.items) {
+        const product = await Product.findById(cartItem.product);
+        if (product) {
+          const cartItemWithDetails = {
+            product,
+            quantity: cartItem.quantity,
+            _id: cartItem._id
+          };
+          cartItems.push(cartItemWithDetails);
+        }
+      }
+
+      console.log("cart items with details are===>", cartItems);
+      const isAuthenticated = true;
+      res.render("user/shopcart", { isAuthenticated, cartItems });
+    } else {
+      const isAuthenticated = false;
+      res.render("user/shopcart", { isAuthenticated });
+    }
+  } catch (error) {
+    console.error("Error fetching cart items:", error.message);
+    res.status(500).send("Error fetching cart items.");
+  }
 };
+
+
+
 const cartadd = async (req, res) => {
   const data = req.body;
-  
+
   console.log("data in the body is =>", data);
   
+
+  try {
+    // if (!req.session.user) {
+    //   console.log("hi");
+    //   res.json({ redirectUrl: "/login" }); // Modify the URL as needed
+      
+    // }
+
+    const { email } = req.session.user;
+    const { quantity } = req.body;
+    const productId = prodId;
+
+    const user = await User.findOne({ email });
+    console.log("user is =>",user)
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const existingCart = await cartCollection.findOne({ user: user._id });
+
+    if (!existingCart) {
+      // If user doesn't have a cart, create a new one
+      const newItem = {
+        product: productId,
+        quantity: quantity,
+      };
+
+      const newCart = new cartCollection({
+        user: user._id,
+        items: [newItem],
+        total: quantity,
+      });
+
+      await newCart.save();
+      res.json({ redirectUrl: "/show_cart" });
+
+    } else {
+      // If user already has a cart, update it
+      const newItem = {
+        product: productId,
+        quantity: quantity,
+      };
+
+      await cartCollection.updateOne(
+        { user: user._id },
+        { $push: { items: newItem }, $inc: { total: quantity } }
+      );
+      res.json({ redirectUrl: "/show_cart" });
+    }
+
+    // const isAuthenticated = true;
+    // res.render("user/cart.ejs", { isAuthenticated });
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
+
+
+const fromcartToLogin = async (req, res) => {
+  const isAuthenticated = false;
+  res.render("user/login.ejs", { isAuthenticated });
+};
+const userInCart = async (req, res) => {
+  const isAuthenticated = true;
+  res.render("user/cart", { isAuthenticated });
+};
+const loginpage1=async(req,res)=>{
+  res.render("user/login")
+}
+
 module.exports = {
   productsearch,
   addtowishlist,
@@ -383,4 +513,7 @@ module.exports = {
   showwishlist,
   showcart,
   cartadd,
+  fromcartToLogin,
+  userInCart,
+  loginpage1
 };

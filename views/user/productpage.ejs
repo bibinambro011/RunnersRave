@@ -25,14 +25,28 @@
                                     <figure class="border-radius-10">
                                         <img src="<%= product.images[2] %>" alt="product image">
                                     </figure>
-                                    
+                                    <!-- <figure class="border-radius-10">
+                                        <img src="/imgs/shop/product-16-4.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="/imgs/shop/product-16-5.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="/imgs/shop/product-16-6.jpg" alt="product image">
+                                    </figure>
+                                    <figure class="border-radius-10">
+                                        <img src="/imgs/shop/product-16-7.jpg" alt="product image">
+                                    </figure> -->
                                 </div>
                                 <!-- THUMBNAILS -->
                                 <div class="slider-nav-thumbnails pl-15 pr-15">
                                     <div><img src="<%= product.images[0] %>" alt="product image"></div>
                                     <div><img src="<%= product.images[1] %>" alt="product image"></div>
                                     <div><img src="<%= product.images[2] %>" alt="product image"></div>
-                                   
+                                    <!-- <div><img src="/imgs/shop/thumbnail-6.jpg" alt="product image"></div>
+                                    <div><img src="/imgs/shop/thumbnail-7.jpg" alt="product image"></div>
+                                    <div><img src="/imgs/shop/thumbnail-8.jpg" alt="product image"></div>
+                                    <div><img src="/imgs/shop/thumbnail-9.jpg" alt="product image"></div> -->
                                 </div>
                             </div>
                             <!-- End Gallery -->
@@ -72,18 +86,30 @@
                                 <div class="short-desc mb-30">
                                     <p class="font-sm">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam rem officia, corrupti reiciendis minima nisi modi,!</p>
                                 </div>
-                              
-                                <!-- <div class="attr-detail attr-size">
-                                    <strong class="mr-10"><%= product.size %></strong>
-                                    <ul class="list-filter size-filter font-small">
-                                        <li><a href="#" onclick="selectSize('6')">6</a></li>
-                                        <li><a href="#" onclick="selectSize('7')">7</a></li>
-                                        <li><a href="#" onclick="selectSize('8')">8</a></li>
-                                        <li><a href="#" onclick="selectSize('9')">9</a></li>
-                                        <li><a href="#" onclick="selectSize('9.5')">9.5</a></li>
-                                        <li><a href="#" onclick="selectSize('10')">10</a></li>
+                                
+                                <!-- <div class="attr-detail attr-color mb-15">
+                                    <strong class="mr-10">Color</strong>
+                                    <ul class="list-filter color-filter">
+                                        <li><a href="#" data-color="Red"><span class="product-color-red"></span></a></li>
+                                        <li><a href="#" data-color="Yellow"><span class="product-color-yellow"></span></a></li>
+                                        <li class="active"><a href="#" data-color="White"><span class="product-color-white"></span></a></li>
+                                        <li><a href="#" data-color="Orange"><span class="product-color-orange"></span></a></li>
+                                        <li><a href="#" data-color="Cyan"><span class="product-color-cyan"></span></a></li>
+                                        <li><a href="#" data-color="Green"><span class="product-color-green"></span></a></li>
+                                        <li><a href="#" data-color="Purple"><span class="product-color-purple"></span></a></li>
                                     </ul>
                                 </div> -->
+                                <div class="attr-detail attr-size">
+                                    <strong class="mr-10"><%= product.size %></strong>
+                                    <ul class="list-filter size-filter font-small">
+                                        <li><a href="#">6</a></li>
+                                        <li class="active"><a href="#">7</a></li>
+                                        <li><a href="#">8</a></li>
+                                        <li><a href="#">9</a></li>
+                                        <li><a href="#">9.5</a></li>
+                                        <li><a href="#">10</a></li>
+                                    </ul>
+                                </div>
                                 <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                 <div class="detail-extralink">
                                     <div class="detail-qty border radius">
@@ -375,34 +401,37 @@
                                             </ul>
                                         </div> -->
                                         <div class="attr-detail attr-size">
-                                           <h5>size</h5>
-                                            <strong class="mr-10" style="display: none;">size</strong>
-                                            <br>
+                                            <strong class="mr-10">Size</strong>
                                             <ul class="list-filter size-filter font-small">
-                                                <li><a href="#" onclick="selectSize('6')">6</a></li>
-                                                <li><a href="#" onclick="selectSize('7')">7</a></li>
-                                                <li><a href="#" onclick="selectSize('8')">8</a></li>
-                                                <li><a href="#" onclick="selectSize('9')">9</a></li>
-                                                <li><a href="#" onclick="selectSize('9.5')">9.5</a></li>
-                                                <li><a href="#" onclick="selectSize('10')">10</a></li>
+                                                <li><a href="#" id="size-6">6</a></li>
+                                                <li><a href="#" id="size-7">7</a></li>
+                                                <li><a href="#" id="size-6">8</a></li>
+                                                <li><a href="#" id="size-7">8.5</a></li>
+                                                <li><a href="#" id="size-6">9</a></li>
+                                                <li><a href="#" id="size-7">9.5</a></li>
+                                                <li><a href="#" id="size-6">10</a></li>
+                                                
+                                                <!-- Add ids for other sizes -->
                                             </ul>
                                         </div>
                                         <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                         <div class="detail-extralink">
                                             <div class="detail-qty border radius">
                                                 <a href="#" class="qty-down" onclick="decrementQuantity()">
-                                                    <i class="fi-rs-angle-small-down"></i>
+                                                  <i class="fi-rs-angle-small-down"></i>
                                                 </a>
                                                 <span class="qty-val" id="quantity">1</span>
                                                 <a href="#" class="qty-up" onclick="incrementQuantity()">
-                                                    <i class="fi-rs-angle-small-up"></i>
+                                                  <i class="fi-rs-angle-small-up"></i>
                                                 </a>
-                                            </div>
+                                              </div>
+                                            
                                             <div class="product-extra-link2">
-                                              <a id="addToCartButton" aria-label="Add To Cart" class="action-btn hover-up" ><i class="fa-solid fa-cart-shopping"></i></a>
-
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addtowishlist"><i class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn hover-up" href="#"><i class="fi-rs-shuffle"></i></a>
+                                                <a  id="addToCartButton" data-product-id="<%= product._id %>">
+                                                    <i class="fa-solid fa-cart-shopping"></i>
+                                                </a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/wishlist"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                             </div>
                                         </div>
                                         <ul class="product-meta font-xs color-grey mt-50">
@@ -846,73 +875,77 @@
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-product-full.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:43 GMT -->
 
-<%-include("../partials/userfooter")-%>
-<script>
-let productsize=""
-function selectSize(size) {
-        // Update the selected size
-        document.querySelector('.attr-detail .mr-10').innerText = size;
-        productsize=size;
-        console.log(size)
-        console.log(productsize)
-}
-   // Global variable to store the quantity
-   let quantity = 1; // Initial quantity
 
-function updateQuantityDisplay() {
+<script>
+    var quantity = 1;
+  var selectedSize = '7';  // Default selected size
+
+  function updateQuantityDisplay() {
     const quantityElement = document.getElementById('quantity');
     quantityElement.innerText = quantity;
-}
+  }
 
-function incrementQuantity() {
+  function incrementQuantity() {
     quantity++;
     updateQuantityDisplay();
-}
+  }
 
-function decrementQuantity() {
+  function decrementQuantity() {
     if (quantity > 1) {
-        quantity--;
-        updateQuantityDisplay();
+      quantity--;
+      updateQuantityDisplay();
     }
-}
+  }
 
-// Event listener for the "Add to Cart" button
-document.getElementById('addToCartButton').addEventListener('click', () => {
-  const productName = document.querySelector('.title-detail').innerText;
-  const productBrand = document.querySelector('.pro-details-brand a').innerText;
-  const productSize = productsize;
+  document.addEventListener('DOMContentLoaded', () => {
+    const sizeOptions = document.querySelectorAll('.list-filter.size-filter a');
+    const productId = document.getElementById('addToCartButton').dataset.productId;
 
-  const productDetails = {
-    name: productName,
-    brand: productBrand,
-    size: productSize,
-    quantity: quantity  // Update the quantity with the global variable
-  };
+    sizeOptions.forEach(sizeOption => {
+      sizeOption.addEventListener('click', () => {
+        selectedSize = sizeOption.innerText;
+      });
+    });
 
-  // Send product details to the server
-  sendProductDetailsToServer(productDetails);
+    document.getElementById('addToCartButton').addEventListener('click', () => {
+        const productDetails = {
+            productId: productId,
+            size: selectedSize,
+            quantity: quantity
+        };
+        console.log('Product details to be added to cart:', productDetails);
+
+        // Send product details to the server
+        sendProductDetailsToServer(productDetails);
+    });
 });
 
 function sendProductDetailsToServer(productDetails) {
-  fetch('/addtocart', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(productDetails)
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Product details sent to the server:', data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+    fetch(`/addtocart/${productDetails.productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productDetails)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Product details sent to the server:', data);
+
+        // Check if a redirect URL is provided in the response
+        if (data.redirectUrl) {
+            window.location.href = data.redirectUrl;  // Redirect to the provided URL
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 </script>
+<%-include("../partials/userfooter")-%>
