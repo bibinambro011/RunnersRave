@@ -262,11 +262,11 @@ const addtocart = async (req, res) => {
 
     const productId = id;
 
-    const productdetails = await Product.find({ _id: id });
+    // const productdetails = await Product.find({ _id: id });
     const quantity = 1;
     const data = await User.find({ email: useremail });
     const userid = data[0]._id;
-    console.log("user id is =>", data[0]._id);
+    // console.log("user id is =>", data[0]._id);
     const cartuser = await cartCollection.find({ user: data[0]._id });
     console.log("cart user is =>", cartuser);
     if (!cartuser || cartuser.length === 0) {
@@ -281,17 +281,29 @@ const addtocart = async (req, res) => {
         total: quantity,
       });
       const savedCart = await newCart.save();
+
+      const cart = await cartCollection.findOne({ user: userid });
+      const cartItems = [];
+
+      for (const cartItem of cart.items) {
+        const product = await Product.findById(cartItem.product);
+        if (product) {
+          const cartItemWithDetails = {
+            product,
+            quantity: cartItem.quantity,
+            _id: cartItem._id,
+          };
+          cartItems.push(cartItemWithDetails);
+        }
+      }
       const isAuthenticated = true;
-      res.render("user/cart.ejs", { isAuthenticated });
+      res.render("user/shopcart", { isAuthenticated, cartItems });
     } else {
       const existingUser = await cartCollection.find({});
       const cartuser = await cartCollection.find({
         user: existingUser[0].user,
       });
-      console.log("cart user is ==>", cartuser);
-      console.log("existing user is =>", existingUser);
-      console.log(existingUser.user);
-      console.log(existingUser[0].user);
+
       const newItem = {
         product: productId,
         quantity: quantity,
@@ -300,9 +312,22 @@ const addtocart = async (req, res) => {
         { user: existingUser[0].user },
         { $push: { items: newItem }, $inc: { total: quantity } }
       );
+      const cart = await cartCollection.findOne({ user: userid });
+      const cartItems = [];
+
+      for (const cartItem of cart.items) {
+        const product = await Product.findById(cartItem.product);
+        if (product) {
+          const cartItemWithDetails = {
+            product,
+            quantity: cartItem.quantity,
+            _id: cartItem._id,
+          };
+          cartItems.push(cartItemWithDetails);
+        }
+      }
       const isAuthenticated = true;
-      res.render("user/cart.ejs", { isAuthenticated });
-      console.log("successfully updated");
+      res.render("user/shopcart", { isAuthenticated, cartItems });
     }
   } else {
     const isAuthenticated = false;
@@ -395,7 +420,7 @@ const showcart = async (req, res) => {
           const cartItemWithDetails = {
             product,
             quantity: cartItem.quantity,
-            _id: cartItem._id
+            _id: cartItem._id,
           };
           cartItems.push(cartItemWithDetails);
         }
@@ -414,19 +439,16 @@ const showcart = async (req, res) => {
   }
 };
 
-
-
 const cartadd = async (req, res) => {
   const data = req.body;
 
   console.log("data in the body is =>", data);
-  
 
   try {
     // if (!req.session.user) {
     //   console.log("hi");
     //   res.json({ redirectUrl: "/login" }); // Modify the URL as needed
-      
+
     // }
 
     const { email } = req.session.user;
@@ -434,7 +456,7 @@ const cartadd = async (req, res) => {
     const productId = prodId;
 
     const user = await User.findOne({ email });
-    console.log("user is =>",user)
+    console.log("user is =>", user);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -456,7 +478,6 @@ const cartadd = async (req, res) => {
 
       await newCart.save();
       res.json({ redirectUrl: "/show_cart" });
-
     } else {
       // If user already has a cart, update it
       const newItem = {
@@ -479,7 +500,6 @@ const cartadd = async (req, res) => {
   }
 };
 
-
 const fromcartToLogin = async (req, res) => {
   const isAuthenticated = false;
   res.render("user/login.ejs", { isAuthenticated });
@@ -488,9 +508,52 @@ const userInCart = async (req, res) => {
   const isAuthenticated = true;
   res.render("user/cart", { isAuthenticated });
 };
-const loginpage1=async(req,res)=>{
-  res.render("user/login")
-}
+const loginpage1 = async (req, res) => {
+  res.render("user/login");
+};
+const cartproductdelete = async (req, res) => {
+  const id = req.params.id;
+  const userdata = await User.find({ email: req.session.user.email });
+  const userid = userdata[0]._id;
+  console.log("userid is ===>", userid);
+  console.log("param id ===>", id);
+
+  await cartCollection.updateOne(
+    {
+      user: userid,
+    },
+    {
+      $pull: { items: { _id: id } },
+    }
+  );
+
+  const cart = await cartCollection.findOne({ user: userid });
+  const cartItems = [];
+
+  for (const cartItem of cart.items) {
+    const product = await Product.findById(cartItem.product);
+    if (product) {
+      const cartItemWithDetails = {
+        product,
+        quantity: cartItem.quantity,
+        _id: cartItem._id,
+      };
+      cartItems.push(cartItemWithDetails);
+    }
+  }
+  console.log("cart items for deletion are ====> ", cartItems);
+  const isAuthenticated = true;
+  res.render("user/shopcart", { isAuthenticated, cartItems });
+};
+const checkoutpage = async (req, res) => {
+  if (req.session.user) {
+    let isAuthenticated = true;
+    res.render("user/checkout", { isAuthenticated });
+  } else {
+    let isAuthenticated = false;
+    res.render("user/checkout", { isAuthenticated });
+  }
+};
 
 module.exports = {
   productsearch,
@@ -515,5 +578,7 @@ module.exports = {
   cartadd,
   fromcartToLogin,
   userInCart,
-  loginpage1
+  loginpage1,
+  checkoutpage,
+  cartproductdelete,
 };

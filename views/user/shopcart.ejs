@@ -304,18 +304,23 @@
                   <td class="price" data-title="Price">
                     <span>$<%= item.product.selling_price %></span>
                   </td>
-                  <td class="text-center" data-title="Quantity">
-                    <div class="detail-qty border radius m-auto">
-                      <span class="qty-val"><%= item.quantity %></span>
-                    </div>
-                  </td>
+               
+                    <td class="text-center" data-title="Quantity">
+                        <div class="detail-qty border radius m-auto">
+                          <button class="quantity-toggle" onclick="decrementQuantity('<%= item._id %>')">-</button>
+                          <span class="qty-val" id="qty_<%= item._id %>"><%= item.quantity %></span>
+                          <button class="quantity-toggle" onclick="incrementQuantity('<%= item._id %>')">+</button>
+                        </div>
+                      </td>
+                  
+                  
                   <td class="text-right" data-title="Subtotal">
                     <span
                       >$<%= item.product.selling_price * item.quantity %></span
                     >
                   </td>
                   <td class="action" data-title="Remove">
-                    <a href="#" class="text-muted"
+                    <a href="/cartproductdelete/<%= item._id %>" class="text-muted"
                       ><i class="fi-rs-trash"></i
                     ></a>
                   </td>
@@ -743,7 +748,7 @@
                     </tbody>
                   </table>
                 </div>
-                <a href="#" class="btn">
+                <a href="/checkoutpage" class="btn">
                   <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a
                 >
               </div>
@@ -755,3 +760,20 @@
   </section>
 </main>
 <%-include("../partials/userfooter")-%>
+<script>
+    function incrementQuantity(itemId) {
+      const qtyElement = document.getElementById('qty_' + itemId);
+      let quantity = parseInt(qtyElement.textContent);
+      quantity++;
+      qtyElement.textContent = quantity;
+    }
+  
+    function decrementQuantity(itemId) {
+      const qtyElement = document.getElementById('qty_' + itemId);
+      let quantity = parseInt(qtyElement.textContent);
+      if (quantity > 1) {
+        quantity--;
+        qtyElement.textContent = quantity;
+      }
+    }
+  </script>

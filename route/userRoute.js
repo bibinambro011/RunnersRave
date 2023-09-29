@@ -26,8 +26,11 @@ router.get("/aboutpage", controller.aboutpage);
 router.get("/show_wishlist", middleware.cartAuth, controller.showwishlist);
 router.get("/show_cart", middleware.cartAuth, controller.showcart);
 router.get("/fromcartToLogin",middleware.cartAuth,controller.fromcartToLogin);
-router.get("/userInCart",middleware.cartAuth,controller.userInCart)
+router.get("/userInCart",middleware.cartAuth,controller.userInCart);
+ router.get("/cartproductdelete/:id",middleware.islogin,controller.cartproductdelete);
+router.get("/checkoutpage",middleware.islogin,controller.checkoutpage)
 
 router.get("/regenerateotp", controller.regenerateOtp);
+
 
 module.exports = router;
