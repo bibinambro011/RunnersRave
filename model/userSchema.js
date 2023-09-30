@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         required: true,
       },
+      addresses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'addressModel', // Reference to the Address model
+     }],
       status: {
         type: Boolean,
         default: true,

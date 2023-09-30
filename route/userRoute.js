@@ -28,7 +28,13 @@ router.get("/show_cart", middleware.cartAuth, controller.showcart);
 router.get("/fromcartToLogin",middleware.cartAuth,controller.fromcartToLogin);
 router.get("/userInCart",middleware.cartAuth,controller.userInCart);
  router.get("/cartproductdelete/:id",middleware.islogin,controller.cartproductdelete);
-router.get("/checkoutpage",middleware.islogin,controller.checkoutpage)
+router.get("/gotoshopcart",middleware.islogin,controller.gotoshopcart)
+router.get("/checkoutpage",middleware.islogin,controller.checkoutpage);
+router.get("/editaddress",controller.editaddress);
+router.get("/editaddress/:id",middleware.islogin,controller.editaddress_id)
+router.post("/user_address",middleware.islogin,controller.user_address);
+router.get("/addAddress",middleware.islogin,controller.addAddress);
+router.post("/updatedAddress/:id",middleware.islogin,controller.updatedAddress)
 
 router.get("/regenerateotp", controller.regenerateOtp);
 

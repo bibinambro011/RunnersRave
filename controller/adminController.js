@@ -216,14 +216,14 @@ exports.unblockUser=async(req,res)=>{
     const found = await user.findByIdAndUpdate(id, { status: true });
 
     if (found) {
-      console.log("Product found and updated:", found);
+     
       return res.redirect("/admin/usermanagement");
     } else {
-      console.log("Product not found");
+    
       return res.status(404).send("Product not found");
     }
   } catch (error) {
-    console.error("Error updating product:", error);
+   
     return res.status(500).send("Error updating product");
   }
 }

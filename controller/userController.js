@@ -1,9 +1,12 @@
 const Product = require("../model/productSchema");
+const addressSchema = require("../model/addresses");
 const User = require("../model/userSchema");
 const category = require("../model/categorySchema");
 const cartCollection = require("../model/cartSchema");
 const bcrypt = require("bcrypt");
 const twilio = require("twilio");
+const { userexist } = require("../middleware/userAuth");
+const { json } = require("express/lib/response");
 require("dotenv").config();
 
 const accountSid = "AC7ed272bfc72e23f5ea62dde1140be05b";
@@ -280,7 +283,7 @@ const addtocart = async (req, res) => {
         items: [newItem],
         total: quantity,
       });
-      const savedCart = await newCart.save();
+      await newCart.save();
 
       const cart = await cartCollection.findOne({ user: userid });
       const cartItems = [];
@@ -351,8 +354,18 @@ const productCategory = async (req, res) => {
 };
 const useraccount = async (req, res) => {
   if (req.session.user) {
+    const email = await User.find({ email: req.session.user.email });
+    const user_id = email[0]._id;
+
+    console.log(user_id);
+    const userData = await User.findOne({ _id: user_id }).populate("addresses");
+
     const isAuthenticated = true;
-    res.render("user/page-account.ejs", { username, isAuthenticated });
+    res.render("user/page-account.ejs", {
+      username,
+      isAuthenticated,
+      userData,
+    });
   } else {
     const isAuthenticated = false;
     res.render("user/page-account.ejs", { username, isAuthenticated });
@@ -428,7 +441,7 @@ const showcart = async (req, res) => {
 
       console.log("cart items with details are===>", cartItems);
       const isAuthenticated = true;
-      res.render("user/shopcart", { isAuthenticated, cartItems });
+      res.render("user/shopcart", { cartItems, isAuthenticated });
     } else {
       const isAuthenticated = false;
       res.render("user/shopcart", { isAuthenticated });
@@ -445,12 +458,6 @@ const cartadd = async (req, res) => {
   console.log("data in the body is =>", data);
 
   try {
-    // if (!req.session.user) {
-    //   console.log("hi");
-    //   res.json({ redirectUrl: "/login" }); // Modify the URL as needed
-
-    // }
-
     const { email } = req.session.user;
     const { quantity } = req.body;
     const productId = prodId;
@@ -554,6 +561,113 @@ const checkoutpage = async (req, res) => {
     res.render("user/checkout", { isAuthenticated });
   }
 };
+const gotoshopcart = async (req, res) => {
+  const isAuthenticated = true;
+  res.render("user/shopcart", { isAuthenticated });
+};
+const editaddress = async (req, res) => {
+  const isAuthenticated = true;
+  res.render("user/address", { isAuthenticated });
+};
+const addAddress=async(req,res)=>{
+  const isAuthenticated=true
+  res.render("user/address.ejs",{isAuthenticated})
+}
+const user_address = async (req, res) => {
+  const {
+    name,
+    city,
+    state,
+    address,
+    pincode,
+    landmark,
+    mobile,
+    alt_mobile,
+    type,
+  } = req.body;
+
+  useremail = req.session.user.email;
+  const userdata = await User.find({ email: useremail });
+  const id = userdata[0]._id;
+  const userId = id;
+
+  const Address = new addressSchema({
+    userId: id,
+    name,
+    city,
+    state,
+    address,
+    pincode,
+    landmark,
+    mobile,
+    alt_mobile,
+    userId,
+    type,
+    blocked: false,
+  });
+  const savedAddress = await Address.save();
+  await User.findByIdAndUpdate(userId, { $push: { addresses: Address._id } });
+  res.redirect("/useraccount");
+};
+
+const editaddress_id = async (req, res) => {
+  
+  const id = req.params.id;
+  console.log(typeof(id))
+  const d=id.trim()
+  console.log("id is ===>",d);
+
+  const details=await addressSchema.find({_id:d})
+  const isAuthenticated=true;
+
+  res.render("user/editaddress",{isAuthenticated,details})
+
+  
+ 
+ 
+};
+const updatedAddress=async(req,res)=>{
+  const id = req.params.id;
+  const {
+    name,
+    city,
+    state,
+    address,
+    pincode,
+    landmark,
+    mobile,
+    alt_mobile,
+    type,
+  } = req.body;
+  
+  try {
+    // Construct the update object with the fields you want to update
+    const updateFields = {
+      name,
+      city,
+      state,
+      address,
+      pincode,
+      landmark,
+      mobile,
+      alt_mobile,
+      type,
+    };
+  
+    // Use findByIdAndUpdate to update the document
+    const updatedAddress = await addressSchema.findByIdAndUpdate(id, updateFields, { new: true });
+  
+    if (!updatedAddress) {
+      return res.status(404).json({ message: 'Address not found' });
+    }
+  
+    // res.json(updatedAddress);
+  } catch (error) {
+    console.error('Error updating address:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+  
+}
 
 module.exports = {
   productsearch,
@@ -581,4 +695,10 @@ module.exports = {
   loginpage1,
   checkoutpage,
   cartproductdelete,
+  gotoshopcart,
+  editaddress,
+  addAddress,
+  user_address,
+  editaddress_id,
+  updatedAddress
 };

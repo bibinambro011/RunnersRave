@@ -282,7 +282,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <!-- <div class="col-lg-6">
                                                 <div class="card mb-3 mb-lg-0">
                                                     <div class="card-header">
                                                         <h5 class="mb-0">Billing Address</h5>
@@ -293,21 +293,46 @@
                                                         <a href="#" class="btn-small">Edit</a>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="card">
+                                            </div> -->
+                                            <!-- <div class="col-lg-6"> -->
+                                                <!-- <div class="card">
                                                     <div class="card-header">
                                                         <h5 class="mb-0">Shipping Address</h5>
+                                                    </div> -->
+                                                   
+                                                    <div class="col-lg-6">
+                                                        <a href="/addAddress"class="btn-small">Add Address</a>
+                                                        <% if (userData && userData.addresses && userData.addresses.length > 0) { %>
+                                                            <% userData.addresses.forEach(address => { %>
+                                                                <div class="card mb-3">
+                                                                    <div class="card-header">
+                                                                        <h5 class="mb-0"><%= address.type %> </h5>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <address>
+                                                                            <%= address.address %> <br>
+                                                                            <%= address.city %>, <%= address.state %> <%= address.pincode %> <br>
+                                                                            Phone: <%= address.mobile %>
+                                                                        </address>
+                                                                        <p><%= address.landmark %></p>
+                                                                        <a href="/editaddress/ <%= address._id %>" class="btn-small">Edit</a>
+                                                                    </div>
+                                                                </div>
+                                                            <% }); %>
+                                                        <% } else { %>
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <p>No shipping addresses available.</p>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        <% } %>
                                                     </div>
-                                                    <div class="card-body">
-                                                        <address>4299 Express Lane<br>
-                                                            Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
-                                                        <p>Sarasota</p>
-                                                        <a href="#" class="btn-small">Edit</a>
-                                                    </div>
+<!--                                                     
                                                 </div>
                                             </div>
-                                        </div>
+                                            
+                                        </div> -->
                                     </div>
                                     <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
                                         <div class="card">
