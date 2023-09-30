@@ -300,7 +300,8 @@ const addtocart = async (req, res) => {
         }
       }
       const isAuthenticated = true;
-      res.render("user/shopcart", { isAuthenticated, cartItems });
+      // res.render("user/shopcart", { isAuthenticated, cartItems });
+      res.redirect("/userhome")
     } else {
       const existingUser = await cartCollection.find({});
       const cartuser = await cartCollection.find({
@@ -330,7 +331,8 @@ const addtocart = async (req, res) => {
         }
       }
       const isAuthenticated = true;
-      res.render("user/shopcart", { isAuthenticated, cartItems });
+      // res.render("user/home", { isAuthenticated, cartItems });
+      res.redirect("/userhome")
     }
   } else {
     const isAuthenticated = false;
@@ -338,6 +340,88 @@ const addtocart = async (req, res) => {
   }
 };
 
+const addtocartfromshop=async(req,res)=>{
+  if (req.session.user) {
+    let useremail = req.session.user.email;
+    let id = req.params.id;
+
+    const productId = id;
+
+    // const productdetails = await Product.find({ _id: id });
+    const quantity = 1;
+    const data = await User.find({ email: useremail });
+    const userid = data[0]._id;
+    // console.log("user id is =>", data[0]._id);
+    const cartuser = await cartCollection.find({ user: data[0]._id });
+    console.log("cart user is =>", cartuser);
+    if (!cartuser || cartuser.length === 0) {
+      console.log("not cart user ");
+      const newItem = {
+        product: productId,
+        quantity: quantity,
+      };
+      const newCart = new cartCollection({
+        user: data[0]._id,
+        items: [newItem],
+        total: quantity,
+      });
+      await newCart.save();
+
+      const cart = await cartCollection.findOne({ user: userid });
+      const cartItems = [];
+
+      for (const cartItem of cart.items) {
+        const product = await Product.findById(cartItem.product);
+        if (product) {
+          const cartItemWithDetails = {
+            product,
+            quantity: cartItem.quantity,
+            _id: cartItem._id,
+          };
+          cartItems.push(cartItemWithDetails);
+        }
+      }
+      const isAuthenticated = true;
+      // res.render("user/shopcart", { isAuthenticated, cartItems });
+      res.redirect("/shop")
+    } else {
+      const existingUser = await cartCollection.find({});
+      const cartuser = await cartCollection.find({
+        user: existingUser[0].user,
+      });
+
+      const newItem = {
+        product: productId,
+        quantity: quantity,
+      };
+      await cartCollection.updateOne(
+        { user: existingUser[0].user },
+        { $push: { items: newItem }, $inc: { total: quantity } }
+      );
+      const cart = await cartCollection.findOne({ user: userid });
+      const cartItems = [];
+
+      for (const cartItem of cart.items) {
+        const product = await Product.findById(cartItem.product);
+        if (product) {
+          const cartItemWithDetails = {
+            product,
+            quantity: cartItem.quantity,
+            _id: cartItem._id,
+          };
+          cartItems.push(cartItemWithDetails);
+        }
+      }
+      const isAuthenticated = true;
+      // res.render("user/home", { isAuthenticated, cartItems });
+      res.redirect("/shop")
+    }
+  } else {
+    const isAuthenticated = false;
+    res.render("user/login", { isAuthenticated });
+  }
+
+}
 const productCategory = async (req, res) => {
   const id = req.params.id;
   if (req.session.user) {
@@ -668,6 +752,30 @@ const updatedAddress=async(req,res)=>{
   }
   
 }
+const deleteaddress = async (req, res) => {
+  const dd = req.params.id;
+  const id=dd.trim()
+  const userData =await addressSchema.find({_id:id})
+
+  try {
+    const deletedAddress = await addressSchema.findByIdAndDelete(id);
+
+    if (!deletedAddress) {
+      return res.status(404).json({ message: 'Address not found' });
+    }
+    const isAuthenticated=true;
+
+   res.render("user/page-account",{isAuthenticated,userData })
+  } catch (error) {
+    console.error('Error deleting address:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+module.exports = {
+  deleteaddress
+};
+
 
 module.exports = {
   productsearch,
@@ -700,5 +808,7 @@ module.exports = {
   addAddress,
   user_address,
   editaddress_id,
-  updatedAddress
+  updatedAddress,
+  deleteaddress,
+  addtocartfromshop
 };

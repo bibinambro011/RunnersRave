@@ -16,6 +16,7 @@ router.post("/user_registration", controller.user_registration);
 router.get("/shop", controller.shop);
 router.get("/product/:id", controller.productpage);
 router.get("/addtocart/:id", middleware.cartAuth, controller.addtocart);
+router.get("/addtocartfromshop/:id",middleware.islogin,controller.addtocartfromshop)
 router.post("/addtocart/:id",middleware.cartislogin,controller.cartadd)
 router.get("/verifyotp", controller.verify_otp);
 router.get("/productCategory/:id", controller.productCategory);
@@ -34,7 +35,8 @@ router.get("/editaddress",controller.editaddress);
 router.get("/editaddress/:id",middleware.islogin,controller.editaddress_id)
 router.post("/user_address",middleware.islogin,controller.user_address);
 router.get("/addAddress",middleware.islogin,controller.addAddress);
-router.post("/updatedAddress/:id",middleware.islogin,controller.updatedAddress)
+router.post("/updatedAddress/:id",middleware.islogin,controller.updatedAddress);
+router.get("/deleteaddress/:id",middleware.islogin,controller.deleteaddress)
 
 router.get("/regenerateotp", controller.regenerateOtp);
 
