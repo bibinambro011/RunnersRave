@@ -7,10 +7,11 @@ const bcrypt = require("bcrypt");
 const twilio = require("twilio");
 const { userexist } = require("../middleware/userAuth");
 const { json } = require("express/lib/response");
+const Order = require("../model/orderSchema");
 require("dotenv").config();
 
-const accountSid = "AC7ed272bfc72e23f5ea62dde1140be05b";
-const authToken = "847740e965bff24e69d8ca6aac7eaedc";
+const accountSid = process.env.accountSid;
+const authToken = process.env.authToken;
 
 const client = twilio(accountSid, authToken);
 let generatedotp = "";
@@ -37,7 +38,7 @@ const user_registration = async (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
-    phone: req.body.password,
+    phone: req.body.phone,
   };
 
   const recipientPhoneNumber = `+91${phone}`;
@@ -158,6 +159,7 @@ const registerpage = async (req, res) => {
 };
 const signin = async (req, res) => {
   if (req.session.user) {
+    console.log("session details===>", req.session.user);
     const isAuthenticated = true;
     res.render("user/login.ejs", { isAuthenticated });
   } else {
@@ -172,6 +174,8 @@ const userlogin = async (req, res) => {
     email: req.body.email,
     password: req.body.password,
   };
+
+  const data = await User.find({ email: req.body.email });
 
   try {
     let user = await User.findOne({ email: userdata.email });
@@ -188,11 +192,11 @@ const userlogin = async (req, res) => {
       );
 
       if (isPasswordValid) {
-        req.session.user = userdata;
-        const isAuthenticated = true;
-        username = user.username;
-        const products = await Product.find();
-        res.render("user/home.ejs", { products, isAuthenticated });
+        req.session.user = data;
+        // const isAuthenticated = true;
+        // username = user.username;
+        // const products = await Product.find();
+        res.redirect("/userhome");
       } else {
         const isAuthenticated = false;
         res.render("user/login.ejs", {
@@ -233,13 +237,22 @@ const productpage = async (req, res) => {
 };
 
 const userhome = async (req, res) => {
-  if (req.session.user) {
+  const user = req.session.user;
+  console.log(user);
+  if (user) {
+    const userid = req.session.user[0]._id;
+    const cart = await cartCollection.find({ userId: userid });
+
     const isAuthenticated = true;
     const products = await Product.find({ status: "unblocked" });
+
     res.render("user/home.ejs", { products, isAuthenticated });
   } else {
+    console.log("in else case");
     const isAuthenticated = false;
     const products = await Product.find({ status: "unblocked" });
+    console.log("before else case===>");
+
     res.render("user/home.ejs", { products, isAuthenticated });
   }
 };
@@ -258,170 +271,6 @@ const shop = async (req, res) => {
   }
 };
 
-const addtocart = async (req, res) => {
-  if (req.session.user) {
-    let useremail = req.session.user.email;
-    let id = req.params.id;
-
-    const productId = id;
-
-    // const productdetails = await Product.find({ _id: id });
-    const quantity = 1;
-    const data = await User.find({ email: useremail });
-    const userid = data[0]._id;
-    // console.log("user id is =>", data[0]._id);
-    const cartuser = await cartCollection.find({ user: data[0]._id });
-    console.log("cart user is =>", cartuser);
-    if (!cartuser || cartuser.length === 0) {
-      console.log("not cart user ");
-      const newItem = {
-        product: productId,
-        quantity: quantity,
-      };
-      const newCart = new cartCollection({
-        user: data[0]._id,
-        items: [newItem],
-        total: quantity,
-      });
-      await newCart.save();
-
-      const cart = await cartCollection.findOne({ user: userid });
-      const cartItems = [];
-
-      for (const cartItem of cart.items) {
-        const product = await Product.findById(cartItem.product);
-        if (product) {
-          const cartItemWithDetails = {
-            product,
-            quantity: cartItem.quantity,
-            _id: cartItem._id,
-          };
-          cartItems.push(cartItemWithDetails);
-        }
-      }
-      const isAuthenticated = true;
-      // res.render("user/shopcart", { isAuthenticated, cartItems });
-      res.redirect("/userhome")
-    } else {
-      const existingUser = await cartCollection.find({});
-      const cartuser = await cartCollection.find({
-        user: existingUser[0].user,
-      });
-
-      const newItem = {
-        product: productId,
-        quantity: quantity,
-      };
-      await cartCollection.updateOne(
-        { user: existingUser[0].user },
-        { $push: { items: newItem }, $inc: { total: quantity } }
-      );
-      const cart = await cartCollection.findOne({ user: userid });
-      const cartItems = [];
-
-      for (const cartItem of cart.items) {
-        const product = await Product.findById(cartItem.product);
-        if (product) {
-          const cartItemWithDetails = {
-            product,
-            quantity: cartItem.quantity,
-            _id: cartItem._id,
-          };
-          cartItems.push(cartItemWithDetails);
-        }
-      }
-      const isAuthenticated = true;
-      // res.render("user/home", { isAuthenticated, cartItems });
-      res.redirect("/userhome")
-    }
-  } else {
-    const isAuthenticated = false;
-    res.render("user/login", { isAuthenticated });
-  }
-};
-
-const addtocartfromshop=async(req,res)=>{
-  if (req.session.user) {
-    let useremail = req.session.user.email;
-    let id = req.params.id;
-
-    const productId = id;
-
-    // const productdetails = await Product.find({ _id: id });
-    const quantity = 1;
-    const data = await User.find({ email: useremail });
-    const userid = data[0]._id;
-    // console.log("user id is =>", data[0]._id);
-    const cartuser = await cartCollection.find({ user: data[0]._id });
-    console.log("cart user is =>", cartuser);
-    if (!cartuser || cartuser.length === 0) {
-      console.log("not cart user ");
-      const newItem = {
-        product: productId,
-        quantity: quantity,
-      };
-      const newCart = new cartCollection({
-        user: data[0]._id,
-        items: [newItem],
-        total: quantity,
-      });
-      await newCart.save();
-
-      const cart = await cartCollection.findOne({ user: userid });
-      const cartItems = [];
-
-      for (const cartItem of cart.items) {
-        const product = await Product.findById(cartItem.product);
-        if (product) {
-          const cartItemWithDetails = {
-            product,
-            quantity: cartItem.quantity,
-            _id: cartItem._id,
-          };
-          cartItems.push(cartItemWithDetails);
-        }
-      }
-      const isAuthenticated = true;
-      // res.render("user/shopcart", { isAuthenticated, cartItems });
-      res.redirect("/shop")
-    } else {
-      const existingUser = await cartCollection.find({});
-      const cartuser = await cartCollection.find({
-        user: existingUser[0].user,
-      });
-
-      const newItem = {
-        product: productId,
-        quantity: quantity,
-      };
-      await cartCollection.updateOne(
-        { user: existingUser[0].user },
-        { $push: { items: newItem }, $inc: { total: quantity } }
-      );
-      const cart = await cartCollection.findOne({ user: userid });
-      const cartItems = [];
-
-      for (const cartItem of cart.items) {
-        const product = await Product.findById(cartItem.product);
-        if (product) {
-          const cartItemWithDetails = {
-            product,
-            quantity: cartItem.quantity,
-            _id: cartItem._id,
-          };
-          cartItems.push(cartItemWithDetails);
-        }
-      }
-      const isAuthenticated = true;
-      // res.render("user/home", { isAuthenticated, cartItems });
-      res.redirect("/shop")
-    }
-  } else {
-    const isAuthenticated = false;
-    res.render("user/login", { isAuthenticated });
-  }
-
-}
 const productCategory = async (req, res) => {
   const id = req.params.id;
   if (req.session.user) {
@@ -438,17 +287,54 @@ const productCategory = async (req, res) => {
 };
 const useraccount = async (req, res) => {
   if (req.session.user) {
-    const email = await User.find({ email: req.session.user.email });
-    const user_id = email[0]._id;
+    const user_id = req.session.user[0]._id;
+    const data = await User.findById(user_id);
 
-    console.log(user_id);
+    const username = data.username;
     const userData = await User.findOne({ _id: user_id }).populate("addresses");
+
+    // Find the order details for the user
+    const details = await Order.find({ userId: user_id });
+
+    // Find the cart details for the user
+    const order = await Order.find({ userId: user_id }).populate({
+      path: 'products.productId',  // Populate the 'productId' field
+      model: 'productCollection',  // Replace with the correct model name for products
+    });
+    const orders = order
+      
+    
+    
+    // Iterate over each order
+    for (const order of orders) {
+      console.log('Order ID:', order._id);
+      console.log('Order Date:', order.date);
+      console.log('Products:');
+    
+      // Iterate over each product in the order
+      for (const product of order.products) {
+        console.log('  Product ID:', product.productId.images[0]);
+        console.log('  Product Name:', product.productId.name); // Adjust this based on your product schema
+        console.log('  Quantity:', product.quantity);
+        console.log('  Sale Price:', product.productId.selling_price);
+        
+      }
+      console.log('-----------------------------');
+    }
+    
+    // console.log('All populated orders:', order);
+    
+    
 
     const isAuthenticated = true;
     res.render("user/page-account.ejs", {
       username,
       isAuthenticated,
       userData,
+      data,
+      order
+      
+      
     });
   } else {
     const isAuthenticated = false;
@@ -497,166 +383,26 @@ const showwishlist = async (req, res) => {
     res.render("user/wishlist.ejs", { isAuthenticated });
   }
 };
-const showcart = async (req, res) => {
-  try {
-    if (req.session.user) {
-      console.log("show cart get called==>");
-      const userdata = await User.find({ email: req.session.user.email });
-      const userid = userdata[0]._id;
-      const cart = await cartCollection.findOne({ user: userid });
 
-      if (!cart) {
-        throw new Error("Cart not found for this user.");
-      }
-
-      const cartItems = [];
-
-      for (const cartItem of cart.items) {
-        const product = await Product.findById(cartItem.product);
-        if (product) {
-          const cartItemWithDetails = {
-            product,
-            quantity: cartItem.quantity,
-            _id: cartItem._id,
-          };
-          cartItems.push(cartItemWithDetails);
-        }
-      }
-
-      console.log("cart items with details are===>", cartItems);
-      const isAuthenticated = true;
-      res.render("user/shopcart", { cartItems, isAuthenticated });
-    } else {
-      const isAuthenticated = false;
-      res.render("user/shopcart", { isAuthenticated });
-    }
-  } catch (error) {
-    console.error("Error fetching cart items:", error.message);
-    res.status(500).send("Error fetching cart items.");
-  }
-};
-
-const cartadd = async (req, res) => {
-  const data = req.body;
-
-  console.log("data in the body is =>", data);
-
-  try {
-    const { email } = req.session.user;
-    const { quantity } = req.body;
-    const productId = prodId;
-
-    const user = await User.findOne({ email });
-    console.log("user is =>", user);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const existingCart = await cartCollection.findOne({ user: user._id });
-
-    if (!existingCart) {
-      // If user doesn't have a cart, create a new one
-      const newItem = {
-        product: productId,
-        quantity: quantity,
-      };
-
-      const newCart = new cartCollection({
-        user: user._id,
-        items: [newItem],
-        total: quantity,
-      });
-
-      await newCart.save();
-      res.json({ redirectUrl: "/show_cart" });
-    } else {
-      // If user already has a cart, update it
-      const newItem = {
-        product: productId,
-        quantity: quantity,
-      };
-
-      await cartCollection.updateOne(
-        { user: user._id },
-        { $push: { items: newItem }, $inc: { total: quantity } }
-      );
-      res.json({ redirectUrl: "/show_cart" });
-    }
-
-    // const isAuthenticated = true;
-    // res.render("user/cart.ejs", { isAuthenticated });
-  } catch (error) {
-    console.error("Error adding to cart:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-const fromcartToLogin = async (req, res) => {
-  const isAuthenticated = false;
-  res.render("user/login.ejs", { isAuthenticated });
-};
-const userInCart = async (req, res) => {
-  const isAuthenticated = true;
-  res.render("user/cart", { isAuthenticated });
-};
 const loginpage1 = async (req, res) => {
   res.render("user/login");
 };
-const cartproductdelete = async (req, res) => {
-  const id = req.params.id;
-  const userdata = await User.find({ email: req.session.user.email });
-  const userid = userdata[0]._id;
-  console.log("userid is ===>", userid);
-  console.log("param id ===>", id);
 
-  await cartCollection.updateOne(
-    {
-      user: userid,
-    },
-    {
-      $pull: { items: { _id: id } },
-    }
-  );
-
-  const cart = await cartCollection.findOne({ user: userid });
-  const cartItems = [];
-
-  for (const cartItem of cart.items) {
-    const product = await Product.findById(cartItem.product);
-    if (product) {
-      const cartItemWithDetails = {
-        product,
-        quantity: cartItem.quantity,
-        _id: cartItem._id,
-      };
-      cartItems.push(cartItemWithDetails);
-    }
-  }
-  console.log("cart items for deletion are ====> ", cartItems);
+const cartRedirection = async (req, res) => {
   const isAuthenticated = true;
-  res.render("user/shopcart", { isAuthenticated, cartItems });
+
+  const products = await Product.find({ status: "unblocked" });
+  res.render("user/home", { products, isAuthenticated });
 };
-const checkoutpage = async (req, res) => {
-  if (req.session.user) {
-    let isAuthenticated = true;
-    res.render("user/checkout", { isAuthenticated });
-  } else {
-    let isAuthenticated = false;
-    res.render("user/checkout", { isAuthenticated });
-  }
-};
-const gotoshopcart = async (req, res) => {
-  const isAuthenticated = true;
-  res.render("user/shopcart", { isAuthenticated });
-};
+
 const editaddress = async (req, res) => {
   const isAuthenticated = true;
   res.render("user/address", { isAuthenticated });
 };
-const addAddress=async(req,res)=>{
-  const isAuthenticated=true
-  res.render("user/address.ejs",{isAuthenticated})
-}
+const addAddress = async (req, res) => {
+  const isAuthenticated = true;
+  res.render("user/address.ejs", { isAuthenticated });
+};
 const user_address = async (req, res) => {
   const {
     name,
@@ -672,7 +418,7 @@ const user_address = async (req, res) => {
 
   useremail = req.session.user.email;
   const userdata = await User.find({ email: useremail });
-  const id = userdata[0]._id;
+  const id = req.session.user[0]._id;
   const userId = id;
 
   const Address = new addressSchema({
@@ -695,22 +441,18 @@ const user_address = async (req, res) => {
 };
 
 const editaddress_id = async (req, res) => {
-  
   const id = req.params.id;
-  console.log(typeof(id))
-  const d=id.trim()
-  console.log("id is ===>",d);
+  console.log(typeof id);
+  const d = id.trim();
+  console.log("id is ===>", d);
 
-  const details=await addressSchema.find({_id:d})
-  const isAuthenticated=true;
+  const details = await addressSchema.find({ _id: d });
+  console.log(details);
+  const isAuthenticated = true;
 
-  res.render("user/editaddress",{isAuthenticated,details})
-
-  
- 
- 
+  res.render("user/editaddress", { isAuthenticated, details });
 };
-const updatedAddress=async(req,res)=>{
+const updatedAddress = async (req, res) => {
   const id = req.params.id;
   const {
     name,
@@ -723,7 +465,7 @@ const updatedAddress=async(req,res)=>{
     alt_mobile,
     type,
   } = req.body;
-  
+
   try {
     // Construct the update object with the fields you want to update
     const updateFields = {
@@ -737,52 +479,59 @@ const updatedAddress=async(req,res)=>{
       alt_mobile,
       type,
     };
-  
+
     // Use findByIdAndUpdate to update the document
-    const updatedAddress = await addressSchema.findByIdAndUpdate(id, updateFields, { new: true });
-  
+    const updatedAddress = await addressSchema.findByIdAndUpdate(
+      id,
+      updateFields,
+      { new: true }
+    );
+
     if (!updatedAddress) {
-      return res.status(404).json({ message: 'Address not found' });
+      return res.status(404).json({ message: "Address not found" });
     }
-  
+
     // res.json(updatedAddress);
   } catch (error) {
-    console.error('Error updating address:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error updating address:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
-  
-}
+};
 const deleteaddress = async (req, res) => {
   const dd = req.params.id;
-  const id=dd.trim()
-  const userData =await addressSchema.find({_id:id})
+  const id = dd.trim();
+  const userData = await addressSchema.find({ _id: id });
 
   try {
     const deletedAddress = await addressSchema.findByIdAndDelete(id);
 
     if (!deletedAddress) {
-      return res.status(404).json({ message: 'Address not found' });
+      return res.status(404).json({ message: "Address not found" });
     }
-    const isAuthenticated=true;
+    const isAuthenticated = true;
 
-   res.render("user/page-account",{isAuthenticated,userData })
+    // res.render("user/page-account", { isAuthenticated, userData });
+    res.redirect("/useraccount");
   } catch (error) {
-    console.error('Error deleting address:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error deleting address:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
+};
+const paymentsuccesfull = async (req, res) => {
+  const isAuthenticated = true;
+  res.render("user/paymentmessage", { isAuthenticated });
 };
 
 module.exports = {
-  deleteaddress
+  deleteaddress,
 };
-
 
 module.exports = {
   productsearch,
   addtowishlist,
   useraccount,
   productCategory,
-  addtocart,
+  // addtocart,
   shop,
   userhome,
   productpage,
@@ -796,19 +545,21 @@ module.exports = {
   user_registration,
   aboutpage,
   showwishlist,
-  showcart,
-  cartadd,
-  fromcartToLogin,
-  userInCart,
+  // showcart,
+  // cartadd,
+  // fromcartToLogin,
+  // userInCart,
   loginpage1,
-  checkoutpage,
-  cartproductdelete,
-  gotoshopcart,
+  //checkoutpage,
+  cartRedirection,
+  // cartproductdelete,
+  // gotoshopcart,
   editaddress,
   addAddress,
   user_address,
   editaddress_id,
   updatedAddress,
   deleteaddress,
-  addtocartfromshop
+  // addtocartfromshop,
+  paymentsuccesfull,
 };

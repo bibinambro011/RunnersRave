@@ -33,7 +33,8 @@ const userexist=async(req,res,next)=>{
   if(req.session.user){
     isAuthenticated=true;
     const products = await Product.find({status:"unblocked"});
-  res.render("user/home.ejs", { products,isAuthenticated });
+    
+  res.render("user/home.ejs", { products,isAuthenticated, });
   }else{
     const isAuthenticated=false;
   const products = await Product.find({status:"unblocked"});
