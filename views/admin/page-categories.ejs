@@ -14,29 +14,13 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <form action="/admin/categoryadd" method="post">
-                                
+                            <form action="/admin/categoryadd" method="post" onsubmit="return validateForm()">
+                                <div class="form-group">
                                     <label for="product_name" class="form-label">Name</label>
-                                    <input type="text" name="name" placeholder="Type here" class="form-control" id="product_name"  />
-                              
-                                <!-- <div class="mb-4">
-                                    <label for="product_slug" class="form-label">Slug</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="product_slug" />
+                                    <input type="text" name="name" placeholder="Type here" class="form-control" id="product_name" />
+                                    <span id="error-category" style="color: red;"></span>
                                 </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Parent</label>
-                                    <select class="form-select">
-                                        <option>Clothes</option>
-                                        <option>T-Shirts</option>
-                                    </select>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Description</label>
-                                    <textarea placeholder="Type here" class="form-control"></textarea>
-                                </div> -->
-                               
-                                    <button class="btn btn-primary">Create category</button>
-                            
+                                <button type="submit" class="btn btn-primary">Create category</button>
                             </form>
                         </div>
                         <div class="col-md-9">
@@ -73,9 +57,7 @@
                                             <td><%= category._id %></td>
                                             <td><b><%= category.active %></b></td>
                                             <td><b><%= category.name %></b></td>
-                                            <!-- <td>Men clothes</td>
-                                            <td>/men</td>
-                                            <td>1</td> -->
+                                           
                                             <td class="text-end">
                                                 <div class="dropdown">
                                                     <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
@@ -245,3 +227,24 @@
         </section> <!-- content-main end// -->
       
         <%-include("../partials/adminfooter")-%>
+        <script>
+            function validateForm() {
+                const name = document.getElementById('product_name').value;
+                const errormessage=document.getElementById("error-category")
+        
+                // Check if the name is empty
+                if (name.trim() === '') {
+                    errormessage.innerHTML="category field cannot be empty"
+                    return false;
+                }
+        
+                return true; // Submit the form if validation passes
+            }
+        </script>
+        
+        
+        
+        
+        
+        
+        

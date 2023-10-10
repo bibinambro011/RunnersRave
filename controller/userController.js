@@ -295,36 +295,13 @@ const useraccount = async (req, res) => {
 
     // Find the order details for the user
     const details = await Order.find({ userId: user_id });
-
+    const userdetail = await User.findById(user_id);
     // Find the cart details for the user
     const order = await Order.find({ userId: user_id }).populate({
-      path: 'products.productId',  // Populate the 'productId' field
-      model: 'productCollection',  // Replace with the correct model name for products
+      path: "products.productId", // Populate the 'productId' field
+      model: "productCollection", // Replace with the correct model name for products
     });
-    const orders = order
-      
-    
-    
-    // Iterate over each order
-    for (const order of orders) {
-      console.log('Order ID:', order._id);
-      console.log('Order Date:', order.date);
-      console.log('Products:');
-    
-      // Iterate over each product in the order
-      for (const product of order.products) {
-        console.log('  Product ID:', product.productId.images[0]);
-        console.log('  Product Name:', product.productId.name); // Adjust this based on your product schema
-        console.log('  Quantity:', product.quantity);
-        console.log('  Sale Price:', product.productId.selling_price);
-        
-      }
-      console.log('-----------------------------');
-    }
-    
-    // console.log('All populated orders:', order);
-    
-    
+    const orders = order;
 
     const isAuthenticated = true;
     res.render("user/page-account.ejs", {
@@ -332,9 +309,9 @@ const useraccount = async (req, res) => {
       isAuthenticated,
       userData,
       data,
-      order
-      
-      
+      order,
+
+      userdetail,
     });
   } else {
     const isAuthenticated = false;
@@ -348,6 +325,28 @@ const addtowishlist = async (req, res) => {
   } else {
     isAuthenticated = false;
     res.render("user/wishlist.ejs", { isAuthenticated });
+  }
+};
+const profileafteredit = async (req, res) => {
+  console.log(req.body);
+  const userId = req.session.user[0]._id;
+  const { username, email, phone } = req.body;
+  const updatedUser = await User.findByIdAndUpdate(
+    { _id: userId }, // Replace userId with the actual user ID
+    { $set: { username, email, phone } },
+    { new: true } // This option ensures that the updated user is returned
+  );
+  res.redirect("/useraccount");
+};
+const passwordchange = async (req, res) => {
+  const user = await User.findById(req.session.user[0]._id);
+  const { currentpassword, newpassword, confirmpassword } = req.body;
+  const isMatch = await bcrypt.compare(currentpassword, user.password);
+  if (isMatch) {
+    const hashedPassword = await bcrypt.hash(newpassword, 10); // You can adjust the salt rounds as needed
+    user.password = hashedPassword;
+    await user.save();
+    res.redirect("/useraccount");
   }
 };
 const productsearch = async (req, res) => {
@@ -453,6 +452,9 @@ const editaddress_id = async (req, res) => {
   res.render("user/editaddress", { isAuthenticated, details });
 };
 const updatedAddress = async (req, res) => {
+
+  console.log("hello world")
+  console.log(req.body)
   const id = req.params.id;
   const {
     name,
@@ -463,11 +465,13 @@ const updatedAddress = async (req, res) => {
     landmark,
     mobile,
     alt_mobile,
-    type,
+    type
+    
   } = req.body;
+  console.log("type is ===>",type)
 
   try {
-    // Construct the update object with the fields you want to update
+    
     const updateFields = {
       name,
       city,
@@ -478,9 +482,10 @@ const updatedAddress = async (req, res) => {
       mobile,
       alt_mobile,
       type,
+  
     };
 
-    // Use findByIdAndUpdate to update the document
+    
     const updatedAddress = await addressSchema.findByIdAndUpdate(
       id,
       updateFields,
@@ -490,8 +495,9 @@ const updatedAddress = async (req, res) => {
     if (!updatedAddress) {
       return res.status(404).json({ message: "Address not found" });
     }
+    res.redirect("/useraccount")
 
-    // res.json(updatedAddress);
+    
   } catch (error) {
     console.error("Error updating address:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -510,7 +516,7 @@ const deleteaddress = async (req, res) => {
     }
     const isAuthenticated = true;
 
-    // res.render("user/page-account", { isAuthenticated, userData });
+    
     res.redirect("/useraccount");
   } catch (error) {
     console.error("Error deleting address:", error);
@@ -532,6 +538,8 @@ module.exports = {
   useraccount,
   productCategory,
   // addtocart,
+  profileafteredit,
+  passwordchange,
   shop,
   userhome,
   productpage,

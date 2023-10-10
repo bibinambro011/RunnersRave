@@ -208,7 +208,7 @@
                                                 <!-- Update the quantity and total price based on user interactions -->
                                                 <td class="text-center" data-title="Stock">
                                                     <div class="detail-qty border radius m-auto">
-                                                        <a class="qty-up" onclick="increaseQuantity('<%= product.productId._id %>','<%= product.productId.selling_price %>')">
+                                                        <a class="qty-up" onclick="increaseQuantity('<%= product.productId._id %>','<%= product.productId.selling_price %>','<%= product.productId.stock %>')" data-stock="<%= product.productId.stock %>">
                                                             <i class="fi-rs-angle-small-up"></i>
                                                         </a>
                                                         <span class="qty-val" id="qty-<%= product.productId._id %>"><%= product.quantity %></span>
@@ -235,8 +235,13 @@
                             </table>
                         </div>
                         <div class="cart-action text-end">
+                            <p style="color: red;"><%=locals.message ? message:''%></p>
                            
-                             <a class="btn   mr-10 mb-sm-15" href="/placeorder"><i class="fi-rs-shuffle mr-10"></i>Place Order</a>
+                          <!-- Assuming this is part of your EJS template -->
+<a class="btn mr-10 mb-sm-15 <%= (cart && cart.products.length > 0) ? '' : 'disabled' %>" href="/placeorder">
+    <i class="fi-rs-shuffle mr-10"></i>proceed to pay
+  </a>
+  
                             <a class="btn " href="/shop"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
                         </div>
                         <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
@@ -258,6 +263,7 @@
 <script>
    function updateQuantity(productId,price, quantity) {
         // Update quantity display
+        
         const qtyElement = document.getElementById(`qty-${productId}`);
         qtyElement.textContent = quantity;
         qtyElement.innerText = quantity;
@@ -278,9 +284,13 @@ updateCartItemInDatabase(updatedCartItem)
 
     }
 
-    function increaseQuantity(productId,price) {
+    function increaseQuantity(productId,price,maxStock) {
         const qtyElement = document.getElementById(`qty-${productId}`);
         let quantity = parseInt(qtyElement.textContent, 10);
+        if (quantity >= maxStock) {
+            alert('Cannot increase quantity. Stock not available.');
+            return;
+        }
         quantity++;
         updateQuantity(productId,price, quantity);
        
@@ -294,7 +304,7 @@ updateCartItemInDatabase(updatedCartItem)
             updateQuantity(productId,price, quantity);
             
         }
-    }
+    }e
     
     
     function updateCartItemInDatabase(cartItem) {

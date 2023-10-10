@@ -9,7 +9,7 @@
 <div class="container mt-4">
   <h2 class="text-center mb-4">Product Details</h2>
   <div class="table-responsive">
-    <table class="table table-bordered table-striped mx-auto" id="myTable">
+    <table class="table table-bordered table-striped mx-auto" id="example">
       <thead>
         <tr>
           <th scope="col">Product</th>
@@ -53,9 +53,10 @@
   </div>
 </div>
 <script>
-$(document).ready( function () {
-  $('#myTable').DataTable();
-} );
+  $(document).ready(function () {
+                    new DataTable('#example');
+            
+                })
 </script>
 
 

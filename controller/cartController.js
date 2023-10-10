@@ -11,7 +11,7 @@ const addtocart = async (req, res) => {
   const size = exproduct.size;
 
   try {
-    const cart = await Cart.findOne({ userId });
+    let cart = await Cart.findOne({ userId });
 
     if (!cart) {
       const newCart = new Cart({
@@ -26,32 +26,26 @@ const addtocart = async (req, res) => {
         ],
       });
       await newCart.save();
-
-      const isAuthenticated = true;
-      const products = await Product.find({ status: "unblocked" });
-      res.render("user/home", { isAuthenticated, products });
-    }
-
-    const existingProduct = cart.products.find(
-      (product) =>
-        product.productId.toString() === productId && product.size == size
-    );
-
-    if (existingProduct) {
-      existingProduct.quantity++;
-      existingProduct.total =
-        existingProduct.quantity * exproduct.selling_price;
-      await cart.save();
     } else {
-      cart.products.push({
-        productId,
-        size: size,
-        quantity: 1,
-        total: exproduct.selling_price,
-      });
-    }
+      const existingProduct = cart.products.find(
+        (product) =>
+          product.productId.toString() === productId && product.size == size
+      );
 
-    await cart.save();
+      if (existingProduct) {
+        existingProduct.quantity++;
+        existingProduct.total = existingProduct.quantity * exproduct.selling_price;
+      } else {
+        cart.products.push({
+          productId,
+          size: size,
+          quantity: 1,
+          total: exproduct.selling_price,
+        });
+      }
+
+      await cart.save();
+    }
 
     const isAuthenticated = true;
     const products = await Product.find({ status: "unblocked" });
@@ -61,12 +55,13 @@ const addtocart = async (req, res) => {
   }
 };
 
+
 const addtocartfrompage = async (req, res) => {
   const { productId, size, quantity } = req.body;
   const userId = req.session.user[0]._id;
 
   const exproduct = await Product.findById(productId);
-  // }
+
   try {
     const cart = await Cart.findOne({ userId });
 
@@ -82,48 +77,36 @@ const addtocartfrompage = async (req, res) => {
           },
         ],
       });
-      console.log("helloo before redirection");
       await newCart.save();
+    } else {
+      const existingProduct = cart.products.find(
+        (product) =>
+          product.productId.toString() === productId && product.size == size
+      );
 
-      const isAuthenticated = true;
-      const products = await Product.find({ status: "unblocked" });
-      //   res.render("user/home", { isAuthenticated, products });
-      res.json({ redirectUrl: "/shop" });
-    }
-
-    const existingProduct = cart.products.find(
-      (product) =>
-        product.productId.toString() === productId && product.size == size
-    );
-
-    if (existingProduct) {
-      console.log("Existing product");
-
-      existingProduct.quantity += quantity;
-      existingProduct.total =
-        existingProduct.quantity * exproduct.selling_price;
+      if (existingProduct) {
+        existingProduct.quantity += quantity;
+        existingProduct.total = existingProduct.quantity * exproduct.selling_price;
+      } else {
+        cart.products.push({
+          productId,
+          quantity: quantity,
+          size: size,
+          total: exproduct.selling_price * quantity,
+        });
+      }
 
       await cart.save();
-    } else {
-      cart.products.push({
-        productId,
-        quantity: quantity,
-        size: size,
-        total: exproduct.selling_price * quantity,
-      });
     }
-    console.log("after redirection");
-
-    await cart.save();
 
     const isAuthenticated = true;
     const products = await Product.find({ status: "unblocked" });
-    // res.render("user/home", { isAuthenticated, products });
     res.json({ redirectUrl: "/shop" });
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const showcart = async (req, res) => {
   const userId = req.session.user[0]._id;

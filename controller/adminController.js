@@ -6,21 +6,8 @@ const express = require("express");
 const adminCollection = require("../model/adminSchema");
 const categories=require("../model/categorySchema")
 
-const multer = require("multer");
 
-const path=require("path")
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'assets/uploads'); 
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));  
-  }
-});
-  
-const upload = multer({ storage: storage });
-
+const upload=require("../helper/multerfile")
 
 exports.login = async (req, res) => {
   res.render("admin/login");
@@ -31,7 +18,7 @@ exports.dashboard = async (req, res) => {
   if(data){
     if (data.email == req.body.email && data.password == req.body.password) {
      
-      req.session.adminuser = req.body.email;
+      req.session.adminuser = data
       res.render("admin/dashboard.ejs");
     }else{
       res.redirect("/admin");
@@ -169,7 +156,7 @@ exports.unblockproduct=async(req,res)=>{
   const id=req.params.id;
   await Product.findByIdAndUpdate({_id:id},{
     $set:{
-      status:"unblock"
+      status:"unblocked"
     }
   })
   res.redirect("/admin/blockproduct")

@@ -13,7 +13,7 @@
                   <h3 class="mb-30">Add Address</h3>
                 </div>
                
-                <form  method="post" name="myform" action="/user_address" >
+                <form method="post" name="myform" action="/user_address" onsubmit="return validateForm()">
                   <div class="form-group">
                     <input
                       type="text"
@@ -44,6 +44,8 @@
                   <div>
                     <label class="form-label">Address</label>
                     <textarea placeholder="Type here" class="form-control" rows="4" name="address"></textarea>
+                    <span id="textarea-error" style="color: red";></span>
+
                 </div>
                 <div class="form-group">
                     <input
@@ -104,13 +106,7 @@
                     </button>
                   </div>
                 </form>
-                <!-- <div class="divider-text-center mt-15 mb-15">
-                  <span> or</span>
-                </div>
-             -->
-                <!-- <div class="text-muted text-center">
-                  Already have an account? <a href="/login">Sign in now</a>
-                </div> -->
+              
               </div>
             </div>
           </div>
@@ -120,9 +116,77 @@
   </div>
 </section>
 </main>
+<script>
+  function validateForm() {
+    const username = document.getElementById('username').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const address = document.getElementsByName('address')[0].value;
+    const pincode = document.getElementById('pincode').value;
+    const landmark = document.getElementById('landmark').value;
+    const mobile = document.getElementById('tel').value;
+    const altMobile = document.getElementById('alternate-tel').value;
+    const type = document.getElementsByName('type')[0].value;
 
+    // Reset error messages
+    resetErrorMessages();
 
+    let hasErrors = false;
 
+    if (!username) {
+      document.getElementById('username-error').innerText = 'Please enter your username';
+      hasErrors = true;
+    }
+
+    if (!city) {
+      document.getElementById('city-error').innerText = 'Please enter your city';
+      hasErrors = true;
+    }
+    if (!state) {
+      document.getElementById('state-error').innerText = 'Please enter your state';
+      hasErrors = true;
+    }
+    if (!address) {
+      document.getElementById('textarea-error').innerText = 'Please enter your address';
+      hasErrors = true;
+    }
+    if (!pincode) {
+      document.getElementById('pincode-error').innerText = 'Please enter your pincode';
+      hasErrors = true;
+    }
+    if (!landmark) {
+      document.getElementById('landmark-error').innerText = 'Please enter your landmark';
+      hasErrors = true;
+    }
+
+    // ... Repeat similar checks for other fields ...
+
+    if (!/^[0-9]{10}$/.test(mobile)) {
+      document.getElementById('tel-error').innerText = 'Please enter a valid 10-digit mobile number';
+      hasErrors = true;
+    }
+
+    if (!/^[0-9]{10}$/.test(altMobile)) {
+      document.getElementById('alternatetel-error').innerText = 'Please enter a valid 10-digit alternate mobile number';
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      return false;
+    }
+
+    // Additional validation can be added for pincode, etc.
+
+    return true; // Submit the form if all validations pass
+  }
+
+  function resetErrorMessages() {
+    const errorElements = document.querySelectorAll('[id$="-error"]');
+    errorElements.forEach(element => {
+      element.innerText = '';
+    });
+  }
+</script>
 
 
 <%-include("../partials/userfooter")-%>

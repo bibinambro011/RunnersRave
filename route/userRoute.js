@@ -42,15 +42,21 @@ router.get("/editaddress/:id",middleware.islogin,controller.editaddress_id)
 router.post("/user_address",middleware.islogin,controller.user_address);
 router.get("/addAddress",middleware.islogin,controller.addAddress);
 router.post("/updatedAddress/:id",middleware.islogin,controller.updatedAddress);
-router.get("/deleteaddress/:id",middleware.islogin,controller.deleteaddress);
+router.get("/deleteaddress/:id",middleware.islogin,controller.deleteaddress);;
+router.post("/profileafteredit",middleware.islogin,controller.profileafteredit)
 router.get("/paymentsuccesfull",middleware.islogin,controller.paymentsuccesfull);
 router.get("/cartRedirection",middleware.islogin,controller.cartRedirection);
-router.post("/orderdetails",middleware.islogin,orderController.orderdetails)
+router.post("/orderdetails",middleware.islogin,orderController.orderdetails);
+router.post("/passwordchange",middleware.islogin,controller.passwordchange);
+router.post("/cancel-order/:orderId",middleware.islogin,orderController.cancelOrder);
+      
+        router.get("/orderplacedsuccessfully",middleware.islogin,orderController.orderplacedsuccessfully)
 
 
 router.get("/regenerateotp", controller.regenerateOtp);
 
-router.get("/addtocart/:id",middleware.islogin,cartController.addtocart)
+router.get("/addtocart/:id",middleware.islogin,cartController.addtocart);
+
 
 
 module.exports = router;

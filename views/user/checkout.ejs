@@ -1028,7 +1028,7 @@
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td class="product-subtotal" colspan="2">$<%= subtotal.toFixed(2) %></td>
+                                    <td class="product-subtotal" colspan="2">Rs<%= subtotal.toFixed(2) %></td>
                                 </tr>
                               
                             </tbody>
@@ -1070,7 +1070,7 @@
                        
                     </div>
                     <!-- <a  onclick="sendDataToBackend('haii')" class="btn btn-fill-out btn-block mt-30">Place Order</a> -->
-                    <button onclick="sendDataToBackend()" class="btn btn-success">Send Data</button>
+                    <button onclick="sendDataToBackend()" class="btn btn-success">Place Oder</button>
 
                 </div>
             </div>
@@ -1102,6 +1102,10 @@
     .then(response => response.json())
     .then(data => {
         console.log('Cart item updated successfully:', data);
+        if (data.redirectUrl) {
+        // Redirect to the specified URL
+        window.location.href = data.redirectUrl;
+      }
     })
     .catch(error => {
         console.error('Error updating cart item:', error);
