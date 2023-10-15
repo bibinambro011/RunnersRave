@@ -21,7 +21,7 @@ const addtocart = async (req, res) => {
             productId,
             size: size,
             quantity: 1,
-            total: exproduct.selling_price,
+            price: exproduct.selling_price 
           },
         ],
       });
@@ -34,13 +34,13 @@ const addtocart = async (req, res) => {
 
       if (existingProduct) {
         existingProduct.quantity++;
-        existingProduct.total = existingProduct.quantity * exproduct.selling_price;
+        
       } else {
         cart.products.push({
           productId,
           size: size,
           quantity: 1,
-          total: exproduct.selling_price,
+          price: exproduct.selling_price 
         });
       }
 
@@ -73,7 +73,7 @@ const addtocartfrompage = async (req, res) => {
             productId,
             size: size,
             quantity: quantity,
-            total: exproduct.selling_price * quantity,
+            price: exproduct.selling_price 
           },
         ],
       });
@@ -86,13 +86,13 @@ const addtocartfrompage = async (req, res) => {
 
       if (existingProduct) {
         existingProduct.quantity += quantity;
-        existingProduct.total = existingProduct.quantity * exproduct.selling_price;
+        
       } else {
         cart.products.push({
           productId,
           quantity: quantity,
           size: size,
-          total: exproduct.selling_price * quantity,
+          price: exproduct.selling_price 
         });
       }
 
@@ -174,7 +174,7 @@ const cartUpdate = async (req, res) => {
 
     // Update the product's quantity and total
     cart.products[productIndex].quantity = quantity;
-    cart.products[productIndex].total = total;
+    // cart.products[productIndex].price = total;
 
     await cart.save();
 

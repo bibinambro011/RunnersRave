@@ -41,47 +41,52 @@
                     </div>
                 </header> 
               
-<div class="container">
-    <div class="row">
-        <% products.forEach(product=>{ %>
-            <div class="col-lg-12 col-sm-12 col-12">
-                <article class="card card-product">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-2 col-sm-2 col-4 col-price" style="max-width: 50px; max-height: 50px; width: auto;height: auto; display: flex;">
-                                <a class="itemside" href="#">
-                                    <div class="left" class="card-image">
-                                         <img src="<%= product.images[0] %>"  
-                                             style="max-width: 50px; max-height: 50px; width: auto;height: auto;" />
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-price gx-5">
-                                <span><%= product.price %></span>
-                            </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-status">
-                                 <span class="badge rounded-pill alert-success " id="statuslive"><%= product.status %></span>
-                            </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-date">
-                                <span><%= product.date %></span>
-                            </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                <a href="/admin/unblock_product/<%= product._id %>" class="btn btn-sm font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i> unblock
-                                </a>
-                                </div>
-                                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                <a href="/admin/block_product/<%= product._id %>" class="btn btn-sm font-sm btn-danger rounded">
-                                    <i class="material-icons md-delete_forever " ></i> block
-                                </a>
-                            </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 col-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Stock</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% products.forEach(product => { %>
+                                        <tr>
+                                            <td>
+                                                <img src="<%= product.images[0] %>" style="max-width: 50px; max-height: 50px; width: auto;height: auto;" />
+                                            </td>
+                                            <td><%= product.price %></td>
+                                            <td>
+                                                <span class="badge rounded-pill alert-success" id="statuslive"><%= product.status %></span>
+                                            </td>
+                                            <td><%= product.stock %></td>
+                                            <td>
+                                                <a href="/admin/edit-product/<%= product._id %>" class="btn btn-sm font-sm btn-success rounded">
+                                                    <i class="material-icons md-delete_forever"></i> edit
+                                                </a>
+                                                <% if (product.status === 'unblocked') { %>
+                                                    <a href="/admin/block_product/<%= product._id %>" class="btn btn-sm font-sm btn-danger rounded">
+                                                        <i class="material-icons md-delete_forever"></i> block
+                                                    </a>
+                                                <% } else { %>
+                                                    <a href="/admin/unblock_product/<%= product._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                                        <i class="material-icons md-edit"></i> unblock
+                                                    </a>
+                                                <% } %>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </article>
-            </div>
-        <% }); %>
-    </div>
-</div>
+                </div>
+                
 
                     
             <div class="pagination-area mt-30 mb-50">

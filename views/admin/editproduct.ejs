@@ -56,7 +56,7 @@
                         <div class="card-body">
                             <div>
                                 <label class="form-label">Description</label>
-                                <textarea placeholder="Type here" class="form-control" rows="4" name="description" value="<%= product.description %>"></textarea>
+                                <textarea placeholder="Type here" class="form-control" rows="4" name="description" ><%= product.description %></textarea>
                             </div>
                         </div>
                     </div> <!-- card end// -->
@@ -75,6 +75,27 @@
                             </div>
                         </div>
                     </div> <!-- card end// -->
+                    <div class="row">
+                        <% for( let i=0; i < product.images.length; i++ ) { %>
+                            <div class="col-lg-3" id="Removebtn<%= i %>">
+                                <div class="card mb-4">
+                                    <div class="card-header" style="height: 200px;">
+                                        <img style=" object-fit: contain; height: 100%; width: 100%;"
+                                            src="<%- product.images[i] %>" alt="">
+                                    </div>
+                                    <div class="card-body bg-light d-flex align-items-center justify-content-center" 
+                                        style="height: 50px;">
+                                        <a href="" data-imageFile="<%- product.images[i] %>"
+                                            data-productId="<%- product._id %>"
+                                            data-index="<%= i %>"
+                                            class="btn btn-outline-danger imageRemoveBtn">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+
+                    </div>
+                   
                 </div>
                 <div class="col-lg-3">
                     <div class="card mb-4">
@@ -104,4 +125,68 @@
                 </div>
             </div>
         </section>
+        <script>
+          
+
+          const i = 2; // You would replace this with your actual loop index
+const buttonRemoval = document.getElementById(`Removebtn${i}`);
+
+            const imageRemoveBtn = document.querySelectorAll('.imageRemoveBtn');
+            imageRemoveBtn.forEach((btn) => {
+                btn.addEventListener('click', async (event) => {
+                    event.preventDefault()
+    
+                    const imageFile = event.currentTarget.getAttribute('data-imageFile');
+                    // console.log(imageFile)
+                    const productId = event.currentTarget.getAttribute('data-productId')
+                 const dataindex=event.currentTarget.getAttribute('data-index')
+                 
+                    if (imageFile && productId) {
+                       
+                        const data = {
+                            imageFile: imageFile,
+                            productId: productId,
+                            dataindex:dataindex
+
+                        
+                        }
+                        buttonRemoval.style.visibility="hidden"
+              
+                  
+                       await fetch('/admin/remove-image', {
+                                method: 'post',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(data)
+                            })
+                            // Waiting for the result
+                            const result = await response.json();
+    
+                            if (result.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: result.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                setTimeout(() => {
+                                    location.href = location.href
+                                }, 2000);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: result.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            }
+                        }
+    
+    
+    
+                    
+                })
+            })
+        </script>
 <%-include("../partials/adminfooter")-%>

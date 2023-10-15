@@ -7,6 +7,8 @@ const userRoute = require("./route/userRoute");
 const adminroutes = require("./route/adminRoute");
 const nocache = require("nocache");
 const loger = require("morgan");
+const Swal = require('sweetalert2');
+
 const controller = require("./controller/userController");
 
 const sessions = require("express-session");
@@ -35,6 +37,9 @@ app.set("view engine", "ejs");
 
 app.use("/admin", adminroutes);
 app.use("/", userRoute);
+app.get('*', (req, res) => {
+  res.render("user/page-404")
+});
 
 db.connectToDatabase();
 app.listen(3000, () => {

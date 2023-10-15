@@ -135,13 +135,13 @@
                 <div class="tab-content wow fadeIn animated" id="myTabContent">
                     <% products.forEach((product, index) => { %> <% if (index % 3 === 0)
                     { %>
-                    <div class="row product-grid-4">
+                    <div class="row product-grid-3">
                       <% } %>
                       <div class="col-lg-4 col-md-4 col-12 col-sm-6">
                         <div class="product-cart-wrap mb-30">
                           <div
-                            class="product-img-action-wrap img-fluid"
-                            style="width: 350px; height: 310px;"
+                            class="product-img-action-wrap img-fluid mx-auto"
+                         style="width: 350px; height: 310px;" 
                           >
                             <div class="product-img product-img-zoom">
                               <a href="/product/<%= product._id %>">

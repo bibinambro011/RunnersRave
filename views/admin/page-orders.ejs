@@ -1,4 +1,9 @@
 <%-include("../partials/adminheader")-%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
         <section class="content-main">
             <div class="content-header">
                 <div>
@@ -42,6 +47,7 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Total</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Description</th>
                                     <th scope="col">Date</th>
                                     <th scope="col" class="text-end"> Action </th>
                                 </tr>
@@ -53,8 +59,9 @@
                                     <td>#<%= order.ord %></td>
                                     <td><b><%= order.userId.username %></b></td>
                                     <td><%= order.userId.email %></td>
-                                    <td><%= product.total %></td>
+                                    <td><%= product.quantity * product.productId.selling_price %></td>
                                     <td><span class="badge rounded-pill alert-warning"></span><%= order.orderStatus %></td>
+                                    <td><span class="badge rounded-pill alert-warning"></span><%= product.productId.description %></td>
                                     <td><%= order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
                                     <td class="text-end">
                                         <a href="/admin/order_details/<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>

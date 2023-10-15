@@ -42,8 +42,9 @@ const ordersModel = new mongoose.Schema({
       salePrice:{
          type:Number,
       },
-      total:{
+      price:{
          type:Number,
+         default:0,
       },
       productStatus:{
          type:String,

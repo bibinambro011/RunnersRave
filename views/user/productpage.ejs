@@ -126,7 +126,7 @@
                                 <ul class="product-meta font-xs color-grey mt-50">
                                     <!-- <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
                                     <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li> -->
-                                    <li>Availability:<span class="in-stock text-success ml-5">8 Items In Stock</span></li>
+                                    <li>Availability:<span class="in-stock text-success ml-5"><%= product.stock %> Items In Stock</span></li>
                                 </ul>
                             </div>
                             <!-- Detail Info -->
@@ -374,7 +374,7 @@
                                             <div class="product-price primary-color float-left">
                                                 <ins><span class="text-brand"><%= product.selling_price %></span></ins>
                                                 <ins><span class="old-price font-md ml-15"><%= product.price %></span></ins>
-                                                <span class="save-price  font-md color3 ml-15">25% Off</span>
+                                                <span class="save-price  font-md color3 ml-15"> <%= Math.round(((product.price - product.selling_price) / product.price) * 100) %> % Off</span>
                                             </div>
                                         </div>
                                         <div class="bt-1 border-color-1 mt-15 mb-15"></div>
@@ -437,7 +437,7 @@
                                         <ul class="product-meta font-xs color-grey mt-50">
                                             <!-- <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
                                             <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li> -->
-                                            <li>Availability:<span class="in-stock text-success ml-5">8 Items In Stock</span></li>
+                                            <li>Availability:<span class="in-stock text-success ml-5"><%= product.stock %> Items In Stock</span></li>
                                         </ul>
                                     </div>
                                     <!-- Detail Info -->

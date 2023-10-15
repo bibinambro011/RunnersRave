@@ -73,5 +73,6 @@ router.post(
 router.get("/productlistredirection",controller.productredirection)
 router.get("/ordernfo",middleware.islogin,orderController.ordernfo);
 router.get("/order_details/:id",middleware.islogin,orderController.orderdetailsofuser);
-router.post("/update-order-status/:orderId",middleware.islogin,orderController.updateorderstatus)
+router.post("/update-order-status/:orderId",middleware.islogin,orderController.updateorderstatus);
+router.post("/remove-image",middleware.islogin,controller.remove_image)
 module.exports = router;

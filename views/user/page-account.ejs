@@ -232,8 +232,10 @@
                                                             <tr>
                                                                 <th>image</th>
                                                                 <th>Order</th>
+                                                                <th>Name</th>
                                                                 <th>Date</th>
                                                                 <th>Status</th>
+                                                                <th>price</th>
                                                                 <th>Total</th>
                                                                <th>Action</th>
 
@@ -246,23 +248,24 @@
                                                           
 
 
-
-                                                         
                                                             <h2>Products</h2>
                                                             <% order.forEach(order => { %>
                                                                 <% order.products.forEach(product => { %>
                                                                     <tr>
                                                                         <td><img src="<%= product.productId.images[0] %>" style="max-width: 100px; max-height: 100px;" alt="Product Image"></td>
                                                                         <td>#<%= order.ord %></td>
+                                                                        <td><%= product.productId.name %></td>
                                                                         <td><%= order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
-                                                                        <td id="statusid_<%= order._id %>"><%= order.orderStatus %></td>
-                                                                        <td><%= product.total %><br><span><%= product.quantity %>X<%= product.productId.selling_price %></span></td>
-                                                                        <!-- <td>$<%= order.actualTotalAmount %> for <%= order.products.length %> item(s)</td> -->
-                                                                        <% if (order.orderStatus !== 'delivered' && order.orderStatus !== 'Cancelled') { %>
-                                                                            <td><button type="button"><a data-order-id="<%= order._id %>" data-product-id="<%= product.productId %>" class="btn-small d-block cancel-order-link">Cancel Order</a></button></td>
+                                                                        <td id="statusid_<%= order._id %>" ><%= order.orderStatus %></td>
+                                                                        <td ><%= product.productId.selling_price %></td>
+                                                                        <td><%= product.quantity * product.productId.selling_price %></td>
+                                                                       
+                                                                        <!-- <% if (order.orderStatus !== 'delivered' && order.orderStatus !== 'Cancelled') { %>
+                                                                            <td id="buttonid"><button type="button"><a data-order-id="<%= order._id %>" data-product-id="<%= product.productId %>" class="btn-small d-block cancel-order-link">Cancel Order</a></button></td>
                                                                         <% } else { %>
                                                                             <td></td>
-                                                                        <% } %>
+                                                                        <% } %> -->
+                                                                        <td ><a href="showUserOrder/<%= order._id %>"><button type="button">order details</button></a>
                                                                     </tr>
                                                                     
                                                                 <% }); %>
@@ -525,6 +528,7 @@
     <script src="/js/main.js"></script>
 </body>
 <script>
+  
     function validateForm() {
         const currentPassword = document.getElementById('currentpassword').value;
         const newPassword = document.getElementById('newpassword').value;
@@ -559,32 +563,39 @@
 
         return true; // Submit the form if all validations pass
     }
-    const cancelOrderButtons = document.querySelectorAll('.cancel-order-link');
 
-cancelOrderButtons.forEach(button => {
-  button.addEventListener('click', async () => {
-    const orderId = button.dataset.orderId;
-    const statusElement = document.getElementById(`statusid_${orderId}`);
+
+
+//     const cancelOrderButtons = document.querySelectorAll('.cancel-order-link');
+
+// cancelOrderButtons.forEach(button => {
+//   button.addEventListener('click', async () => {
+//     const orderId = button.dataset.orderId;
+//     const statusElement = document.getElementById(`statusid_${orderId}`);
+//     const buttonid=document.getElementById("buttonid")
     
 
-    try {
-      const response = await fetch(`/cancel-order/${orderId}`, {
-        method: 'POST',
-      });
+//     try {
+//       const response = await fetch(`/cancel-order/${orderId}`, {
+//         method: 'POST',
+//       });
 
-      if (response.ok) {
-        statusElement.innerHTML = "Cancelled";
+//       if (response.ok) {
+//         statusElement.innerHTML = "Cancelled";
+//         if( statusElement.innerHTML == "Cancelled"){
+//             buttonid.style.visibility="hidden"
+//         }
         
   
 
-      } else {
-        console.error('Failed to cancel order.');
-      }
-    } catch (error) {
-      console.error('Error cancelling order:', error);
-    }
-  });
-});
+//       } else {
+//         console.error('Failed to cancel order.');
+//       }
+//     } catch (error) {
+//       console.error('Error cancelling order:', error);
+//     }
+//   });
+// });
 
 
 </script>

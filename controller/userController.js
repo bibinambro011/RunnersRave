@@ -182,7 +182,7 @@ const userlogin = async (req, res) => {
     if (user.status == false) {
       const isAuthenticated = false;
       const data = "you are blocked";
-      res.render("user/login", { data, isAuthenticated });
+     return  res.render("user/login", { errordata:data, isAuthenticated });
     }
 
     if (user) {
@@ -193,10 +193,8 @@ const userlogin = async (req, res) => {
 
       if (isPasswordValid) {
         req.session.user = data;
-        // const isAuthenticated = true;
-        // username = user.username;
-        // const products = await Product.find();
-        res.redirect("/userhome");
+       
+        return res.redirect("/userhome");
       } else {
         const isAuthenticated = false;
         res.render("user/login.ejs", {
@@ -206,7 +204,7 @@ const userlogin = async (req, res) => {
       }
     } else {
       const isAuthenticated = false;
-      res.render("user/login.ejs", {
+     return res.render("user/login.ejs", {
         errordata: "Invalid credentials",
         isAuthenticated,
       });
@@ -214,7 +212,7 @@ const userlogin = async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error);
     const isAuthenticated = false;
-    res.status(500).send("Internal Server Error");
+   return res.status(500).send("Internal Server Error");
   }
 };
 const userlogout = async (req, res) => {

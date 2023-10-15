@@ -1,5 +1,7 @@
 require("dotenv").config();
-
+const path = require("path");
+const sharp = require("sharp");
+const fs = require("fs"); 
 const Product = require("../model/productSchema");
 const user=require("../model/userSchema")
 const express = require("express");
@@ -38,44 +40,66 @@ exports.homepage=async(req,res)=>{
 exports.productlist = async (req, res) => {
   const products = await Product.find({ status: "unblocked" });
 
-  res.render("admin/productlist", { products });
+  res.render("admin/productlist2", { products });
 };
 exports.addproduct = async (req, res) => {
   const categorydata=await categories.find()
   res.render("admin/addproduct.ejs",{categorydata});
 };
 exports.productadd = async (req, res) => {
-  console.log("reached")
- 
-    try {
-      const { name, description, price, selling_price, category, size, gender, brand, stock,status } = req.body;
-      const imageUrls = req.files.map(file => `/uploads/${file.filename}`);
-  
-      const product = new Product({
-        name,
-        description,
-        price,
-        selling_price,
-        category,
-        size,
-        gender,
-        brand,
-        status,
-        stock,
-        images: imageUrls
-      });
-      console.log("category id is =>"+category)
-  
-      await product.save();
-      
-      const products=await Product.find()
-      // res.render("admin/productlist.ejs",{products})
-      res.redirect("/admin/productlistredirection")
-    } catch (error) {
-      console.error("Error uploading product:", error);
-      res.status(500).send("Error uploading product.");
-    }
+  console.log("reached");
+
+  try {
+    const { name, description, price, selling_price, category, size, gender, brand, stock, status } = req.body;
+
+    // Define the desired crop dimensions (width, height)
+    const width = 700;
+    const height =600;
+   
+
+    const imagePromises = req.files.map(async file => {
+      const filePath = path.join('assets/uploads', file.filename);
+
+      // Use Sharp to resize and crop the image
+      const croppedBuffer = await sharp(filePath)
+        .resize(width, height)
+        .toBuffer();
+
+      // Save the cropped image
+      const croppedFilename = 'cropped-' + file.filename;
+      const croppedFilePath = path.join('assets/uploads', croppedFilename);
+      fs.writeFileSync(croppedFilePath, croppedBuffer);
+
+      return `/uploads/${croppedFilename}`;
+    });
+
+    const imageUrls = await Promise.all(imagePromises);
+
+    const product = new Product({
+      name,
+      description,
+      price,
+      selling_price,
+      category,
+      size,
+      gender,
+      brand,
+      status,
+      stock,
+      images: imageUrls
+    });
+
+    console.log("category id is =>" + category);
+
+    await product.save();
+
+    const products = await Product.find();
+    res.redirect("/admin/productlistredirection");
+  } catch (error) {
+    console.error("Error uploading product:", error);
+    res.status(500).send("Error uploading product.");
   }
+};
 
 exports.logout = async (req, res) => {
   res.redirect("/admin");
@@ -98,38 +122,64 @@ exports.editproduct = async (req, res) => {
 
 
 
-exports.updateProduct=async(req,res)=>{
-  
-    const { name, description, price, selling_price, category, size, gender, brand, stock,status } = req.body;
-    const imageUrls = req.files.map(file => `/uploads/${file.filename}`);
+exports.updateProduct = async (req, res) => {
+  const { name, description, price, selling_price, category, size, gender, brand, stock, status } = req.body;
+  const imageUrls = req.files.map(file => `/uploads/${file.filename}`);
 
-    try{
-           const updateData = {
-            name,
-            description,
-            price,
-            selling_price,
-            category,
-            size,
-            gender,
-            brand,
-            status,
-            stock,
-            images: imageUrls// Save an array of images
-           };
-          
-          updateId = updateId;
+  try {
+    const updateData = {
+      name,
+      description,
+      price,
+      selling_price,
+      category,
+      size,
+      gender,
+      brand,
+      status,
+      stock,
+      images: imageUrls // Save an array of images
+    };
+    updateId = updateId;
 
-    await Product.findByIdAndUpdate(updateId, { $set: updateData });
+    const updatedProduct = await Product.findByIdAndUpdate(updateId, { $set: updateData }, { new: true });
+
+    // Define the desired crop dimensions (width, height)
+    const width = 700;
+    const height = 600;
+
+    const updatedImagePromises = updatedProduct.images.map(async imageUrl => {
+      const imagePath = path.join('assets', imageUrl);
+
+      // Use Sharp to resize and crop the image
+      const croppedBuffer = await sharp(imagePath)
+        .resize(width, height)
+        .toBuffer();
+
+      // Save the cropped image
+      const croppedFilename = 'cropped-' + path.basename(imagePath);
+      const croppedFilePath = path.join('assets/uploads', croppedFilename);
+      fs.writeFileSync(croppedFilePath, croppedBuffer);
+
+      return `/uploads/${croppedFilename}`;
+    });
+
+    const updatedCroppedImageUrls = await Promise.all(updatedImagePromises);
+
+    updatedProduct.images = updatedCroppedImageUrls;
+    await updatedProduct.save();
 
     res.redirect("/admin/productlist");
   } catch (error) {
     console.error("Error updating product:", error);
     res.status(500).send("Error updating product.");
   }
-    
-}
+};
 
+exports.remove_image=async(req,res)=>{
+  console.log("body is===>",req.body);
+  return
+}
 
 exports.loginpage = async (req, res) => {
   res.redirect("/");
@@ -246,6 +296,6 @@ exports.adminproductsearch=async(req,res)=>{
 }
 exports.productredirection=async(req,res)=>{
   const products=await Product.find();
-  res.render("admin/productlist.ejs",{products})
+  res.render("admin/productlist2.ejs",{products})
 }
 
