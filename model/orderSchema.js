@@ -31,6 +31,11 @@ const ordersModel = new mongoose.Schema({
    paymentMethod:{
       type:String,
    },
+   paymentStatus:{
+      type:String,
+      default:"pending"
+   },
+
    products:[{
       productId:{
          type:mongoose.Types.ObjectId,

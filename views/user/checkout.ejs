@@ -1127,6 +1127,8 @@ console.log('options are',options);
 var razorpay = new Razorpay(options);
 razorpay.on('payment.failed', function (response) {
     alert("Payment failed");
+    console.log("response data for failed paymentis ===> ",response);
+   
     // Your fetch call to handle payment failure
     fetch('/paymentFailureHandler', {
         method: 'POST',

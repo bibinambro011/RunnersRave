@@ -74,5 +74,8 @@ router.get("/productlistredirection",controller.productredirection)
 router.get("/ordernfo",middleware.islogin,orderController.ordernfo);
 router.get("/order_details/:id",middleware.islogin,orderController.orderdetailsofuser);
 router.post("/update-order-status/:orderId",middleware.islogin,orderController.updateorderstatus);
-router.post("/remove-image",middleware.islogin,controller.remove_image)
+router.post("/remove-image",middleware.islogin,controller.remove_image);
+router.get("/SalesReports",middleware.islogin,controller.SalesReport);
+router.post("/generateSalesReport",middleware.islogin,controller.getSalesReports);
+router.get("/sortedByDateredirect",controller.sortedByDateredirect)
 module.exports = router;

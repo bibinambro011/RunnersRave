@@ -2,11 +2,14 @@ require("dotenv").config();
 const path = require("path");
 const sharp = require("sharp");
 const fs = require("fs"); 
+const PDFDocument = require('pdfkit');
 const Product = require("../model/productSchema");
 const user=require("../model/userSchema")
 const express = require("express");
 const adminCollection = require("../model/adminSchema");
-const categories=require("../model/categorySchema")
+const categories=require("../model/categorySchema");
+const Order=require("../model/orderSchema")
+
 
 
 const upload=require("../helper/multerfile")
@@ -298,4 +301,41 @@ exports.productredirection=async(req,res)=>{
   const products=await Product.find();
   res.render("admin/productlist2.ejs",{products})
 }
+exports.SalesReport=async(req,res)=>{
+  const data = await Order.find({
+    orderStatus: { $in: ["payment Failed", "delivered", "Confirmed","Placed"] }
+  })
+  console.log("confirmed orders are==>",data)
+  res.render("admin/salesReports",{data})
+}
+exports.getSalesReports = async (req, res) => {
+  const { startDate, endDate } = req.body;
 
+  const data = await Order.find({
+    orderStatus: { $in: ["payment Failed", "delivered", "Confirmed", "Placed"] },
+    date: { $gte: new Date(startDate), $lte: new Date(endDate) }
+  });
+
+  const encodedData = encodeURIComponent(JSON.stringify(data));
+
+  const redirectURL = `/admin/sortedByDateredirect?data=${encodedData}`;
+
+  return res.status(200).json({
+    redirectURL,
+    encodedData
+  });
+};
+exports.sortedByDateredirect=async(req,res)=>{
+  const dataString = req.query.data; // Assuming data is a JSON string
+  let dataObject;
+  
+  try {
+    dataObject = JSON.parse(dataString);
+    console.log('Data parsed successfully:', dataObject);
+  } catch (error) {
+    console.error('Error parsing data:', error);
+  }
+  console.log("data type of data==>" , typeof dataObject)
+
+  res.render("admin/salesReports",{data:dataObject})
+}

@@ -1,4 +1,5 @@
 <%-include("../partials/adminheader")-%>
+
         <section class="content-main">
             <div class="content-header">
                 <div>
@@ -54,7 +55,17 @@
                                 <div class="text">
                                     <h6 class="mb-1">Order info</h6>
                                     <p class="mb-1">
-                                        Shipping: Fargo express <br> Pay method:cash on delivery<br> Status: <%= order.orderStatus %> 
+                                        Shipping: Fargo express <br> Pay method:<span class="badge badge-pill badge-soft-warning yellow-badge"><%= order.paymentMethod %></span> <br> Status: <%= order.orderStatus %> 
+                                        <br> paymentStatus: 
+                                        <% if (order.paymentStatus === 'paid') { %>
+                                          <span class="badge badge-pill badge-soft-success">Paid</span>
+                                        <% } else if (order.paymentStatus === 'pending') { %>
+                                          <span class="badge badge-pill badge-soft-warning">Pending</span>
+                                        <% } else { %>
+                                          <%= order.paymentStatus %>
+                                        <% } %>
+                                        
+                                         
                                     </p>
                                     <!-- <a href="#">Download info</a> -->
                                 </div>

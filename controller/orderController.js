@@ -20,8 +20,8 @@ const orderdetails = async (req, res) => {
         model: "productCollection",
       }),
     ]);
-    orderId = orderDetails._id;
-    console.log("orderId is===>", orderId);
+  
+    
 
     let totalPrice = 0;
     let originalPrice = 0;
@@ -66,7 +66,7 @@ const orderdetails = async (req, res) => {
         city: city,
         postalCode: pincode,
       },
-      orderStatus: "Pending",
+      orderStatus: "Confirmed",
       returnOrderStatus: {
         status: "Not requested",
         reason: "No reason",
@@ -74,6 +74,7 @@ const orderdetails = async (req, res) => {
     });
 
     await newOrder.save();
+     orderId=newOrder._id;
 
     //payment method
 
@@ -300,6 +301,15 @@ const orderUpdatedStatusDetails = async (req, res) => {
   });
 };
 const paymentFailureHandler = async (req, res) => {
+  // let data=await Order.findOne({_id:orderId});
+  console.log("order details are==>",orderId);
+  let data = await Order.findOneAndUpdate(
+    { _id: orderId }, // Query to find the document
+    { $set: { orderStatus:"payment Failed" } }, 
+    { new: true } 
+);
+
+
   return res.status(200).json({
     redirectUrl: `/paymentFailure`, // Specify the desired redirect URL here
   });
