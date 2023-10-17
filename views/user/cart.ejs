@@ -284,17 +284,37 @@ updateCartItemInDatabase(updatedCartItem)
 
     }
 
-    function increaseQuantity(productId,price,maxStock) {
-        const qtyElement = document.getElementById(`qty-${productId}`);
-        let quantity = parseInt(qtyElement.textContent, 10);
-        if (quantity >= maxStock) {
-            alert('Cannot increase quantity. Stock not available.');
-            return;
-        }
-        quantity++;
-        updateQuantity(productId,price, quantity);
-       
+    function increaseQuantity(productId, price, maxStock) {
+    const qtyElement = document.getElementById(`qty-${productId}`);
+    let quantity = parseInt(qtyElement.textContent, 10);
+
+    if (quantity >= maxStock) {
+        Swal.fire({
+  icon: 'info',
+  title: 'Out of stock',
+  text:"Stock is not available",
+  showConfirmButton: false,
+  timer: 1500,  // Automatically close after 1.5 seconds
+  backdrop: `
+    rgba(0,0,123,0.4)
+    url('path/to/your-image.jpg')
+    left top
+    no-repeat
+  `,
+  customClass: {
+    title: 'my-title-class',
+    icon: 'my-icon-class'
+  }
+});
+
+
+        return;  // Return early if quantity is already at maxStock
     }
+
+    quantity++;
+    updateQuantity(productId, price, quantity);
+}
+
 
     function decreaseQuantity(productId,price) {
         const qtyElement = document.getElementById(`qty-${productId}`);
@@ -327,6 +347,8 @@ updateCartItemInDatabase(updatedCartItem)
         });
     }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
      
 
    

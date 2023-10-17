@@ -1071,6 +1071,27 @@
             }
         }
       async function sendDataToBackend(){
+        if(!data.address){
+            Swal.fire({
+  icon: 'info',
+  title: 'Please select an address to continue',
+  showConfirmButton: false,
+  timer: 1500,  // Automatically close after 1.5 seconds
+  backdrop: `
+    rgba(0,0,123,0.4)
+    url('path/to/your-image.jpg')
+    left top
+    no-repeat
+  `,
+  customClass: {
+    title: 'my-title-class',
+    icon: 'my-icon-class'
+  }
+});
+
+
+            return
+        }
           
             console.log(data);
             const apiUrl = '/orderdetails';
@@ -1191,5 +1212,7 @@ razorpay.open();
        
    
       </script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <%-include("../partials/userfooter")-%>
     

@@ -4,45 +4,64 @@
 
     <header class="card-header">
         <h4 class="card-title">Latest orders</h4>
-        <div class="row align-items-center">
-            <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+        <div class="container">
+            <div class="row align-items-center">
+              <div class="col-md-3 col-12 me-auto mb-md-0 mb-3" style="display: none;">
                 <div class="custom_select">
-                    <select class="form-select select-nice">
-                        <option selected>All Categories</option>
-                        <option>Women's Clothing</option>
-                        <option>Men's Clothing</option>
-                        <option>Cellphones</option>
-                        <option>Computer & Office</option>
-                        <option>Consumer Electronics</option>
-                        <option>Jewelry & Accessories</option>
-                        <option>Home & Garden</option>
-                        <option>Luggage & Bags</option>
-                        <option>Shoes</option>
-                        <option>Mother & Kids</option>
-                    </select>
+                  <select class="form-select select-nice">
+                    <option selected>All Categories</option>
+                    <option>Women's Clothing</option>
+                    <option>Men's Clothing</option>
+                    <option>Cellphones</option>
+                    <option>Computer & Office</option>
+                    <option>Consumer Electronics</option>
+                    <option>Jewelry & Accessories</option>
+                    <option>Home & Garden</option>
+                    <option>Luggage & Bags</option>
+                    <option>Shoes</option>
+                    <option>Mother & Kids</option>
+                  </select>
                 </div>
-            </div>
-            <div class="col-md-2 col-6">
+              </div>
+        
+              <div class="col-md-2 col-6">
                 <input type="date" id="startDate" class="form-control">
-            </div>
-            <div class="col-md-2 col-6">
+              </div>
+        
+              <div class="col-md-2 col-6">
                 <input type="date" id="endDate" class="form-control">
-            </div>
-            <button class="btn btn-sm btn-success" onclick="getSalesReports()">Get Sales Reports</button>
-            
-            
-            <div class="col-md-2 col-6">
+              </div>
+        
+              <div class="col-md-2 col-6">
+                <button class="btn btn-sm btn-info" onclick="getSalesReport()" style="max-width: 80px;max-height: 60px;">submit</button>
+              </div>
+        
+              <div class="col-md-2 col-6">
                 <div class="custom_select">
-                    <select class="form-select select-nice">
-                        <option selected>Status</option>
-                        <option>All</option>
-                        <option>Paid</option>
-                        <option>Chargeback</option>
-                        <option>Refund</option>
-                    </select>
+                  <select class="form-select select-nice">
+                    <option selected>Status</option>
+                    <option>All</option>
+                    <option>Paid</option>
+                    <option>Chargeback</option>
+                    <option>Refund</option>
+                  </select>
                 </div>
+              </div>
+        
+              <div class="col-md-1 col-4 ml-auto">
+                <button class="btn btn-success" id="daily">daily</button>
+              </div>
+        
+              <div class="col-md-1 col-4">
+                <button class="btn btn-warning" id="weekly">weekly</button>
+              </div>
+        
+              <div class="col-md-1 col-4">
+                <button class="btn btn-secondary" id="yearly">Yearly</button>
+              </div>
             </div>
-        </div>
+          </div>
+        
     </header>
     <div class="card-body">
         <div class="table-responsive">
@@ -105,7 +124,9 @@
         </div> <!-- table-responsive end// -->
     </div>
 </div>
-<div class="pagination-area mt-30 mb-50">
+
+  
+<!-- <div class="pagination-area mt-30 mb-50">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-start">
             <li class="page-item active"><a class="page-link" href="#">01</a></li>
@@ -116,12 +137,50 @@
             <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
         </ul>
     </nav>
-</div>
+</div> -->
 </section> <!-- content-main end// -->
 
 <script>
 
-async function getSalesReports() {
+async function getSalesReports(startDate, endDate) {
+    const response = await fetch('/admin/generateSalesReport', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ startDate, endDate }),
+    });
+
+    if (response.ok) {
+      const responseData = await response.json();
+      const redirectURL = responseData.redirectURL;
+      window.location.href = redirectURL;
+    } else {
+      console.error('Error generating sales report');
+    }
+  }
+//weekly
+  function getWeekDates() {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const startDay = new Date(today);
+    startDay.setDate(today.getDate() - dayOfWeek);
+    startDay.setHours(0, 0, 0, 0);
+
+    const endDay = new Date(today);
+    endDay.setDate(today.getDate() + (6 - dayOfWeek));
+    endDay.setHours(23, 59, 59, 999);
+
+    return { startDay, endDay };
+  }
+
+  document.getElementById('weekly').addEventListener('click', async function() {
+    const { startDay, endDay } = getWeekDates();
+    await getSalesReports(startDay, endDay);
+  });
+
+//date range 
+  async function getSalesReport() {
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
 
@@ -141,6 +200,39 @@ async function getSalesReports() {
     console.error('Error generating sales report');
   }
 }
+
+
+//daily 
+
+document.getElementById('daily').addEventListener('click', function() {
+  const currentDate = new Date();
+  
+  // Calculate end date (one day more than the current date)
+  const endDate = new Date(currentDate);
+  endDate.setDate(currentDate.getDate() + 1);
+  
+  // Format dates as YYYY-MM-DD
+  const formattedStartDate = currentDate.toISOString().split('T')[0];
+  const formattedEndDate = endDate.toISOString().split('T')[0];
+  getSalesReports(formattedStartDate, formattedEndDate);
+  
+});
+
+//yearly
+document.getElementById('yearly').addEventListener('click', function() {
+  const currentDate = new Date();
+
+  // Calculate the start date for the current year
+  const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+  const formattedStartDate = startOfYear.toISOString().split('T')[0];
+
+  // Calculate the end date for the current year
+  const endOfYear = new Date(currentDate.getFullYear() + 1, 0, 0);
+  const formattedEndDate = endOfYear.toISOString().split('T')[0];
+  getSalesReports(formattedStartDate, formattedEndDate);
+ 
+});
+
 
 
 </script>

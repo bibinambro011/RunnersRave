@@ -234,55 +234,129 @@ const productpage = async (req, res) => {
   }
 };
 
+const ITEM_PER_PAGE = 6;  // Number of products to display per page
+
 const userhome = async (req, res) => {
   const user = req.session.user;
-  console.log(user);
-  if (user) {
-    const userid = req.session.user[0]._id;
-    const cart = await cartCollection.find({ userId: userid });
+  const page = parseInt(req.query.page) || 1; // Get the requested page number
 
-    const isAuthenticated = true;
-    const products = await Product.find({ status: "unblocked" });
+  try {
+    if (user) {
+      const userid = req.session.user[0]._id;
+      const cart = await cartCollection.find({ userId: userid });
+      const isAuthenticated = true;
+      const skip = (page - 1) * ITEM_PER_PAGE; // Calculate the number of items to skip
+      const products = await Product.find({ status: "unblocked" })
+        .skip(skip)
+        .limit(ITEM_PER_PAGE);
 
-    res.render("user/home.ejs", { products, isAuthenticated });
-  } else {
-    console.log("in else case");
-    const isAuthenticated = false;
-    const products = await Product.find({ status: "unblocked" });
-    console.log("before else case===>");
+      // Count total products for calculating total pages
+      const totalProductsCount = await Product.countDocuments({ status: "unblocked" });
+      const totalPages = Math.ceil(totalProductsCount / ITEM_PER_PAGE);
 
-    res.render("user/home.ejs", { products, isAuthenticated });
+      res.render("user/home.ejs", { products, isAuthenticated, currentPage: page, totalPages });
+    } else {
+      const isAuthenticated = false;
+      const skip = (page - 1) * ITEM_PER_PAGE; // Calculate the number of items to skip
+      const products = await Product.find({ status: "unblocked" })
+        .skip(skip)
+        .limit(ITEM_PER_PAGE);
+
+      // Count total products for calculating total pages
+      const totalProductsCount = await Product.countDocuments({ status: "unblocked" });
+      const totalPages = Math.ceil(totalProductsCount / ITEM_PER_PAGE);
+
+      res.render("user/home.ejs", { products, isAuthenticated, currentPage: page, totalPages });
+    }
+  } catch (error) {
+    res.status(500).send("Error fetching products.");
   }
 };
+
+const ITEMS_PER_PAGE = 6;  // Number of products to display per page
+
 const shop = async (req, res) => {
-  if (req.session.user) {
-    const isAuthenticated = true;
+  const page = parseInt(req.query.page) || 1; // Get the requested page number
+
+  try {
+    const isAuthenticated = req.session.user ? true : false;
     const categorydata = await category.find();
 
-    const products = await Product.find({ status: "unblocked" });
-    res.render("user/shop.ejs", { products, categorydata, isAuthenticated });
-  } else {
-    const categorydata = await category.find();
-    const isAuthenticated = false;
-    const products = await Product.find({ status: "unblocked" });
-    res.render("user/shop.ejs", { products, categorydata, isAuthenticated });
+    const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
+    const products = await Product.find({ status: "unblocked" })
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE);
+
+    // Count total products for calculating total pages
+    const totalProductsCount = await Product.countDocuments({ status: "unblocked" });
+    const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
+
+    res.render("user/shop.ejs", { products, categorydata, isAuthenticated, currentPage: page, totalPages });
+  } catch (error) {
+    res.status(500).send("Error fetching products.");
   }
 };
+
+
+ // Number of products to display per page
 
 const productCategory = async (req, res) => {
   const id = req.params.id;
-  if (req.session.user) {
-    const isAuthenticated = true;
+  const page = parseInt(req.query.page) || 1; // Get the requested page number
+
+  try {
+    const isAuthenticated = req.session.user ? true : false;
     const categorydata = await category.find();
-    const products = await Product.find({ category: id });
-    res.render("user/shop.ejs", { products, categorydata, isAuthenticated });
-  } else {
-    const isAuthenticated = false;
-    const categorydata = await category.find();
-    const products = await Product.find({ category: id, status: "unblocked" });
-    res.render("user/shop.ejs", { products, categorydata, isAuthenticated });
+    const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
+
+    let products;
+    if (req.session.user) {
+      products = await Product.find({ category: id })
+        .skip(skip)
+        .limit(ITEMS_PER_PAGE);
+    } else {
+      products = await Product.find({ category: id, status: "unblocked" })
+        .skip(skip)
+        .limit(ITEMS_PER_PAGE);
+    }
+
+    // Count total products for calculating total pages
+    const totalProductsCount = await Product.countDocuments({ category: id });
+    const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
+
+    res.render("user/shop.ejs", { products, categorydata, isAuthenticated, currentPage: page, totalPages });
+  } catch (error) {
+    res.status(500).send("Error fetching products.");
   }
 };
+
+
+ // Number of products to display per page
+
+const productBrand = async (req, res) => {
+  const brand = req.query.brand;
+  const page = parseInt(req.query.page) || 1; // Get the requested page number
+
+  try {
+    const isAuthenticated = true;
+    const categorydata = await category.find();
+    const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
+
+    const products = await Product.find({ brand: brand })
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE);
+
+    // Count total products for calculating total pages
+    const totalProductsCount = await Product.countDocuments({ brand: brand });
+    const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
+
+    res.render("user/shop.ejs", { products, categorydata, isAuthenticated, currentPage: page, totalPages });
+  } catch (error) {
+    res.status(500).send("Error fetching products.");
+  }
+};
+
+
 const useraccount = async (req, res) => {
   if (req.session.user) {
     const user_id = req.session.user[0]._id;
@@ -347,21 +421,30 @@ const passwordchange = async (req, res) => {
     res.redirect("/useraccount");
   }
 };
+  // Number of products to display per page
+
 const productsearch = async (req, res) => {
-  if (req.session.user) {
-    const isAuthenticated = true;
-    const name = req.body.search;
-    const regex = new RegExp(`^${name}`, "i");
-    const products = await Product.find({ name: { $regex: regex } }).exec();
-    res.render("user/home", { products, isAuthenticated });
-  } else {
-    const isAuthenticated = false;
-    const name = req.body.search;
-    const regex = new RegExp(`^${name}`, "i");
-    const products = await Product.find({ name: { $regex: regex } }).exec();
-    res.render("user/home", { products, isAuthenticated });
+  const page = parseInt(req.query.page) || 1; // Get the requested page number
+  const name = req.body.search;
+  const regex = new RegExp(`^${name}`, "i");
+
+  try {
+    const isAuthenticated = req.session.user ? true : false;
+    const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
+    const products = await Product.find({ name: { $regex: regex } })
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE);
+
+    // Count total products for calculating total pages
+    const totalProductsCount = await Product.countDocuments({ name: { $regex: regex } });
+    const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
+
+    res.render("user/home", { products, isAuthenticated, currentPage: page, totalPages });
+  } catch (error) {
+    res.status(500).send("Error fetching products.");
   }
 };
+
 const aboutpage = async (req, res) => {
   if (req.session.user) {
     const isAuthenticated = true;
@@ -568,4 +651,5 @@ module.exports = {
   deleteaddress,
   // addtocartfromshop,
   paymentsuccesfull,
+  productBrand
 };

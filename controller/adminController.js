@@ -19,12 +19,58 @@ exports.login = async (req, res) => {
 };
 
 exports.dashboard = async (req, res) => {
+  const orderCountsByMonth = [];
+  const order=await Order.find();
+  const products=await Product.find();
+  const productlength=products.length;
+  const orederlength=order.length;
+  const categor= await categories.find({active:true});
+  let categorieslength=categor.length
+const revenue=await Order.find({paymentStatus:"paid"});
+const today = new Date();
+const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString();
+const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString();
+
+const monthlyorders = await Order.find({
+  date: { $gte: startOfMonth, $lte: endOfMonth },paymentStatus: 'paid'
+  
+});
+
+let monthlytotal=0;
+let finalmonthlytotal=monthlyorders.forEach((product)=>{
+  monthlytotal+=product.totalAmount;
+})
+
+let total=0;
+const totalRevenue=revenue.forEach((product)=>{
+  total+=product.totalAmount
+})
+const orders = await Order.find();
+  
+  orders.forEach(order => {
+    const orderDate = new Date(order.date);
+    const month = orderDate.getMonth() + 1;  // Month is zero-based, so we add 1
+    const year = orderDate.getFullYear();
+    
+    // Check if there's an entry for this month and year
+    const existingEntry = orderCountsByMonth.find(entry => entry.month === month && entry.year === year);
+    
+    if (existingEntry) {
+      existingEntry.count++;
+    } else {
+      orderCountsByMonth.push({ month, year, count: 1 });
+    }
+  });
+
+  console.log("orderCountsByMonth==>",orderCountsByMonth)
+  console.log(orderCountsByMonth[0])
+
   const data = await adminCollection.findOne({ email: req.body.email });
   if(data){
     if (data.email == req.body.email && data.password == req.body.password) {
      
       req.session.adminuser = data
-      res.render("admin/dashboard.ejs");
+      res.render("admin/dashboard.ejs",{totalRevenue:total,productlength,orederlength,categorieslength,orderCountsByMonth,monthlytotal});
     }else{
       res.redirect("/admin");
     }
@@ -37,7 +83,54 @@ exports.dashboard = async (req, res) => {
   }
 };
 exports.homepage=async(req,res)=>{
-  res.render("admin/dashboard.ejs")
+  const orderCountsByMonth = [];
+  const order=await Order.find();
+  const products=await Product.find();
+  const productlength=products.length;
+  const orederlength=order.length;
+  const categor= await categories.find({active:true});
+  let categorieslength=categor.length
+const revenue=await Order.find({paymentStatus:"paid"});
+const today = new Date();
+const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+const monthlyorders = await Order.find({
+  date: { $gte: startOfMonth, $lte: endOfMonth },paymentStatus: 'paid'
+  
+});
+let monthlytotal=0;
+let finalmonthlytotal=monthlyorders.forEach((product)=>{
+  monthlytotal+=product.totalAmount;
+})
+
+let total=0;
+const totalRevenue=revenue.forEach((product)=>{
+  total+=product.totalAmount
+})
+const orders = await Order.find();
+  
+  orders.forEach(order => {
+    const orderDate = new Date(order.date);
+    const month = orderDate.getMonth() + 1;  // Month is zero-based, so we add 1
+    const year = orderDate.getFullYear();
+    
+    // Check if there's an entry for this month and year
+    const existingEntry = orderCountsByMonth.find(entry => entry.month === month && entry.year === year);
+    
+    if (existingEntry) {
+      existingEntry.count++;
+    } else {
+      orderCountsByMonth.push({ month, year, count: 1 });
+    }
+  });
+
+  console.log("orderCountsByMonth==>",orderCountsByMonth)
+  console.log(orderCountsByMonth[0])
+
+  
+  res.render("admin/dashboard.ejs",{totalRevenue:total,productlength,orederlength,categorieslength,orderCountsByMonth,monthlytotal});
+  console.log(orderCountsByMonth[0].count)
 }
 
 exports.productlist = async (req, res) => {
@@ -310,7 +403,7 @@ exports.SalesReport=async(req,res)=>{
 }
 exports.getSalesReports = async (req, res) => {
   const { startDate, endDate } = req.body;
-
+console.log("req.body is==>",req.body)
   const data = await Order.find({
     orderStatus: { $in: ["payment Failed", "delivered", "Confirmed", "Placed"] },
     date: { $gte: new Date(startDate), $lte: new Date(endDate) }

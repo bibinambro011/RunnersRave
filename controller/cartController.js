@@ -8,6 +8,7 @@ const addtocart = async (req, res) => {
   const productId = req.params.id;
   const userId = req.session.user[0]._id;
   const exproduct = await Product.findById(productId);
+  const exiStock=exproduct.stock;
   const size = exproduct.size;
 
   try {
@@ -33,7 +34,9 @@ const addtocart = async (req, res) => {
       );
 
       if (existingProduct) {
+        if(exiStock>existingProduct.quantity){
         existingProduct.quantity++;
+        }
         
       } else {
         cart.products.push({
@@ -49,7 +52,8 @@ const addtocart = async (req, res) => {
 
     const isAuthenticated = true;
     const products = await Product.find({ status: "unblocked" });
-    res.render("user/home", { isAuthenticated, products });
+    // res.render("user/home", { isAuthenticated, products });
+    res.redirect("/userhome")
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
@@ -77,7 +81,10 @@ const addtocartfrompage = async (req, res) => {
           },
         ],
       });
-      await newCart.save();
+      
+        await newCart.save();
+    
+    
     } else {
       const existingProduct = cart.products.find(
         (product) =>

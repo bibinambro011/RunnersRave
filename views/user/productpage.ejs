@@ -1,4 +1,4 @@
-﻿<%-include("../partials/userheader")-%>
+﻿﻿<%-include("../partials/userheader")-%>
 
     <!-- Quick view -->
     <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
@@ -415,7 +415,8 @@
                                             </ul>
                                         </div>
                                         <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                                        <div class="detail-extralink">
+                                        <!-- <div class="detail-extralink">
+                                            <% if (product.stock >= 1) { %>
                                             <div class="detail-qty border radius">
                                                 <a href="#" class="qty-down" onclick="decrementQuantity()">
                                                   <i class="fi-rs-angle-small-down"></i>
@@ -425,11 +426,23 @@
                                                   <i class="fi-rs-angle-small-up"></i>
                                                 </a>
                                               </div>
-                                            
+                                              <% } else { %>
+                                                <span class="text-danger">Out of stock</span>
+                                              <% } %>
+                                             -->
                                             <div class="product-extra-link2">
-                                                <a  id="addToCartButton" data-product-id="<%= product._id %>">
-                                                    <i class="fa-solid fa-cart-shopping"></i>
-                                                </a>
+                                                <% if (product.stock >= 1) { %>
+                                                    <a
+                                                      aria-label="Add To Cart"
+                                                      class="action-btn hover-up"
+                                                      href="/addtocart/<%= product._id %>"
+                                                    >
+                                                      <i class="fi-rs-shopping-bag-add"></i>
+                                                    </a>
+                                                  <% } else { %>
+                                                  <span style="color: red;">Out of stock</span>
+                                                  <% } %>
+                                                  
                                                 <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/wishlist"><i class="fi-rs-heart"></i></a>
                                                 <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                             </div>
@@ -887,8 +900,27 @@
 
   function incrementQuantity(totalstock) {
     if (quantity >= totalstock) {
-            alert('Cannot increase quantity. Stock not available.');
-            return;
+        Swal.fire({
+  icon: 'info',
+  title: 'Out of stock',
+  text:"Product is not available",
+  showConfirmButton: false,
+  timer: 1500,  // Automatically close after 1.5 seconds
+  backdrop: `
+    rgba(0,0,123,0.4)
+    url('path/to/your-image.jpg')
+    left top
+    no-repeat
+  `,
+  customClass: {
+    title: 'my-title-class',
+    icon: 'my-icon-class'
+  }
+  
+});
+return;
+          
+          
         }
     quantity++;
     updateQuantityDisplay();
@@ -952,4 +984,6 @@ function sendProductDetailsToServer(productDetails) {
 }
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <%-include("../partials/userfooter")-%>

@@ -249,7 +249,7 @@ const showUserOrder = async (req, res) => {
     });
   }
 
-  res.render("user/orderDetails", { order, totalPrice });
+  res.render("user/orderDetails", { order, totalPrice ,isAuthenticated:true});
 }
 const verifyOnlinePayment = async (req, res) => {
   let data = req.body;

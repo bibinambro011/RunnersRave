@@ -9,8 +9,8 @@ const nocache = require("nocache");
 
 router.use(nocache());
 
-router.get("/", middleware.userexist, controller.userhome);
-router.get("/userhome", middleware.userexist, controller.userhome);
+router.get("/", middleware.islogin, controller.userhome);
+router.get("/userhome",  controller.userhome);
 router.get("/signup", controller.registerpage);
 router.get("/login", middleware.userexist, controller.loginpage);
 router.post("/login", middleware.userexist, controller.userlogin);
@@ -27,6 +27,7 @@ router.post(
 );
 router.get("/verifyotp", controller.verify_otp);
 router.get("/productCategory/:id", controller.productCategory);
+router.get("/productBrand",controller.productBrand)
 router.get("/useraccount", middleware.islogin, controller.useraccount);
 router.get("/addtowishlist", middleware.cartAuth, controller.addtowishlist);
 router.post("/productsearch", controller.productsearch);

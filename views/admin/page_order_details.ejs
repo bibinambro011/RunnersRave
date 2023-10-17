@@ -134,9 +134,10 @@
                                                     <dl class="dlist">
                                                         <dt class="text-muted">Status:</dt>
                                                         <dd>
-                                                            <span class="badge rounded-pill <%= order.orderStatus === 'Cancelled' ? 'alert-danger text-danger' : 'alert-success text-success' %>">
-                                                              <%= order.orderStatus %> 
-                                                            </span>
+                                                            <span class="badge rounded-pill <%= order.orderStatus === 'Cancelled' ? 'alert-danger text-danger' : order.orderStatus === 'payment Failed' ? 'alert-danger text-danger' : 'alert-success text-success' %>">
+                                                                <%= order.orderStatus %> 
+                                                              </span>
+                                                              
                                                           </dd>
                                                           
                                                     </dl>
