@@ -189,9 +189,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Change password</a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="/logout"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
                                         </li>
@@ -216,7 +216,7 @@
                                               <p ><%=data.username%></p>
                                               <p><%=data.email%></p>
                                               <p><%=data.phone%></p>
-
+                                           <a href="/changepasswordpage" class="btn btn-success">changepassword</a>
                                             </div>
                                           </div>
                                     </div>
@@ -256,7 +256,8 @@
                                                                         <td>#<%= order.ord %></td>
                                                                         <td><%= product.productId.name %></td>
                                                                         <td><%= order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
-                                                                        <td id="statusid_<%= order._id %>" ><%= order.orderStatus %></td>
+                                                                        <td id="statusid_<%= order._id %>" >
+                                                                            <%= order.orderStatus %></td>
                                                                         <td ><%= product.productId.selling_price %></td>
                                                                         <td><%= product.quantity * product.productId.selling_price %></td>
                                                                        
@@ -265,7 +266,7 @@
                                                                         <% } else { %>
                                                                             <td></td>
                                                                         <% } %> -->
-                                                                        <td ><a href="showUserOrder/<%= order._id %>"><button type="button">order details</button></a>
+                                                                        <td ><a href="showUserOrder/<%= order._id %>"><button type="button" class="btn btn-success">order details</button></a>
                                                                     </tr>
                                                                     
                                                                 <% }); %>
@@ -310,45 +311,48 @@
                                     </div>
                                     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                         <div class="d-flex justify-content-center pb-2">
-                                            <button style="background-color: green; border: none;"><a href="/addAddress"class="btn-small" style="text-decoration: none; color: white;">Add Address</a></button> 
+                                            <button style="background-color: green; border: none;">
+                                                <a href="/addAddress" class="btn-small" style="text-decoration: none; color: white;">Add Address</a>
+                                            </button>
                                         </div>
                                         <div class="row">
-                                            
                                             <% if (userData && userData.addresses && userData.addresses.length > 0) { %>
                                                 <% userData.addresses.forEach(address => { %>
                                                     <div class="col-lg-6">
-                                                    <div class="card mb-3">
-                                                        <div class="card-header">
-                                                            <h5 class="mb-0"><%= address.type %> </h5>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <address>
-                                                                <%= address.address %> <br>
-                                                                <%= address.city %>, <%= address.state %> <%= address.pincode %> <br>
-                                                                Phone: <%= address.mobile %>
-                                                            </address>
-                                                            <p><%= address.landmark %></p>
-                                                            <div class="d-flex justify-content-between">
-                                                                <button style="background-color: green; border: none; " ><a href="/editaddress/ <%= address._id %>" class="btn-small" style="text-decoration: none; color: white;">Edit</a></button>
-                                                                <button style="background-color: red; border: none; "  ><a href="/deleteaddress/ <%= address._id %>" class="btn-small" style="text-decoration: none; color: white;">delete</a></button> 
+                                                        <div class="card mb-3">
+                                                            <div class="card-header">
+                                                                <h5 class="mb-0"><%= address.type %> </h5>
                                                             </div>
-                                                           
+                                                            <div class="card-body">
+                                                                <address>
+                                                                    <%= address.address %> <br>
+                                                                    <%= address.city %>, <%= address.state %> <%= address.pincode %> <br>
+                                                                    Phone: <%= address.mobile %>
+                                                                </address>
+                                                                <p><%= address.landmark %></p>
+                                                                <div class="d-flex justify-content-between">
+                                                                    <button style="background-color: green; border: none; ">
+                                                                        <a href="/editaddress/ <%= address._id %>" class="btn-small" style="text-decoration: none; color: white;">Edit</a>
+                                                                    </button>
+                                                                    <button style="background-color: red; border: none; ">
+                                                                        <a href="/deleteaddress/ <%= address._id %>" class="btn-small" style="text-decoration: none; color: white;">Delete</a>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 <% }); %>
                                             <% } else { %>
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <p>No shipping addresses available.</p>
-                                                        
                                                     </div>
                                                 </div>
                                             <% } %>
                                         </div>
-                                        </div>
                                     </div>
-                                    <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                                    
+                                    <!-- <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
                                         <div class="col-lg-8">
                                             <form class="contact-form-style mt-30 mb-50" action="/passwordchange" method="post" onsubmit="return validateForm()">
                                                 <div class="input-style mb-20">
@@ -369,9 +373,8 @@
                                                 <button class="submit submit-auto-width" type="submit">Submit</button>
                                             </form>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    </div> -->
+                                    
                         </div>
                     </div>
                 </div>

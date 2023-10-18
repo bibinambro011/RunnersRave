@@ -96,4 +96,5 @@ router.post(
   middleware.islogin,
   orderController.orderUpdatedStatusDetails
 );
+router.get("/changepasswordpage",middleware.islogin,controller.changepasswordpage)
 module.exports = router;

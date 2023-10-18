@@ -20,8 +20,6 @@ const orderdetails = async (req, res) => {
         model: "productCollection",
       }),
     ]);
-  
-    
 
     let totalPrice = 0;
     let originalPrice = 0;
@@ -72,45 +70,53 @@ const orderdetails = async (req, res) => {
         reason: "No reason",
       },
     });
-
-    await newOrder.save();
-     orderId=newOrder._id;
-
-    //payment method
-
-    if (newOrder.paymentMethod == "COD") {
-      newOrder.paymentMethod = "Cash on delivery";
+    if (newOrder.totalAmount != 0) {
       await newOrder.save();
-      if (cartDetails) {
-        cartDetails.products = [];
-        await cartDetails.save();
-      }
 
+      orderId = newOrder._id;
+
+      //payment method
+
+      if (newOrder.paymentMethod == "COD") {
+        newOrder.paymentMethod = "Cash on delivery";
+        await newOrder.save();
+        if (cartDetails) {
+          cartDetails.products = [];
+          await cartDetails.save();
+        }
+
+        return res.json({
+          status: "COD",
+          placedOrderId: newOrder._id,
+          redirectUrl: "/orderplacedsuccessfully",
+        });
+      } else {
+        userHelper
+          .generateRazorPay(newOrder._id, newOrder.totalAmount)
+          .then((response) => {
+            console.log("razorpay response is===>", response);
+            return res.json({ status: "RAZORPAY", response: response });
+          });
+        // if (cartDetails) {
+        //   cartDetails.products = [];
+        //   await cartDetails.save();
+        // }
+      }
+      // await Cart.findOneAndUpdate({ userId }, { products: [] });
+
+      // const response = {
+      //   message: "Order created successfully",
+      //   redirectUrl: "/orderplacedsuccessfully"
+      // };
+
+      // return res.status(200).json(response);
+    } else {
       return res.json({
         status: "COD",
         placedOrderId: newOrder._id,
-        redirectUrl: "/orderplacedsuccessfully",
+        redirectUrl: "/checkoutpage",
       });
-    } else {
-      userHelper
-        .generateRazorPay(newOrder._id, newOrder.totalAmount)
-        .then((response) => {
-          console.log("razorpay response is===>", response);
-          return res.json({ status: "RAZORPAY", response: response });
-        });
-      // if (cartDetails) {
-      //   cartDetails.products = [];
-      //   await cartDetails.save();
-      // }
     }
-    // await Cart.findOneAndUpdate({ userId }, { products: [] });
-
-    // const response = {
-    //   message: "Order created successfully",
-    //   redirectUrl: "/orderplacedsuccessfully"
-    // };
-
-    // return res.status(200).json(response);
   } catch (error) {
     console.error("Error creating order:", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -219,6 +225,15 @@ const updateorderstatus = async (req, res) => {
     { orderStatus: updatedData.orderStatus },
     { new: true }
   );
+  if(updatedData.orderStatus=="delivered"){
+    console.log("hello world")
+    await Order.findByIdAndUpdate(
+      id,
+      { paymentStatus: "paid" },
+      { new: true }
+    );
+
+  }
   return res.status(200).json({
     message: "Order created successfully",
     redirectUrl: `/admin/order_details/${id}`, // Specify the desired redirect URL here
@@ -249,24 +264,24 @@ const showUserOrder = async (req, res) => {
     });
   }
 
-  res.render("user/orderDetails", { order, totalPrice ,isAuthenticated:true});
-}
+  res.render("user/orderDetails", { order, totalPrice, isAuthenticated: true });
+};
 const verifyOnlinePayment = async (req, res) => {
   let data = req.body;
-  let cart=await Cart.findOne({userId:req.session.user[0]._id})
-  console.log("cart details are===>",cart)
-  cart.products=[];
-  await cart.save()
+  let cart = await Cart.findOne({ userId: req.session.user[0]._id });
+  console.log("cart details are===>", cart);
+  cart.products = [];
+  await cart.save();
   let receiptId = data.order.receipt;
   userHelper
     .verifyOnlinePayment(data)
     .then(() => {
       console.log("this is a payment success block");
+
       let paymentSuccess = true;
-      userHelper.updatePaymentStatus(receiptId, paymentSuccess);
-      // .then(()=>{
-      //    res.json({status:'paymentSuccess',placedOrderId:receiptId});
-      // })
+      userHelper.updatePaymentStatus(receiptId, paymentSuccess).then(() => {
+        res.json({ status: "paymentSuccess", placedOrderId: receiptId });
+      });
     })
     .catch((err) => {
       console.log("this is a payment failure block");
@@ -276,7 +291,6 @@ const verifyOnlinePayment = async (req, res) => {
 
         let paymentSuccess = false;
         userHelper.updatePaymentStatus(receiptId, paymentSuccess);
-        
       }
     });
 };
@@ -302,22 +316,21 @@ const orderUpdatedStatusDetails = async (req, res) => {
 };
 const paymentFailureHandler = async (req, res) => {
   // let data=await Order.findOne({_id:orderId});
-  console.log("order details are==>",orderId);
+  console.log("order details are==>", orderId);
   let data = await Order.findOneAndUpdate(
     { _id: orderId }, // Query to find the document
-    { $set: { orderStatus:"payment Failed" } }, 
-    { new: true } 
-);
-
+    { $set: { orderStatus: "payment Failed" } },
+    { new: true }
+  );
 
   return res.status(200).json({
     redirectUrl: `/paymentFailure`, // Specify the desired redirect URL here
   });
 };
-const paymentFailure=async(req,res)=>{
-  const isAuthenticated=true;
-  res.render("user/paymentFailure",{isAuthenticated})
-}
+const paymentFailure = async (req, res) => {
+  const isAuthenticated = true;
+  res.render("user/paymentFailure", { isAuthenticated });
+};
 module.exports = {
   orderdetails,
   ordernfo,
@@ -329,5 +342,5 @@ module.exports = {
   orderUpdatedStatusDetails,
   verifyOnlinePayment,
   paymentFailureHandler,
-  paymentFailure
+  paymentFailure,
 };

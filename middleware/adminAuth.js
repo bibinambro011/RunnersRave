@@ -1,5 +1,3 @@
-
-
 const islogin = async (req, res, next) => {
   if (req.session.adminuser) {
     next();
@@ -9,18 +7,16 @@ const islogin = async (req, res, next) => {
 };
 
 const islogout = async (req, res, next) => {
-  req.session.adminuser=null;
+  req.session.adminuser = null;
   next();
 };
 
+const adminexist = async (req, res, next) => {
+  if (req.session.adminuser) {
+    res.redirect("/admin/home");
+  } else {
+    next();
+  }
+};
 
-const adminexist=async(req,res,next)=>{
-    if(req.session.adminuser ){
-        res.redirect("/admin/home")
-
-    }else{
-      next()
-    }
-}
-
-module.exports={islogin,islogout,adminexist}
+module.exports = { islogin, islogout, adminexist };

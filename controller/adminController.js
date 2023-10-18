@@ -428,7 +428,6 @@ exports.sortedByDateredirect=async(req,res)=>{
   } catch (error) {
     console.error('Error parsing data:', error);
   }
-  console.log("data type of data==>" , typeof dataObject)
 
   res.render("admin/salesReports",{data:dataObject})
 }

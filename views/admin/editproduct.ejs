@@ -111,7 +111,7 @@
                                 <label class="form-label">Categories</label>
                                 <select class="form-select" name="category">
                                   <% categorydata.forEach(category => { %>
-                                    <option value="<%= category._id %>"><%= category.name %></option>
+                                    <option value="<%= category._id %>"><%= category.name %></option>    
                                   <% }); %>
                                 </select>
                             </div>
@@ -128,65 +128,61 @@
         <script>
           
 
-          const i = 2; // You would replace this with your actual loop index
-const buttonRemoval = document.getElementById(`Removebtn${i}`);
+          ; // You would replace this with your actual loop index
+          const imageRemoveBtn = document.querySelectorAll('.imageRemoveBtn');
+imageRemoveBtn.forEach((btn) => {
+    btn.addEventListener('click', async (event) => {
+        event.preventDefault();
 
-            const imageRemoveBtn = document.querySelectorAll('.imageRemoveBtn');
-            imageRemoveBtn.forEach((btn) => {
-                btn.addEventListener('click', async (event) => {
-                    event.preventDefault()
-    
-                    const imageFile = event.currentTarget.getAttribute('data-imageFile');
-                    // console.log(imageFile)
-                    const productId = event.currentTarget.getAttribute('data-productId')
-                 const dataindex=event.currentTarget.getAttribute('data-index')
-                 
-                    if (imageFile && productId) {
-                       
-                        const data = {
-                            imageFile: imageFile,
-                            productId: productId,
-                            dataindex:dataindex
+        const dataindex = event.currentTarget.getAttribute('data-index');
+        const buttonRemoval = document.getElementById(`Removebtn${dataindex}`);
 
-                        
-                        }
-                        buttonRemoval.style.visibility="hidden"
-              
-                  
-                       await fetch('/admin/remove-image', {
-                                method: 'post',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(data)
-                            })
-                            // Waiting for the result
-                            const result = await response.json();
-    
-                            if (result.status === 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: result.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                                setTimeout(() => {
-                                    location.href = location.href
-                                }, 2000);
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: result.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            }
-                        }
-    
-    
-    
-                    
-                })
-            })
+        const imageFile = event.currentTarget.getAttribute('data-imageFile');
+        const productId = event.currentTarget.getAttribute('data-productId');
+
+        if (imageFile && productId) {
+            const data = {
+                imageFile: imageFile,
+                productId: productId,
+                dataindex: dataindex
+            };
+
+            // Hide the button corresponding to the clicked image
+            buttonRemoval.style.display = 'none';
+
+            const response = await fetch('/admin/remove-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            // Check the response and proceed accordingly
+            if (response.ok) {
+                const result = await response.json();
+                Swal.fire({
+                    icon: 'success',
+                    title: result.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setTimeout(() => {
+                    location.href = location.href;
+                }, 2000);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error occurred during image removal',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                // Restore the visibility of the button in case of an error
+                buttonRemoval.style.display = 'block';
+            }
+        }
+    });
+});
+
         </script>
 <%-include("../partials/adminfooter")-%>

@@ -182,7 +182,7 @@ const userlogin = async (req, res) => {
     if (user.status == false) {
       const isAuthenticated = false;
       const data = "you are blocked";
-     return  res.render("user/login", { errordata:data, isAuthenticated });
+      return res.render("user/login", { errordata: data, isAuthenticated });
     }
 
     if (user) {
@@ -193,7 +193,7 @@ const userlogin = async (req, res) => {
 
       if (isPasswordValid) {
         req.session.user = data;
-       
+
         return res.redirect("/userhome");
       } else {
         const isAuthenticated = false;
@@ -204,7 +204,7 @@ const userlogin = async (req, res) => {
       }
     } else {
       const isAuthenticated = false;
-     return res.render("user/login.ejs", {
+      return res.render("user/login.ejs", {
         errordata: "Invalid credentials",
         isAuthenticated,
       });
@@ -212,7 +212,7 @@ const userlogin = async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error);
     const isAuthenticated = false;
-   return res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 };
 const userlogout = async (req, res) => {
@@ -234,7 +234,7 @@ const productpage = async (req, res) => {
   }
 };
 
-const ITEM_PER_PAGE = 6;  // Number of products to display per page
+const ITEM_PER_PAGE = 6; // Number of products to display per page
 
 const userhome = async (req, res) => {
   const user = req.session.user;
@@ -251,10 +251,17 @@ const userhome = async (req, res) => {
         .limit(ITEM_PER_PAGE);
 
       // Count total products for calculating total pages
-      const totalProductsCount = await Product.countDocuments({ status: "unblocked" });
+      const totalProductsCount = await Product.countDocuments({
+        status: "unblocked",
+      });
       const totalPages = Math.ceil(totalProductsCount / ITEM_PER_PAGE);
 
-      res.render("user/home.ejs", { products, isAuthenticated, currentPage: page, totalPages });
+      res.render("user/home.ejs", {
+        products,
+        isAuthenticated,
+        currentPage: page,
+        totalPages,
+      });
     } else {
       const isAuthenticated = false;
       const skip = (page - 1) * ITEM_PER_PAGE; // Calculate the number of items to skip
@@ -263,17 +270,24 @@ const userhome = async (req, res) => {
         .limit(ITEM_PER_PAGE);
 
       // Count total products for calculating total pages
-      const totalProductsCount = await Product.countDocuments({ status: "unblocked" });
+      const totalProductsCount = await Product.countDocuments({
+        status: "unblocked",
+      });
       const totalPages = Math.ceil(totalProductsCount / ITEM_PER_PAGE);
 
-      res.render("user/home.ejs", { products, isAuthenticated, currentPage: page, totalPages });
+      res.render("user/home.ejs", {
+        products,
+        isAuthenticated,
+        currentPage: page,
+        totalPages,
+      });
     }
   } catch (error) {
     res.status(500).send("Error fetching products.");
   }
 };
 
-const ITEMS_PER_PAGE = 6;  // Number of products to display per page
+const ITEMS_PER_PAGE = 6; // Number of products to display per page
 
 const shop = async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Get the requested page number
@@ -288,17 +302,24 @@ const shop = async (req, res) => {
       .limit(ITEMS_PER_PAGE);
 
     // Count total products for calculating total pages
-    const totalProductsCount = await Product.countDocuments({ status: "unblocked" });
+    const totalProductsCount = await Product.countDocuments({
+      status: "unblocked",
+    });
     const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
 
-    res.render("user/shop.ejs", { products, categorydata, isAuthenticated, currentPage: page, totalPages });
+    res.render("user/shop.ejs", {
+      products,
+      categorydata,
+      isAuthenticated,
+      currentPage: page,
+      totalPages,
+    });
   } catch (error) {
     res.status(500).send("Error fetching products.");
   }
 };
 
-
- // Number of products to display per page
+// Number of products to display per page
 
 const productCategory = async (req, res) => {
   const id = req.params.id;
@@ -324,14 +345,19 @@ const productCategory = async (req, res) => {
     const totalProductsCount = await Product.countDocuments({ category: id });
     const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
 
-    res.render("user/shop.ejs", { products, categorydata, isAuthenticated, currentPage: page, totalPages });
+    res.render("user/shop.ejs", {
+      products,
+      categorydata,
+      isAuthenticated,
+      currentPage: page,
+      totalPages,
+    });
   } catch (error) {
     res.status(500).send("Error fetching products.");
   }
 };
 
-
- // Number of products to display per page
+// Number of products to display per page
 
 const productBrand = async (req, res) => {
   const brand = req.query.brand;
@@ -350,12 +376,17 @@ const productBrand = async (req, res) => {
     const totalProductsCount = await Product.countDocuments({ brand: brand });
     const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
 
-    res.render("user/shop.ejs", { products, categorydata, isAuthenticated, currentPage: page, totalPages });
+    res.render("user/shop.ejs", {
+      products,
+      categorydata,
+      isAuthenticated,
+      currentPage: page,
+      totalPages,
+    });
   } catch (error) {
     res.status(500).send("Error fetching products.");
   }
 };
-
 
 const useraccount = async (req, res) => {
   if (req.session.user) {
@@ -419,9 +450,14 @@ const passwordchange = async (req, res) => {
     user.password = hashedPassword;
     await user.save();
     res.redirect("/useraccount");
+  } else {
+    res.render("user/changepasswordpage", {
+      message: "your entered current password do not match",
+      isAuthenticated: true,
+    });
   }
 };
-  // Number of products to display per page
+// Number of products to display per page
 
 const productsearch = async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Get the requested page number
@@ -436,10 +472,17 @@ const productsearch = async (req, res) => {
       .limit(ITEMS_PER_PAGE);
 
     // Count total products for calculating total pages
-    const totalProductsCount = await Product.countDocuments({ name: { $regex: regex } });
+    const totalProductsCount = await Product.countDocuments({
+      name: { $regex: regex },
+    });
     const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
 
-    res.render("user/home", { products, isAuthenticated, currentPage: page, totalPages });
+    res.render("user/home", {
+      products,
+      isAuthenticated,
+      currentPage: page,
+      totalPages,
+    });
   } catch (error) {
     res.status(500).send("Error fetching products.");
   }
@@ -533,9 +576,8 @@ const editaddress_id = async (req, res) => {
   res.render("user/editaddress", { isAuthenticated, details });
 };
 const updatedAddress = async (req, res) => {
-
-  console.log("hello world")
-  console.log(req.body)
+  console.log("hello world");
+  console.log(req.body);
   const id = req.params.id;
   const {
     name,
@@ -546,13 +588,11 @@ const updatedAddress = async (req, res) => {
     landmark,
     mobile,
     alt_mobile,
-    type
-    
+    type,
   } = req.body;
-  console.log("type is ===>",type)
+  console.log("type is ===>", type);
 
   try {
-    
     const updateFields = {
       name,
       city,
@@ -563,10 +603,8 @@ const updatedAddress = async (req, res) => {
       mobile,
       alt_mobile,
       type,
-  
     };
 
-    
     const updatedAddress = await addressSchema.findByIdAndUpdate(
       id,
       updateFields,
@@ -576,9 +614,7 @@ const updatedAddress = async (req, res) => {
     if (!updatedAddress) {
       return res.status(404).json({ message: "Address not found" });
     }
-    res.redirect("/useraccount")
-
-    
+    res.redirect("/useraccount");
   } catch (error) {
     console.error("Error updating address:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -597,7 +633,6 @@ const deleteaddress = async (req, res) => {
     }
     const isAuthenticated = true;
 
-    
     res.redirect("/useraccount");
   } catch (error) {
     console.error("Error deleting address:", error);
@@ -607,6 +642,9 @@ const deleteaddress = async (req, res) => {
 const paymentsuccesfull = async (req, res) => {
   const isAuthenticated = true;
   res.render("user/paymentmessage", { isAuthenticated });
+};
+const changepasswordpage = async (req, res) => {
+  res.render("user/changepasswordpage", { isAuthenticated: true });
 };
 
 module.exports = {
@@ -651,5 +689,6 @@ module.exports = {
   deleteaddress,
   // addtocartfromshop,
   paymentsuccesfull,
-  productBrand
+  productBrand,
+  changepasswordpage,
 };

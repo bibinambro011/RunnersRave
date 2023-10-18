@@ -1028,7 +1028,22 @@
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td class="product-subtotal" colspan="2">Rs<%= subtotal.toFixed(2) %></td>
+                                    <%
+    const formattedSubtotal = subtotal.toFixed(2);
+    if (parseFloat(formattedSubtotal) > 0) {
+%>
+        <td class="product-subtotal" colspan="2">Rs<%= formattedSubtotal %></td>
+    <%
+    } else {
+%>
+        <script>
+            alert('Product already purchased.');
+           
+        </script>
+    <%
+    }
+%>
+
                                 </tr>
                               
                             </tbody>
@@ -1187,19 +1202,25 @@ razorpay.open();
                 },
                 body: JSON.stringify({ payment, order }),
             })
+            // .then((data)=>{
+            //   alert(data.redirectUrl,data.message)
+            //     window.location.href=data.redirectUrl
+            // })
 
-            // const result = await response.json();
+            
+            const result = await response.json();
 
-            // if (result.status === 'paymentSuccess') {
+            if (result.status === 'paymentSuccess') {
+                window.location.href="/orderplacedsuccessfully"
                 
-            //     console.log("payment success")
-            // } else if (result.status === 'paymentFailed') {
+                console.log("payment success")
+            } else if (result.status === 'paymentFailed') {
                 
-            //     console.log("payment failede")
-            // } else {
+                console.log("payment failede")
+            } else {
                 
-            //     console.log("payment error")
-            // }
+                console.log("payment error")
+            }
         }
 
     })

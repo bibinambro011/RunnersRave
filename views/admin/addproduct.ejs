@@ -133,11 +133,19 @@
             document.getElementById("pricespan").innerHTML="Please enter a product price."
             return false;
         }
+        if (productPrice <=0 || isNaN(productPrice) ) {
+            document.getElementById("pricespan").innerHTML="Please provide a valid price"
+            return false;
+        }
 
         // Validate selling price
         let sellingPrice = document.getElementById('product_size').value;
         if (sellingPrice.trim() === '') {
             document.getElementById("selling_price_span").innerHTML="Please enter a product selling price."
+            return false;
+        }
+        if (sellingPrice <=0 || isNaN(sellingPrice)) {
+            document.getElementById("selling_price_span").innerHTML="Please provide a valid price"
             return false;
         }
 
@@ -168,6 +176,11 @@
             document.getElementById("imagespan").innerHTML="Please enter a product image."
             return false;
         }
+        if (images.length > 3) {
+            document.getElementById("imagespan").innerHTML="only 3 images are allowed to add"
+            return false;
+        }
+
 
         // Validate gender
         let gender = document.querySelector('input[name="gender"]').value;
@@ -185,6 +198,10 @@
 
         return true; // Form is valid
     }
+
+    // Function to hide the associated span when input is clicked
+
+
 </script>
 
 

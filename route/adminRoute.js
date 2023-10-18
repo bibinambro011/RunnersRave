@@ -2,7 +2,7 @@ const process = require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const controller = require("../controller/adminController");
-const orderController=require("../controller/orderController")
+const orderController = require("../controller/orderController");
 const middleware = require("../middleware/adminAuth");
 const multer = require("multer");
 const Product = require("../model/productSchema");
@@ -70,12 +70,24 @@ router.post(
   upload.array("images", 5),
   controller.updateProduct
 );
-router.get("/productlistredirection",controller.productredirection)
-router.get("/ordernfo",middleware.islogin,orderController.ordernfo);
-router.get("/order_details/:id",middleware.islogin,orderController.orderdetailsofuser);
-router.post("/update-order-status/:orderId",middleware.islogin,orderController.updateorderstatus);
-router.post("/remove-image",middleware.islogin,controller.remove_image);
-router.get("/SalesReports",middleware.islogin,controller.SalesReport);
-router.post("/generateSalesReport",middleware.islogin,controller.getSalesReports);
-router.get("/sortedByDateredirect",controller.sortedByDateredirect)
+router.get("/productlistredirection", controller.productredirection);
+router.get("/ordernfo", middleware.islogin, orderController.ordernfo);
+router.get(
+  "/order_details/:id",
+  middleware.islogin,
+  orderController.orderdetailsofuser
+);
+router.post(
+  "/update-order-status/:orderId",
+  middleware.islogin,
+  orderController.updateorderstatus
+);
+router.post("/remove-image", middleware.islogin, controller.remove_image);
+router.get("/SalesReports", middleware.islogin, controller.SalesReport);
+router.post(
+  "/generateSalesReport",
+  middleware.islogin,
+  controller.getSalesReports
+);
+router.get("/sortedByDateredirect", controller.sortedByDateredirect);
 module.exports = router;

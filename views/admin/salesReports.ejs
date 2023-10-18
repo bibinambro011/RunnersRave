@@ -36,7 +36,7 @@
                 <button class="btn btn-sm btn-info" onclick="getSalesReport()" style="max-width: 80px;max-height: 60px;">submit</button>
               </div>
         
-              <div class="col-md-2 col-6">
+              <!-- <div class="col-md-2 col-6">
                 <div class="custom_select">
                   <select class="form-select select-nice">
                     <option selected>Status</option>
@@ -46,7 +46,7 @@
                     <option>Refund</option>
                   </select>
                 </div>
-              </div>
+              </div> -->
         
               <div class="col-md-1 col-4 ml-auto">
                 <button class="btn btn-success" id="daily">daily</button>
@@ -124,8 +124,6 @@
         </div> <!-- table-responsive end// -->
     </div>
 </div>
-
-  
 <!-- <div class="pagination-area mt-30 mb-50">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-start">
@@ -229,12 +227,18 @@ document.getElementById('yearly').addEventListener('click', function() {
   // Calculate the end date for the current year
   const endOfYear = new Date(currentDate.getFullYear() + 1, 0, 0);
   const formattedEndDate = endOfYear.toISOString().split('T')[0];
-  getSalesReports(formattedStartDate, formattedEndDate);
+  
+ getSalesReports(formattedStartDate, formattedEndDate);
+
  
 });
 
 
 
+
+
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
 
 <%-include("../partials/adminfooter")-%>
