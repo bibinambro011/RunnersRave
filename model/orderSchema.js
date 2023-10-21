@@ -51,6 +51,10 @@ const ordersModel = new mongoose.Schema({
          type:Number,
          default:0,
       },
+      images:[{
+         type:String
+
+      }],
       productStatus:{
          type:String,
          default:'Pending'

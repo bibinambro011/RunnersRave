@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controller/adminController");
 const orderController = require("../controller/orderController");
+const couponController=require("../controller/couponController")
 const middleware = require("../middleware/adminAuth");
 const multer = require("multer");
 const Product = require("../model/productSchema");
@@ -89,5 +90,11 @@ router.post(
   middleware.islogin,
   controller.getSalesReports
 );
+
 router.get("/sortedByDateredirect", controller.sortedByDateredirect);
+
+
+router.get("/AddCoupons",middleware.islogin,couponController.AddCoupons);
+router.post("/createCoupon",middleware.islogin,couponController.createCoupon)
+
 module.exports = router;

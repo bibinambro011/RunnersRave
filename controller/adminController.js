@@ -220,6 +220,7 @@ exports.editproduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   const { name, description, price, selling_price, category, size, gender, brand, stock, status } = req.body;
+  
   const imageUrls = req.files.map(file => `/uploads/${file.filename}`);
 
   try {

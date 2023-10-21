@@ -13,6 +13,12 @@ const cartModel = new mongoose.Schema({
         ref: "productCollection",
         required: true,
       },
+      images: [
+        {
+          type: String  // Assuming you store image URLs as strings
+        }
+      ],
+    
       size:{
         type:String,
         default:7

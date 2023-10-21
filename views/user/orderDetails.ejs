@@ -45,13 +45,19 @@
                         </div>
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
                             <select id="orderStatusSelect" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
-                              <% if (order.orderStatus === 'delivered') { %>
-                                <option value="Return">Return</option>
-                              <% } %>
-                              <option value="Cancelled">Cancel</option>
+                                <% if (order.orderStatus === 'delivered') { %>
+                                    <option value="Return">Return</option>
+                                  <% } else if (order.orderStatus === 'Cancelled') { %>
+
+                                    <% } else if (order.orderStatus === 'Confirmed' ) { %>
+                                        <option value="Cancelled">Cancell</option>
+                                   
+                                  <% } %>
+                                  
+                        
                             </select>
                             <button class="btn btn-primary" id="saveStatus">Save</button>
-                            <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
+                            <a class="btn btn-secondary print ms-2" id="invoice"><i class="icon material-icons md-print"></i></a>
                           </div>
                           
                     </div>
@@ -119,14 +125,14 @@
                                                 <td>
                                                     <a class="itemside" href="#">
                                                         <div class="left">
-                                                            <img src="<%= product.productId.images[0] %>" width="40" height="40" class="img-xs" alt="Item">
+                                                            <img src="<%= product.images[0] %>" width="40" height="40" class="img-xs" alt="Item">
                                                         </div>
                                                         <div class="info"><%= product.productId.name %> </div>
                                                     </a>
                                                 </td>
-                                                <td><%= product.productId.selling_price %> </td>
+                                                <td><%= product.price%> </td>
                                                 <td> <%= product.quantity %> </td>
-                                                <td class="text-end"><%= product.productId.selling_price * product.quantity %></td>
+                                                <td class="text-end"><%= product.price * product.quantity %></td>
                                             </tr>
                                         
                                             <% }); %>
@@ -230,6 +236,10 @@ console.error('Error updating order status:', error);
 console.log('Please select a valid status.');
 }
 });
+
+document.getElementById("invoice").addEventListener("click",()=>{
+    window.print()
+})
 </script>
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->

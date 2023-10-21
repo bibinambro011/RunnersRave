@@ -20,7 +20,7 @@ const orderdetails = async (req, res) => {
         model: "productCollection",
       }),
     ]);
-
+console.log("orderdetails are====>",cartDetails)
     let totalPrice = 0;
     let originalPrice = 0;
     const stockUpdates = [];
@@ -255,7 +255,7 @@ const showUserOrder = async (req, res) => {
       const quantity = product.quantity;
       const productId = product.productId._id; // Assuming this is the product ID
 
-      const price = product.productId.selling_price;
+      const price = product.price
       const actualPrice = product.productId.price;
 
       const productTotal = quantity * price;

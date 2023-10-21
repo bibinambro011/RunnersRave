@@ -10,9 +10,11 @@ const addtocart = async (req, res) => {
   const exproduct = await Product.findById(productId);
   const exiStock=exproduct.stock;
   const size = exproduct.size;
+  const getimage=exproduct.images[0]
 
   try {
     let cart = await Cart.findOne({ userId });
+    
 
     if (!cart) {
       const newCart = new Cart({
@@ -21,9 +23,12 @@ const addtocart = async (req, res) => {
           {
             productId,
             size: size,
+            images:getimage,
             quantity: 1,
-            price: exproduct.selling_price 
-          },
+            price: exproduct.selling_price,
+
+
+          }
         ],
       });
       await newCart.save();
@@ -43,6 +48,7 @@ const addtocart = async (req, res) => {
           productId,
           size: size,
           quantity: 1,
+          images:getimage,
           price: exproduct.selling_price 
         });
       }

@@ -252,14 +252,14 @@
                                                             <% order.forEach(order => { %>
                                                                 <% order.products.forEach(product => { %>
                                                                     <tr>
-                                                                        <td><img src="<%= product.productId.images[0] %>" style="max-width: 100px; max-height: 100px;" alt="Product Image"></td>
+                                                                        <td><img src="<%= product.images %>" style="max-width: 100px; max-height: 100px;" alt="Product Image"></td>
                                                                         <td>#<%= order.ord %></td>
                                                                         <td><%= product.productId.name %></td>
                                                                         <td><%= order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
                                                                         <td id="statusid_<%= order._id %>" >
                                                                             <%= order.orderStatus %></td>
-                                                                        <td ><%= product.productId.selling_price %></td>
-                                                                        <td><%= product.quantity * product.productId.selling_price %></td>
+                                                                        <td ><%= product.price %></td>
+                                                                        <td><%= product.quantity * product.price %></td>
                                                                        
                                                                         <!-- <% if (order.orderStatus !== 'delivered' && order.orderStatus !== 'Cancelled') { %>
                                                                             <td id="buttonid"><button type="button"><a data-order-id="<%= order._id %>" data-product-id="<%= product.productId %>" class="btn-small d-block cancel-order-link">Cancel Order</a></button></td>

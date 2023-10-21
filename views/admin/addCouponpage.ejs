@@ -1,0 +1,101 @@
+<%-include("../partials/adminheader")-%>
+   
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Categories </h2>
+                    <p>Add, edit or delete a category</p>
+                </div>
+                <div>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <form method="post" action="/admin/createCoupon">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">CouponCode</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="CouponCode" name="couponcode"/>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="product_slug" class="form-label">Coupon Description</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="Coupon Description" name="coupondescription" />
+                                </div>
+                                <div class="mb-4">
+                                    <label for="product_slug" class="form-label">MIn OrderAmount</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="minAmount"  name="minorder"/>
+                                </div>
+                             
+                                <div class="mb-4">
+                                    <label for="product_slug" class="form-label">Max discount Amount</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="maxAmount"  name="maxdiscount"/>
+                                </div>
+                               
+                                <div class="mb-4">
+                                    <label for="validfrom" class="form-label">Valid from</label>
+                                    <input type="date" class="form-control" id="validfrom" name="validfrom" />
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="validfrom" class="form-label">Valid To</label>
+                                    <input type="date" class="form-control" id="validfrom" name="validto" />
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button class="btn btn-primary">Create Coupon</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Slug</th>
+                                            <th>Order</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </td>
+                                            <td>21</td>
+                                            <td><b>Men clothes</b></td>
+                                            <td>Men clothes</td>
+                                            <td>/men</td>
+                                            <td>1</td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#">View detail</a>
+                                                        <a class="dropdown-item" href="#">Edit info</a>
+                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                    </div>
+                                                </div> <!-- dropdown //end -->
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+        <%-include("../partials/adminfooter")-%>

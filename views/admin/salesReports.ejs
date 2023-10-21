@@ -59,6 +59,9 @@
               <div class="col-md-1 col-4">
                 <button class="btn btn-secondary" id="yearly">Yearly</button>
               </div>
+              <div class="col-md-1 col-4">
+                <button class="btn btn-warning ms-5 ps-5 pe-5 " data-toggle="tooltip" title="download invoice" data-placement="top" id="invoice" > invoice</button>
+              </div>
             </div>
           </div>
         
@@ -233,6 +236,10 @@ document.getElementById('yearly').addEventListener('click', function() {
  
 });
 
+
+document.getElementById("invoice").addEventListener("click",()=>{
+  window.print()
+})
 
 
 
