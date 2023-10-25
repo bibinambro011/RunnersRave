@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'addressModel', // Reference to the Address model
      }],
+     walletbalance: {
+      type: Number,
+      default:0
+      
+   },
       status: {
         type: Boolean,
         default: true,

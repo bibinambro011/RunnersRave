@@ -210,14 +210,18 @@
                                             </div> -->
                                            
                                         </div>
-                                        <div class="card col-lg-4  mt-5">
+                                        <div class="card col-lg-4   mt-5">
                                             <div class="card-body">
                                                 <p style="text-align: center;"><i class="fa-solid fa-user-tie fa-xl"></i></p>
-                                              <p ><%=data.username%></p>
-                                              <p><%=data.email%></p>
-                                              <p><%=data.phone%></p>
+                                              <p ><b>name :</b> <%=data.username%></p>
+                                              <p><b> email :</b> <%=data.email%></p>
+                                              <p><b>contach number :</b> <%=data.phone%></p><br><br>
+                                              <!-- <a href="/coupontemplate">coupon</a> -->
                                            <a href="/changepasswordpage" class="btn btn-success">changepassword</a>
                                             </div>
+                                          </div>
+                                          <div>
+                                           
                                           </div>
                                     </div>
                                     <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
@@ -227,10 +231,10 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="table-responsive">
-                                                    <table class="table">
+                                                    <table class="table" id="example" >
                                                         <thead>
                                                             <tr>
-                                                                <th>image</th>
+                                                                <!-- <th>image</th> -->
                                                                 <th>Order</th>
                                                                 <th>Name</th>
                                                                 <th>Date</th>
@@ -252,7 +256,7 @@
                                                             <% order.forEach(order => { %>
                                                                 <% order.products.forEach(product => { %>
                                                                     <tr>
-                                                                        <td><img src="<%= product.images %>" style="max-width: 100px; max-height: 100px;" alt="Product Image"></td>
+                                                                        <!-- <td><img src="<%= product.images %>" style="max-width: 100px; max-height: 100px;" alt="Product Image"></td> -->
                                                                         <td>#<%= order.ord %></td>
                                                                         <td><%= product.productId.name %></td>
                                                                         <td><%= order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
@@ -266,7 +270,7 @@
                                                                         <% } else { %>
                                                                             <td></td>
                                                                         <% } %> -->
-                                                                        <td ><a href="showUserOrder/<%= order._id %>"><button type="button" class="btn btn-success">order details</button></a>
+                                                                        <td ><a href="showUserOrder/<%= order._id %>"><button type="button" class="btn btn-success"> details</button></a>
                                                                     </tr>
                                                                     
                                                                 <% }); %>
@@ -602,5 +606,14 @@
 
 
 </script>
+<script>
+    $(document).ready(function () {
+        new DataTable('#example');
+
+    })
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
 </html>

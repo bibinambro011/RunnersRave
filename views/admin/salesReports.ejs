@@ -49,18 +49,18 @@
               </div> -->
         
               <div class="col-md-1 col-4 ml-auto">
-                <button class="btn btn-success" id="daily">daily</button>
+                <button class="btn btn-secondary" id="daily">daily</button>
               </div>
         
-              <div class="col-md-1 col-4">
-                <button class="btn btn-warning" id="weekly">weekly</button>
+              <div class="col-md-1 col-4 ms-3">
+                <button class="btn btn-secondary" id="weekly">weekly</button>
               </div>
         
-              <div class="col-md-1 col-4">
+              <div class="col-md-1 col-4 ms-5">
                 <button class="btn btn-secondary" id="yearly">Yearly</button>
               </div>
-              <div class="col-md-1 col-4">
-                <button class="btn btn-warning ms-5 ps-5 pe-5 " data-toggle="tooltip" title="download invoice" data-placement="top" id="invoice" > invoice</button>
+              <div class="col-md-1 col-4 ms-3">
+                <button class="btn btn-secondary ms-5 ps-5 pe-5 " data-toggle="tooltip" title="download invoice" data-placement="top" id="invoice" > invoice</button>
               </div>
             </div>
           </div>
@@ -98,8 +98,16 @@
                                 </td>
                                 <td><a href="#" class="fw-bold">#<%= data.ord %></a> </td>
                                 <td><%= data.address.name %></td>
-                                <td><%= data.date %></td>
-                                <td>$<%= data.totalAmount %></td>
+                                <td>
+                                  <script>
+                                      var dateString = '<%= data.date %>'; 
+                                      var date = new Date(dateString);
+                                      var formattedDate = date.toLocaleDateString(); 
+                                      document.write(formattedDate);
+                                  </script>
+                              </td>
+                              
+                                <td>Rs: <%= data.totalAmount %></td>
                                 <td>
                                     <% if (data.paymentStatus === 'paid') { %>
                                         <span class="badge badge-pill badge-soft-success"><%= data.paymentStatus %></span>
@@ -248,4 +256,4 @@ document.getElementById("invoice").addEventListener("click",()=>{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
 
-<%-include("../partials/adminfooter")-%>
+<%-include("../partials/adminfooter")-%>  

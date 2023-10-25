@@ -95,6 +95,10 @@ router.get("/sortedByDateredirect", controller.sortedByDateredirect);
 
 
 router.get("/AddCoupons",middleware.islogin,couponController.AddCoupons);
-router.post("/createCoupon",middleware.islogin,couponController.createCoupon)
+router.post("/createCoupon",middleware.islogin,couponController.createCoupon);
+router.get("/couponedit/:id",middleware.islogin,couponController.couponedit);
+router.post("/couponupdate/:id",middleware.islogin,couponController.couponupdate);
+router.get("/deactivateCoupon/:id",middleware.islogin,couponController.deactivateCoupon);
+router.get("/activateCoupon/:id",middleware.islogin,couponController.activateCoupon)
 
 module.exports = router;

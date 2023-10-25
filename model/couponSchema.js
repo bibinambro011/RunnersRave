@@ -30,7 +30,12 @@ const couponModel = new mongoose.Schema({
       type:Boolean,
       default:true,
       required:true,
-   }
+   },
+   redeemedusers:[{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'runnerslogins'
+
+   }]
 })
 
 

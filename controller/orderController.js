@@ -4,10 +4,22 @@ const Address = require("../model/addresses");
 const Product = require("../model/productSchema");
 const Cart = require("../model/cartSchema");
 const userHelper = require("../helper/razorPayHelper");
+const Coupon=require("../model/couponSchema");
+const UsedCoupon=require("../model/useCouponSchema");
 
 let orderId = "";
 const orderdetails = async (req, res) => {
-  const { address, city, pincode, mobil, paymentype } = req.body;
+  const userId=req.session.user[0]._id
+  const { address, city, pincode, mobil, paymentype,amount,couponcode } = req.body;
+  console.log( "coupon code is===> ",couponcode);
+  const appliedCoupon = await Coupon.findOne({ couponCode: couponcode });
+  if(appliedCoupon){
+    appliedCoupon.redeemedusers.push(userId);
+  
+    // Save the updated coupon document
+    await appliedCoupon.save();
+  }
+ 
 
   try {
     const userId = req.session.user[0]._id;
@@ -20,7 +32,7 @@ const orderdetails = async (req, res) => {
         model: "productCollection",
       }),
     ]);
-console.log("orderdetails are====>",cartDetails)
+
     let totalPrice = 0;
     let originalPrice = 0;
     const stockUpdates = [];
@@ -53,7 +65,8 @@ console.log("orderdetails are====>",cartDetails)
     const newOrder = new Order({
       userId,
       date: Date.now(),
-      totalAmount: totalPrice,
+      totalAmount: totalPrice-amount,
+      couponDiscount:amount,
       actualTotalAmount: originalPrice,
       paymentMethod: paymentype,
       products: cartDetails.products,
@@ -75,7 +88,8 @@ console.log("orderdetails are====>",cartDetails)
 
       orderId = newOrder._id;
 
-      //payment method
+    
+      
 
       if (newOrder.paymentMethod == "COD") {
         newOrder.paymentMethod = "Cash on delivery";
@@ -90,26 +104,55 @@ console.log("orderdetails are====>",cartDetails)
           placedOrderId: newOrder._id,
           redirectUrl: "/orderplacedsuccessfully",
         });
-      } else {
+      }
+      else if(newOrder.paymentMethod=="walletpayment"){
+        console.log("inside wallet payment block");
+      
+        let userdata=await User.findOne({_id:req.session.user[0]._id});
+        console.log("userdata details are==>",userdata)
+       
+        if(userdata.walletbalance<newOrder.totalAmount){
+          console.log("inside lowwalletbalance");
+       
+          return res.json({
+            status: "walletpayment",
+            placedOrderId: newOrder._id,
+            redirectUrl: "/lowWalletbalance",
+          });
+        }else{
+          let userdata=await User.findOne({_id:req.session.user[0]._id});
+         console.log("userdata ius==>",userdata)
+         let balance=userdata.walletbalance-newOrder.totalAmount;
+         let updatedbalance=Number(balance);
+         console.log("wallet balance is==>",updatedbalance)
+          let id=userdata._id
+          let updatedata={
+            walletbalance:updatedbalance
+          };
+          let updateddata = await User.findByIdAndUpdate(id, updatedata, { new: true });
+          console.log("updated data is ===>", updateddata);
+          if (cartDetails) {
+            cartDetails.products = [];
+            await cartDetails.save();
+          }
+         
+          return res.json({
+            status: "walletpayment",
+            placedOrderId: newOrder._id,
+            redirectUrl: "/successWalletpayment",
+          });
+        }
+
+      } else if(newOrder.paymentMethod == "onlinePayment") {
         userHelper
           .generateRazorPay(newOrder._id, newOrder.totalAmount)
           .then((response) => {
             console.log("razorpay response is===>", response);
             return res.json({ status: "RAZORPAY", response: response });
           });
-        // if (cartDetails) {
-        //   cartDetails.products = [];
-        //   await cartDetails.save();
-        // }
+        
       }
-      // await Cart.findOneAndUpdate({ userId }, { products: [] });
-
-      // const response = {
-      //   message: "Order created successfully",
-      //   redirectUrl: "/orderplacedsuccessfully"
-      // };
-
-      // return res.status(200).json(response);
+      
     } else {
       return res.json({
         status: "COD",
@@ -132,7 +175,7 @@ const ordernfo = async (req, res) => {
     .populate({
       path: "userId", // Populate the 'userId' field
       model: "runnerslogins", // Replace with the correct model name for users
-    });
+    }).sort({ date: 1 });
 
   res.render("admin/page-orders", { order });
 };
@@ -234,6 +277,15 @@ const updateorderstatus = async (req, res) => {
     );
 
   }
+  if(updatedData.orderStatus=="Cancelled"){
+    console.log("hello world")
+    await Order.findByIdAndUpdate(
+      id,
+      { admincancellreason: "failure in delivering the product" },
+      { new: true }
+    );
+
+  }
   return res.status(200).json({
     message: "Order created successfully",
     redirectUrl: `/admin/order_details/${id}`, // Specify the desired redirect URL here
@@ -302,7 +354,86 @@ const orderUpdatedStatusDetails = async (req, res) => {
   const updatedData = req.body;
 
   id = await req.params.id;
-  console.log(id);
+let orderdetails=await Order.findOne({_id:req.params.id})
+  if(updatedData.orderStatus=="Return"){
+    let userdata=await User.find({_id:req.session.user[0]._id});
+  
+    console.log("userdeata==>",userdata);
+ 
+    walletbal=userdata[0].walletbalance+orderdetails.totalAmount;
+    console.log(walletbal)
+    let bal=Number(walletbal)
+    data={
+      walletbalance:bal
+    };
+    let orderdata={
+      paymentStatus:"refunded"
+    }
+
+  
+    let userdetails = await User.findByIdAndUpdate(req.session.user[0]._id, data, { new: true });
+    let orederdata=await Order.findByIdAndUpdate(id,orderdata,{ new: true })
+
+    const canceledOrder = await Order.findById(id);
+    // Iterate through the products in the canceled order
+    for (const productItem of canceledOrder.products) {
+        const productId = productItem.productId;
+        const quantityToReturn = productItem.quantity;
+
+        // Find the corresponding product in your product collection
+        const product = await Product.findById(productId);
+
+        // Update the product's stock by adding the returned quantity
+        if (product) {
+            product.stock += quantityToReturn;
+
+            // Save the updated product in the product collection
+            await product.save();
+        }
+    }
+
+
+  }
+  if(updatedData.orderStatus=="Cancelled"){
+    const canceledOrder = await Order.findById(id);
+    for (const productItem of canceledOrder.products) {
+      const productId = productItem.productId;
+      const quantityToReturn = productItem.quantity;
+
+      // Find the corresponding product in your product collection
+      const product = await Product.findById(productId);
+
+      // Update the product's stock by adding the returned quantity
+      if (product) {
+          product.stock += quantityToReturn;
+
+          // Save the updated product in the product collection
+          await product.save();
+      }
+  }
+
+
+  //for checking payment method 
+  if(canceledOrder.paymentMethod=="walletpayment"){
+    let userdet=await User.find({_id:req.session.user[0]._id})
+    let bal=canceledOrder.totalAmount+userdet[0].walletbalance;
+    let balance=Number(bal)
+    let userdat={
+      walletbalance:balance
+    }
+    let updateuserdata = await User.findByIdAndUpdate(
+  {
+    _id: req.session.user[0]._id,
+    paymentStatus: "refunded" // Additional condition
+  },
+  userdat,
+  { new: true }
+);
+
+  }
+
+  }
+ 
 
   const updatedOrder = await Order.findByIdAndUpdate(
     id,
@@ -319,9 +450,15 @@ const paymentFailureHandler = async (req, res) => {
   console.log("order details are==>", orderId);
   let data = await Order.findOneAndUpdate(
     { _id: orderId }, // Query to find the document
-    { $set: { orderStatus: "payment Failed" } },
+    { 
+      $set: { 
+        orderStatus: "payment Failed",
+        paymentStatus: "failed" // Add this line to update paymentStatus
+      }
+    },
     { new: true }
   );
+  
 
   return res.status(200).json({
     redirectUrl: `/paymentFailure`, // Specify the desired redirect URL here

@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const middleware = require("../middleware/userAuth");
 const controller = require("../controller/userController");
-
+const couponController=require("../controller/couponController")
 const cartController = require("../controller/cartController");
+const walletController=require("../controller/walletController")
 const orderController = require("../controller/orderController");
 const nocache = require("nocache");
 
@@ -96,5 +97,16 @@ router.post(
   middleware.islogin,
   orderController.orderUpdatedStatusDetails
 );
-router.get("/changepasswordpage",middleware.islogin,controller.changepasswordpage)
+router.get("/changepasswordpage",middleware.islogin,controller.changepasswordpage);
+
+
+//coupons
+router.get("/coupontemplate",middleware.islogin,couponController.coupontemplate);
+router.post("/applyCoupon",middleware.islogin,couponController.applyCoupon);
+
+//wallet
+router.get("/wallet",middleware.islogin,walletController.userwallet);
+router.get("/lowWalletbalance",middleware.islogin,walletController.lowWalletbalance);
+router.get("/successWalletpayment",middleware.islogin,walletController.successWalletpayment)
+
 module.exports = router;

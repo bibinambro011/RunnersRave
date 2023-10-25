@@ -18,16 +18,24 @@
                             <small style="display: none;" id="orderid"><%= order._id %></small>
                         </div>
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                            <select id="orderStatusSelect" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
-                                <option value="">Change status</option>
-                                <option value="awaiting_payment">Awaiting payment</option>
-                                <option value="confirmed">Confirmed</option>
-                                <option value="shipped">Shipped</option>
-                                <option value="delivered">Delivered</option>
-                            </select>
-                            <button class="btn btn-primary" id="saveStatus">Save</button>
-                            <a class="btn btn-secondary print ms-2"  id="invoice"><i class="icon material-icons md-print"></i></a>
-                        </div>
+                            <% if (order.orderStatus === 'Cancelled') { %>
+                              <span class="badge rounded-pill alert-danger text-danger">Order is Cancelled</span>
+                            <% } else if (order.orderStatus === 'Return') { %>
+                              <span class="badge rounded-pill alert-warning text-warning">Order is Returned</span>
+                            <% } 
+                            else { %>
+                              <select id="orderStatusSelect" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
+                                  <option value="">Change status</option>
+                                  <option value="confirmed">Confirmed</option>
+                                  <option value="shipped">Shipped</option>
+                                  <option value="Cancelled">Cancel</option>
+                                  <option value="delivered">Delivered</option>
+                              </select>
+                              <button class="btn btn-primary" id="saveStatus">Save</button>
+                              <a class="btn btn-secondary print ms-2" id="invoice"><i class="icon material-icons md-print"></i></a>
+                            <% } %>
+                          </div>
+                          
                         
                     </div>
                 </header> <!-- card-header end// -->
@@ -128,8 +136,20 @@
                                                         <dd>Rs 0.00</dd>
                                                     </dl>
                                                     <dl class="dlist">
+                                                        <dt>discountAmount:</dt>
+                                                        <dd>
+                                                            <b class="h5">
+                                                                <% if (order.couponDiscount) { %>
+                                                                    <%= order.couponDiscount %>
+                                                                <% } else { %>
+                                                                    0
+                                                                <% } %>
+                                                            </b>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl class="dlist">
                                                         <dt>Grand total:</dt>
-                                                        <dd> <b class="h5"><%=locals.totalPrice ? totalPrice:''%></b> </dd>
+                                                        <dd> <b class="h5"><%=order.totalAmount%></b> </dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt class="text-muted">Status:</dt>

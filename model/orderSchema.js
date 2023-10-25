@@ -35,6 +35,14 @@ const ordersModel = new mongoose.Schema({
       type:String,
       default:"pending"
    },
+   admincancellreason:{
+      type:String,
+      default:"pending"
+   },
+   returnreason:{
+      type:String,
+      default:"noreason"
+   },
 
    products:[{
       productId:{

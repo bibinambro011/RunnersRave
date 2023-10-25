@@ -20,16 +20,40 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css">  
    <style>
-    /* .badge {
-        font-size: 12px; /* Adjust the font size to your desired size */
-        /* padding: 4px 7px; Adjust the padding to your desired size
-         */
-        
-    /* } */
-    /* .showcart{
-        margin-top: -25px;
-    } */ */
-</style>
+    /* Reset default margin and padding */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .user-menu {
+      position: relative;
+      display: inline-block;
+    }
+
+    .user-menu .menu-options {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+      top: 30px; /* Adjust the distance from the icon */
+      right: 0;
+    }
+
+    .user-menu:hover .menu-options {
+      display: block;
+    }
+
+    .menu-options a {
+      display: block;
+      color: black;
+      text-decoration: none;
+      padding: 5px 0;
+    }
+  </style>
     
 </head>
 
@@ -153,10 +177,16 @@
                                 </div>
                             <% } %>
                         
-                            <div>
-                                <a href="/useraccount" style="margin-left: 20px ;color: black;"><i class="fa-solid fa-user fa-xl"></i></a>
-                            </div>
-                        </div>
+                            <div class="user-menu">
+                                <a href="/useraccount" style="margin-left: 20px; color: black;">
+                                  <i class="fa-solid fa-user fa-xl"></i>
+                                </a>
+                                <div class="menu-options">
+                                  <a href="/coupontemplate">Coupons</a>
+                                  <a href="/wallet">Wallet</a>
+                                </div>
+                              </div>
+                              
                         
                                
     </header>

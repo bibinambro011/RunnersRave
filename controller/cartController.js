@@ -2,7 +2,8 @@ const Product = require("../model/productSchema");
 const User = require("../model/userSchema");
 const addressSchema=require("../model/addresses")
 const Cart = require("../model/cartSchema");
-const Order=require("../model/orderSchema")
+const Order=require("../model/orderSchema");
+const coupon=require("../model/couponSchema")
 
 const addtocart = async (req, res) => {
   const productId = req.params.id;
@@ -141,6 +142,8 @@ const showcart = async (req, res) => {
   }
  
 };
+
+let originaltotal="";
 const placeorder=async(req,res)=>{
     const userId = req.session.user[0]._id;
     const cart = await Cart.findOne({ userId: userId }).populate({
@@ -156,10 +159,16 @@ const placeorder=async(req,res)=>{
           totalPrice += productTotal;
         });
       }
-    const carttototal=totalPrice
+    const  carttototal=totalPrice;
+    originaltotal=totalPrice
     const isAuthenticated = true;
-    res.render("user/placeOrder", { isAuthenticated, cart,carttototal });
+    const Coupon=await coupon.find();
+    console.log('before placeorder coupons are==>',Coupon);
+  
+
+    res.render("user/placeOrder", { isAuthenticated, cart,carttototal,Coupon,originaltotal });
 }
+
 const cartproductdelete=async(req,res)=>{
     const userid=req.session.user[0]._id;
     const id=req.params.id
@@ -174,6 +183,12 @@ const cartproductdelete=async(req,res)=>{
          
           res.redirect("/show_cart")
 }
+
+//applying coupon
+
+
+
+
 const cartUpdate = async (req, res) => {
   try {
     const userId = req.session.user[0]._id;
@@ -197,6 +212,12 @@ const cartUpdate = async (req, res) => {
   }
 };
 const checkoutpage = async (req, res) => {
+  const discountamount=req.query.discountAmount;
+  const couponcode=req.query.code
+  console.log("coupon code is===>",couponcode , "and its data type is ===>",typeof couponcode);
+  
+  console.log("the discount amount is===>",discountamount);
+
     if (req.session.user) {
       const userId = req.session.user[0]._id;
       const cart = await Cart.findOne({ userId: userId }).populate({
@@ -213,7 +234,7 @@ const checkoutpage = async (req, res) => {
             totalPrice += productTotal;
           });
         }
-      const subtotal=totalPrice
+      const subtotal=totalPrice-discountamount
       const userData = await addressSchema.find({ userId: userId });
   console.log(cart)
       let isAuthenticated = true;
@@ -221,6 +242,8 @@ const checkoutpage = async (req, res) => {
         isAuthenticated,
         userData,
         cart,
+        discountamount,
+        code:couponcode,
         subtotal
         
       });

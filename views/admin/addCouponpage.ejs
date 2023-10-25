@@ -3,8 +3,8 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Categories </h2>
-                    <p>Add, edit or delete a category</p>
+                    <h2 class="content-title card-title">Add Coupon </h2>
+                    <p>Add, edit or delete a Coupon</p>
                 </div>
                 <div>
                     <input type="text" placeholder="Search Categories" class="form-control bg-white">
@@ -53,42 +53,52 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" />
-                                                </div>
-                                            </th>
-                                            <th>ID</th>
-                                            <th>Name</th>
+                                          
+                                            <th>couponCode</th>
                                             <th>Description</th>
-                                            <th>Slug</th>
-                                            <th>Order</th>
+                                            <th>discount percentage</th>
+
+                                            <th>from date</th>
+                                            <th>expiry date</th>
+                                            <th>Status</th>
+                                           
                                             <th class="text-end">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <% allCoupon.forEach((data, index) => { %>
                                         <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" />
-                                                </div>
+                                          
+                                            <td><%= data.couponCode %></td>
+                                            <td><b><%= data.couponDiscription %></b></td>
+                                            <td><%= data.discountPercentage %></td>
+                                            <td><%= data.validFor %></td>
+                                            <td><%= data.createdOn %></td>
+                                            <td>
+                                                <% if (data.isActive) { %>
+                                                    <span class="badge rounded-pill bg-success">Active</span>
+                                                <% } else { %>
+                                                    <span class="badge rounded-pill bg-danger">Inactive</span>
+                                                <% } %>
                                             </td>
-                                            <td>21</td>
-                                            <td><b>Men clothes</b></td>
-                                            <td>Men clothes</td>
-                                            <td>/men</td>
-                                            <td>1</td>
+                                            
                                             <td class="text-end">
                                                 <div class="dropdown">
                                                     <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                      
+                                                        <a class="dropdown-item" href="/admin/couponedit/<%= data._id %>">Edit info</a>
+                                                        <% if (data.isActive) { %>
+                                                            <a class="dropdown-item text-danger" href="/admin/deactivateCoupon/<%= data._id %>">Deactivate</a>
+                                                        <% } else { %>
+                                                            <a class="dropdown-item text-success" href="/admin/activateCoupon/<%= data._id %>">Activate</a>
+                                                        <% } %>
+                                                        
                                                     </div>
                                                 </div> <!-- dropdown //end -->
                                             </td>
                                         </tr>
+                                        <% }); %>
                                         
                                     </tbody>
                                 </table>

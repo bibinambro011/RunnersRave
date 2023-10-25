@@ -37,9 +37,9 @@ app.set("view engine", "ejs");
 
 app.use("/admin", adminroutes);
 app.use("/", userRoute);
-app.get('*', (req, res) => {
-  res.render("user/page-404")
-});
+// app.get('*', (req, res) => {
+//   res.render("user/page-404")
+// });
 
 db.connectToDatabase();
 app.listen(3000, () => {

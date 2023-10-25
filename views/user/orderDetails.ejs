@@ -24,7 +24,7 @@
 <body>
    
     
-    <main class="main-wrap">
+
    
         <section class="content-main">
             <div class="content-header">
@@ -44,21 +44,23 @@
                             <small style="display: none;" id="orderid"><%= order._id %></small>
                         </div>
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                            <select id="orderStatusSelect" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
-                                <% if (order.orderStatus === 'delivered') { %>
-                                    <option value="Return">Return</option>
-                                  <% } else if (order.orderStatus === 'Cancelled') { %>
-
-                                    <% } else if (order.orderStatus === 'Confirmed' ) { %>
+                            <% if (order.orderStatus === 'Cancelled') { %>
+                                <span class="badge rounded-pill bg-danger">Order is Cancelled</span>
+                            <% } else { %>
+                                <select id="orderStatusSelect" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
+                                    <% if (order.orderStatus === 'delivered') { %>
+                                        <option value="Return">Return</option>
+                                        
+                                    <% } else if (order.orderStatus === 'Confirmed') { %>
                                         <option value="Cancelled">Cancell</option>
-                                   
-                                  <% } %>
-                                  
-                        
-                            </select>
-                            <button class="btn btn-primary" id="saveStatus">Save</button>
+                                    <% } %>
+                                </select>
+                                <button class="btn btn-primary" id="saveStatus">Save</button>
+                            <% } %>
                             <a class="btn btn-secondary print ms-2" id="invoice"><i class="icon material-icons md-print"></i></a>
-                          </div>
+                        </div>
+                        
+                        
                           
                     </div>
                 </header> <!-- card-header end// -->
@@ -152,16 +154,32 @@
                                                         <dd>Rs 0.00</dd>
                                                     </dl>
                                                     <dl class="dlist">
+                                                        <dt>discountAmount:</dt>
+                                                        <dd>
+                                                            <b class="h5">
+                                                                <% if (order.couponDiscount) { %>
+                                                                    <%= order.couponDiscount %>
+                                                                <% } else { %>
+                                                                    0
+                                                                <% } %>
+                                                            </b>
+                                                        </dd>
+                                                    </dl>
+                                                    <dl class="dlist">
                                                         <dt>Grand total:</dt>
-                                                        <dd> <b class="h5"><%=locals.totalPrice ? totalPrice:''%></b> </dd>
+                                                        <dd> <b class="h5"><%=order.totalAmount%></b> </dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt class="text-muted">Status:</dt>
                                                         <dd>
                                                             <span class="badge rounded-pill <%= order.orderStatus === 'Cancelled' ? 'alert-danger text-danger' : 'alert-success text-success' %>">
-                                                              <%= order.orderStatus %> 
+                                                              <%= order.orderStatus %>
                                                             </span>
+                                                            <% if (order.admincancellreason !== 'pending') { %>
+                                                              <p class="badge-soft-danger rounded-pill">Admin Cancellation Reason: <%= order.admincancellreason %></p>
+                                                            <% } %>
                                                           </dd>
+                                                          
                                                           
                                                     </dl>
                                                 </article>
@@ -194,7 +212,7 @@
             </div> <!-- card end// -->
         </section> <!-- content-main end// -->
        
-    </main>
+    
     <script src="/adminassets/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/adminassets/assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/adminassets/assets/js/vendors/select2.min.js"></script>

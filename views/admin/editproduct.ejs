@@ -1,190 +1,244 @@
-<%-include("../partials/adminheader")-%>
+<%- include("../partials/adminheader") -%>
 
-        <section class="content-main">
-            <div class="row">
-                <div class="col-9">
-                    <div class="content-header">
-                        <h2 class="content-title">Add New Product</h2>
-                       
-                    </div>
-                </div>
-                <form action="/admin/uploadEditedProduct" method="POST" enctype="multipart/form-data">
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="mb-4">
-                                <label for="product_title" class="form-label">Product title</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_title" name="name" value="<%= product.name %>">
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Update Product</h2>
+            </div>
+        </div>
+    </div>
+    <form action="/admin/uploadEditedProduct" method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="product_title" class="form-label">Product title</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_title" name="name" value="<%= product.name %>">
+                            <span id="namespan" style="color:red"></span>
+                        </div>
+                        <div class="row gx-3">
+                            <div class="col-md-4  mb-3">
+                                <label for="product_sku" class="form-label">Size</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_sku" name="size" value="<%= product.size %>">
+                                <span id="sizespan" style="color: red;"></span>
                             </div>
-                            <div class="row gx-3">
-                                <div class="col-md-4  mb-3">
-                                    <label for="product_sku" class="form-label">size</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="product_sku" name="size" value="<%= product.size %>">
-                                </div>
-                                <div class="col-md-4  mb-3">
-                                    <label for="product_color" class="form-label">price</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="product_color" name="price" value="<%= product.price %>">
-                                </div>
-                                <div class="col-md-4  mb-3">
-                                    <label for="product_size" class="form-label">selling price</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="product_size" name="selling_price" value="<%= product.selling_price %>">
-                                </div>
+                            <div class="col-md-4  mb-3">
+                                <label for="product_color" class="form-label">Price</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_color" name="price" value="<%= product.price %>">
+                                <span id="pricespan" style="color: red;"></span>
                             </div>
-                            <!-- <div class="mb-4">
-                                <label for="product_brand" class="form-label">Brand</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_brand" name="brand">
-                            </div> -->
-                            <div class="mb-4">
-                                <label class="form-label">Brand</label>
-                                <select class="form-select" name="brand">
-                                    <option value="ADIDAS">ADIDAS</option>
-                                    <option value="NIKE">NIKE</option>
-                                    <option value="Published">PUMA</option>
-                                    <option value="ASICS">ASICS</option>
-                                    <option value="UNDER ARMOUR">UNDER ARMOUR</option>
-                                    
-                                </select>
+                            <div class="col-md-4  mb-3">
+                                <label for="product_size" class="form-label">Selling price</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_size" name="selling_price" value="<%= product.selling_price %>">
+                                <span id="selling_price_span" style="color: red;"></span>
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label for="product_brand" class="form-label">stock</label>
+                            <label class="form-label">Brand</label>
+                            <select class="form-select" name="brand">
+                                <option value="ADIDAS" <%= product.brand === 'ADIDAS' ? 'selected' : '' %>>ADIDAS</option>
+                                <option value="NIKE" <%= product.brand === 'NIKE' ? 'selected' : '' %>>NIKE</option>
+                                <option value="Puma" <%= product.brand === 'PUMA' ? 'selected' : '' %>>PUMA</option>
+                                <option value="ASICS" <%= product.brand === 'ASICS' ? 'selected' : '' %>>ASICS</option>
+                                <option value="UNDER ARMOUR" <%= product.brand === 'UNDER ARMOUR' ? 'selected' : '' %>>UNDER ARMOUR</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_brand" class="form-label">Stock</label>
                             <input type="text" placeholder="Type here" class="form-control" id="product_brand" name="stock" value="<%= product.stock %>">
+                            <span id="stockspan" style="color: red;"></span>
                         </div>
                     </div>
-                    </div> <!-- card end// -->
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div>
-                                <label class="form-label">Description</label>
-                                <textarea placeholder="Type here" class="form-control" rows="4" name="description" ><%= product.description %></textarea>
-                            </div>
+                </div> <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div>
+                            <label class="form-label">Description</label>
+                            <textarea placeholder="Type here" class="form-control" rows="4" name="description"><%= product.description %></textarea>
+                            <span id="descriptionspan" style="color: red;"></span>
                         </div>
-                    </div> <!-- card end// -->
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div>
-                                <label class="form-label">Images</label>
-                                <input
-                                type="file"
-                                id="productImage"
-                                name="images"
-                                accept="image/*"
-                                multiple
-                                required
-                              />
-                            </div>
+                    </div>
+                </div> <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div>
+                            <label class="form-label">Images</label>
+                            <input type="file" id="productImage" name="images" accept="image/*" multiple />
+                            <span id="imagespan" style="color: red;"></span>
                         </div>
-                    </div> <!-- card end// -->
-
-                    
-                    <!-- <div class="row">
-                        <% for( let i=0; i < product.images.length; i++ ) { %>
-                            <div class="col-lg-3" id="Removebtn<%= i %>">
-                                <div class="card mb-4">
-                                    <div class="card-header" style="height: 200px;">
-                                        <img style=" object-fit: contain; height: 100%; width: 100%;"
-                                            src="<%- product.images[i] %>" alt="">
-                                    </div>
-                                    <div class="card-body bg-light d-flex align-items-center justify-content-center" 
-                                        style="height: 50px;">
-                                        <a href="" data-imageFile="<%- product.images[i] %>"
-                                            data-productId="<%- product._id %>"
-                                            data-index="<%= i %>"
-                                            class="btn btn-outline-danger imageRemoveBtn">Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <% } %>
-
-                    </div> -->
-                   
-                </div>
-                <div class="col-lg-3">
-                    <div class="card mb-4">
-                       
-                            <div class="mb-4">
-                                <label class="form-label">gender</label>
-                                <input type="text" placeholder="Type here" class="form-control" name="gender" value="<%= product.gender %>">
-                               
-                            </div>
-                            
-                           
-                            <div class="mb-4">
-                                <label class="form-label">Categories</label>
-                                <select class="form-select" name="category">
-                                  <% categorydata.forEach(category => { %>
-                                    <option value="<%= category._id %>"><%= category.name %></option>    
-                                  <% }); %>
-                                </select>
-                            </div>
-                            
-                           
-                    
-                        </div>
-                        <button type="submit" class="btn btn-primary">submit</button>
-                    </form>
-                    </div> 
+                    </div>
                 </div>
             </div>
-        </section>
-        <script>
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="mb-4">
+                        <label class="form-label">Gender</label>
+                        <select class="form-select" name="gender">
+                            <option value="Male" <%= product.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                            <option value="Female" <%= product.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                        </select>
+                        <span id="genderspan" style="color: red;"></span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Categories</label>
+                        <select class="form-select" name="category">
+                            <% categorydata.forEach(category => { %>
+                            <option value="<%= category._id %>"><%= category.name %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+<script>
+    function validateForm() {
+         // Validate product title
+         let productTitle = document.getElementById('product_title').value;
+        if (productTitle.trim() === '') {
+        
+            document.getElementById("namespan").innerHTML="Please enter a product title."
+            return false;
+        }
+
+        // Validate product size
+        let productSize = document.getElementById('product_sku').value;
+        if (productSize.trim() === '') {
+            document.getElementById("sizespan").innerHTML="Please enter the product size."
+            return false;
+        }
+
+        // Validate product price
+        let productPrice = document.getElementById('product_color').value;
+        if (productPrice.trim() === '') {
+            document.getElementById("pricespan").innerHTML="Please enter a product price."
+            return false;
+        }
+        if (productPrice <=0 || isNaN(productPrice) ) {
+            document.getElementById("pricespan").innerHTML="Please provide a valid price"
+            return false;
+        }
+
+        // Validate selling price
+        let sellingPrice = document.getElementById('product_size').value;
+        if (sellingPrice.trim() === '') {
+            document.getElementById("selling_price_span").innerHTML="Please enter a product selling price."
+            return false;
+        }
+        if (sellingPrice <=0 || isNaN(sellingPrice)) {
+            document.getElementById("selling_price_span").innerHTML="Please provide a valid price"
+            return false;
+        }
+
+        // Validate brand
+        let brand = document.querySelector('select[name="brand"]').value;
+        if (brand.trim() === '') {
+            alert('Please select a brand.');
+            return false;
+        }
+
+        // Validate stock
+        let stockInput = document.getElementById('product_brand');
+let stock = stockInput.value;
+
+// Check if stock is empty
+if (stock.trim() === '') {
+    document.getElementById("stockspan").innerHTML = "Please enter a product stock.";
+    return false;
+}
+
+// Check if stock is not a number
+if (isNaN(stock)) {
+    document.getElementById("stockspan").innerHTML = "Stock must be a number.";
+    return false;
+}
+
+// Check if stock is less than or equal to 0
+if (parseInt(stock) <= 0) {
+    document.getElementById("stockspan").innerHTML = "Stock must be greater than 0.";
+    return false;
+}
+
+// If all checks pass, clear any previous error message
+document.getElementById("stockspan").innerHTML = "";
+
+// Rest of your validation code
+
+
+        // Validate description
+        let description = document.querySelector('textarea[name="description"]').value;
+        if (description.trim() === '') {
+            document.getElementById("descriptionspan").innerHTML="Please enter a product description."
+            return false;
+        }
+
+        // Validate images
+        let images = document.getElementById('productImage').files;
+       
+        if (images.length > 3) {
+            document.getElementById("imagespan").innerHTML="only 3 images are allowed to add"
+            return false;
+        }
+
+
+        // Validate gender
+        let gender = document.querySelector('input[name="gender"]').value;
+        if (gender.trim() === '') {
+            document.getElementById("genderspan").innerHTML="Please enter a gender ."
+            return false;
+        }
+
+        // Validate category
+        let category = document.querySelector('select[name="category"]').value;
+        if (category.trim() === '') {
+            alert('Please select a category.');
+            return false;
+        }
+
+        return true; // Form is valid
+    }
+
+    // Function to hide the associated span when input is clicked
+</script>
+<script>
+    let productTitle = document.getElementById('product_title')
+
+    productTitle.addEventListener("click",()=>{
+        document.getElementById("namespan").style.visibility="hidden"
+    })
+    let productSize = document.getElementById('product_sku')
+    productSize.addEventListener("click",()=>{
+        document.getElementById("sizespan").style.display='none'
+    })
+       
+    let productPrice = document.getElementById('product_color')
+    productPrice.addEventListener("click",()=>{
+        document.getElementById("pricespan").style.display='none'
+    })
+    let sellingPrice = document.getElementById('product_size')
+    sellingPrice.addEventListener("click",()=>{
+        document.getElementById("selling_price_span").style.display='none'
+    })
+    let stock = document.getElementById('product_brand')
+    stock.addEventListener("click",()=>{
+        document.getElementById("stockspan").style.display='none'
+    })
+    let description = document.querySelector('textarea[name="description"]')
+    description.addEventListener("click",()=>{
+        document.getElementById("descriptionspan").style.display='none'
+    })
+          
+       
+    
+          
           
 
-          ; // You would replace this with your actual loop index
-          const imageRemoveBtn = document.querySelectorAll('.imageRemoveBtn');
-imageRemoveBtn.forEach((btn) => {
-    btn.addEventListener('click', async (event) => {
-        event.preventDefault();
+</script>
 
-        const dataindex = event.currentTarget.getAttribute('data-index');
-        const buttonRemoval = document.getElementById(`Removebtn${dataindex}`);
-
-        const imageFile = event.currentTarget.getAttribute('data-imageFile');
-        const productId = event.currentTarget.getAttribute('data-productId');
-
-        if (imageFile && productId) {
-            const data = {
-                imageFile: imageFile,
-                productId: productId,
-                dataindex: dataindex
-            };
-
-            // Hide the button corresponding to the clicked image
-            buttonRemoval.style.display = 'none';
-
-            const response = await fetch('/admin/remove-image', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            // Check the response and proceed accordingly
-            if (response.ok) {
-                const result = await response.json();
-                Swal.fire({
-                    icon: 'success',
-                    title: result.message,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                setTimeout(() => {
-                    location.href = location.href;
-                }, 2000);
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error occurred during image removal',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                // Restore the visibility of the button in case of an error
-                buttonRemoval.style.display = 'block';
-            }
-        }
-    });
-});
-
-        </script>
-<%-include("../partials/adminfooter")-%>
+<%- include("../partials/adminfooter") -%>

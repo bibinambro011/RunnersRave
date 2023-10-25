@@ -49,7 +49,7 @@ const updatePaymentStatus = (orderId,paymentStatus)=>{
    return new Promise(async(resolve,reject)=>{
       try {
          if(paymentStatus){
-            const orderUpdate = await Order.findByIdAndUpdate({_id:new Object(orderId)},{$set:{orderStatus:'Placed',paymentStatus:"paid"}})
+            const orderUpdate = await Order.findByIdAndUpdate({_id:new Object(orderId)},{$set:{orderStatus:'Confirmed',paymentStatus:"paid"}})
             .then(()=>{
                resolve();
             });

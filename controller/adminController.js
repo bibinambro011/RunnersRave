@@ -26,15 +26,29 @@ exports.dashboard = async (req, res) => {
   const orederlength=order.length;
   const categor= await categories.find({active:true});
   let categorieslength=categor.length
-const revenue=await Order.find({paymentStatus:"paid"});
+  const revenue = await Order.find({ 
+    $and: [
+      { orderStatus: { $ne: "Cancelled" } },
+      { orderStatus: { $ne: "Return" } },
+      {orderStatus:{$ne:"payment Failed"}},
+      {orderStatus:{$ne:"Return"}},
+    ]
+  });
 const today = new Date();
 const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString();
 const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString();
 
 const monthlyorders = await Order.find({
-  date: { $gte: startOfMonth, $lte: endOfMonth },paymentStatus: 'paid'
-  
+  $and: [
+    { date: { $gte: startOfMonth, $lte: endOfMonth } },
+    { orderStatus: { $ne: "Cancelled" } },
+    { orderStatus: { $ne: "payment Failed" } },
+    {orderStatus:{$ne:"payment Failed"}},
+    {orderStatus:{$ne:"Return"}},
+     // Add this condition
+  ]
 });
+
 
 let monthlytotal=0;
 let finalmonthlytotal=monthlyorders.forEach((product)=>{
@@ -61,6 +75,7 @@ const orders = await Order.find();
       orderCountsByMonth.push({ month, year, count: 1 });
     }
   });
+  
 
   console.log("orderCountsByMonth==>",orderCountsByMonth)
   console.log(orderCountsByMonth[0])
@@ -90,15 +105,33 @@ exports.homepage=async(req,res)=>{
   const orederlength=order.length;
   const categor= await categories.find({active:true});
   let categorieslength=categor.length
-const revenue=await Order.find({paymentStatus:"paid"});
+  const revenue = await Order.find({ 
+    $and: [
+      { orderStatus: { $ne: "Cancelled" } },
+      { orderStatus: { $ne: "Return" } },
+      {orderStatus:{$ne:"payment Failed"}},
+      {orderStatus:{$ne:"Return"}},
+    ]
+  });
+  
+
 const today = new Date();
 const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
 const monthlyorders = await Order.find({
-  date: { $gte: startOfMonth, $lte: endOfMonth },paymentStatus: 'paid'
-  
+  $and: [
+    { date: { $gte: startOfMonth, $lte: endOfMonth } },
+    { orderStatus: { $ne: "Cancelled" } },
+    { orderStatus: { $ne: "payment Failed" } },
+    {orderStatus:{$ne:"payment Failed"}},
+    {orderStatus:{$ne:"Return"}},
+     // Add this condition
+  ]
 });
+
+
+console.log("monthly orders are===> ",monthlyorders)
 let monthlytotal=0;
 let finalmonthlytotal=monthlyorders.forEach((product)=>{
   monthlytotal+=product.totalAmount;
@@ -220,10 +253,21 @@ exports.editproduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   const { name, description, price, selling_price, category, size, gender, brand, stock, status } = req.body;
+  const productdetails=await Product.findOne({_id:updateId});
   
-  const imageUrls = req.files.map(file => `/uploads/${file.filename}`);
+  
 
   try {
+    const productdetails = await Product.findOne({ _id: updateId });
+    const existingImages = productdetails.images;
+
+    // Check if there are new images uploaded in the request
+    const newImages = req.files;
+    const imageUrls = newImages.map(file => `/uploads/${file.filename}`);
+
+    // Merge existing images with new ones or keep existing if new images are not provided
+    const updatedImages = newImages.length > 0 ? imageUrls : existingImages;
+
     const updateData = {
       name,
       description,
@@ -235,8 +279,9 @@ exports.updateProduct = async (req, res) => {
       brand,
       status,
       stock,
-      images: imageUrls // Save an array of images
+      images: updatedImages
     };
+
     updateId = updateId;
 
     const updatedProduct = await Product.findByIdAndUpdate(updateId, { $set: updateData }, { new: true });
@@ -404,7 +449,7 @@ exports.SalesReport=async(req,res)=>{
 }
 exports.getSalesReports = async (req, res) => {
   const { startDate, endDate } = req.body;
-console.log("req.body is==>",req.body)
+
   const data = await Order.find({
     orderStatus: { $in: ["payment Failed", "delivered", "Confirmed", "Placed"] },
     date: { $gte: new Date(startDate), $lte: new Date(endDate) }
