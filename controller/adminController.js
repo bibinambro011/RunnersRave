@@ -158,8 +158,7 @@ const orders = await Order.find();
     }
   });
 
-  console.log("orderCountsByMonth==>",orderCountsByMonth)
-  console.log(orderCountsByMonth[0])
+  
 
   
   res.render("admin/dashboard.ejs",{totalRevenue:total,productlength,orederlength,categorieslength,orderCountsByMonth,monthlytotal});
