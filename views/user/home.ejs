@@ -3,6 +3,8 @@
         <%-include("../partials/userheader")-%>
         
 
+        
+
     <div class="mobile-header-active mobile-header-wrapper-style">
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
@@ -64,7 +66,8 @@
                             </div>
                             <div class="col-lg-7 col-md-6">
                                 <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-1-1" src="/imgs/slider/slider-1.png" alt="">
+                                    <img class="animated slider-1-1" src="/imgs/slider/slider-1.jpg" alt=""  class="mx-auto" style="width: 100%;">
+
                                 </div>
                             </div>
                         </div>
@@ -98,13 +101,13 @@
                                     <h4 class="animated">Upcoming Offer</h4>
                                     <h2 class="animated fw-900">Big Deals From</h2>
                                     <h1 class="animated fw-900 text-8">Manufacturer</h1>
-                                    <p class="animated">Clothing, Shoes, Bags, Wallets...</p>
+                                    <p class="animated"> Shoes, spikes, boots...</p>
                                     <a class="animated btn btn-brush btn-brush-1" href="/shop"> Shop Now </a>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6">
                                 <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-1-3" src="/imgs/slider/slider-3.png" alt="">
+                                    <img class="animated slider-1-3" src="/imgs/slider/slider-3.jpg" alt="">
                                 </div>
                             </div>
                         </div>
@@ -117,20 +120,7 @@
         <section class="product-tabs section-padding position-relative wow fadeIn animated">
             <div class="bg-square"></div>
             <div class="container">
-                <div class="tab-header">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
-                        </li>
-                    </ul>
-                    <a href="#" class="view-more d-none d-md-flex">View More<i class="fi-rs-angle-double-small-right"></i></a>
-                </div>
+              
                 <!--End nav-tabs-->
                 <div class="container">
                     <div class="tab-content wow fadeIn animated" id="myTabContent">
@@ -174,7 +164,7 @@
                                 <% } else { %>
                                   <!-- Hide the button when stock is less than 1 -->
                                 <% } %>
-                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addtowishlist">
+                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addtowishlist/<%= product._id %>" >
                                   <i class="fi-rs-heart"></i>
                                 </a>
                               </div>
@@ -211,10 +201,10 @@
         <section class="banner-2 section-padding pb-0">
             <div class="container">
                 <div class="banner-img banner-big wow fadeIn animated f-none">
-                    <img src="/imgs/banner/banner-4.png" alt="">
+                    <img src="/imgs/banner/sportsbanner1.jpg" alt="">
                     <div class="banner-text d-md-block d-none">
                         <h4 class="mb-15 mt-40 text-brand">Repair Services</h4>
-                        <h1 class="fw-600 mb-20">We're an Apple <br>Authorised Service Provider</h1>
+                        <h1 class="fw-600 mb-20">We're an Adidas<br>Authorised Service Provider</h1>
                         <a href="shop-grid-right.html" class="btn">Learn More <i class="fi-rs-arrow-right"></i></a>
                     </div>
                 </div>
@@ -251,98 +241,7 @@
        
         
         
-       
-        <section class="section-padding">
-            <div class="container pt-25 pb-20">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <h3 class="section-title mb-20"><span>From</span> blog</h3>
-                        <div class="post-list mb-4 mb-lg-0">
-                            <article class="wow fadeIn animated">
-                                <div class="d-md-flex d-block">
-                                    <div class="post-thumb d-flex mr-15">
-                                        <a class="color-white" href="blog-post-fullwidth.html">
-                                            <img src="/imgs/blog/blog-2.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-content">
-                                        <div class="entry-meta mb-10 mt-10">
-                                            <a class="entry-meta meta-2" href="blog-category-fullwidth.html"><span class="post-in font-x-small">Fashion</span></a>
-                                        </div>
-                                        <h4 class="post-title mb-25 text-limit-2-row">
-                                            <a href="blog-post-fullwidth.html">Qualcomm is developing a Nintendo Switch-like console, report says</a>
-                                        </h4>
-                                        <div class="entry-meta meta-1 font-xs color-grey mt-10 pb-10">
-                                            <div>
-                                                <span class="post-on">14 April 2021</span>
-                                                <span class="hit-count has-dot">12M Views</span>
-                                            </div>
-                                            <a href="blog-post-right.html">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="wow fadeIn animated">
-                                <div class="d-md-flex d-block">
-                                    <div class="post-thumb d-flex mr-15">
-                                        <a class="color-white" href="blog-post-fullwidth.html">
-                                            <img src="/imgs/blog/blog-1.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="post-content">
-                                        <div class="entry-meta mb-10 mt-10">
-                                            <a class="entry-meta meta-2" href="blog-category-fullwidth.html"><span class="post-in font-x-small">Healthy</span></a>
-                                        </div>
-                                        <h4 class="post-title mb-25 text-limit-2-row">
-                                            <a href="blog-post-fullwidth.html">Not even the coronavirus can derail 5G's global momentum</a>
-                                        </h4>
-                                        <div class="entry-meta meta-1 font-xs color-grey mt-10 pb-10">
-                                            <div>
-                                                <span class="post-on">14 April 2021</span>
-                                                <span class="hit-count has-dot">12M Views</span>
-                                            </div>
-                                            <a href="blog-post-right.html">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="banner-img banner-1 wow fadeIn animated">
-                                    <img src="/imgs/banner/banner-5.jpg" alt="">
-                                    <div class="banner-text">
-                                        <span>Accessories</span>
-                                        <h4>Save 17% on <br>Autumn Hat</h4>
-                                        <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="banner-img mb-15 wow fadeIn animated">
-                                    <img src="/imgs/banner/banner-6.jpg" alt="">
-                                    <div class="banner-text">
-                                        <span>Big Offer</span>
-                                        <h4>Save 20% on <br>Women's socks</h4>
-                                        <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                                    </div>
-                                </div>
-                                <div class="banner-img banner-2 wow fadeIn animated">
-                                    <img src="/imgs/banner/banner-7.jpg" alt="">
-                                    <div class="banner-text">
-                                        <span>Smart Offer</span>
-                                        <h4>Save 20% on <br>Eardrop</h4>
-                                        <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+   
         <section class="mb-50">
             <div class="container">
                 <div class="row">

@@ -16,9 +16,22 @@
 
 
 </style>
-<div class="error-message">
+<!-- <div class="error-message">
     <h1><%= locals.error ? error : '' %></h1>
-</div>
+</div> -->
+<input type="hidden" class="err" data-error="<%= locals.error%>">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+   let error= document.querySelector(".err").getAttribute('data-error');
+   if(error){
+    Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error
+            });
+   }
+</script>
+
 
 <div class="row mb-50 contain">
     <div class="col-lg-6 col-md-12">

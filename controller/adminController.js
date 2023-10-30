@@ -78,7 +78,10 @@ const orders = await Order.find();
   
 
   console.log("orderCountsByMonth==>",orderCountsByMonth)
-  console.log(orderCountsByMonth[0])
+  console.log('october',orderCountsByMonth[2])
+  console.log('jan',orderCountsByMonth[0])
+  console.log('Data Array:',orderCountsByMonth);
+
 
   const data = await adminCollection.findOne({ email: req.body.email });
   if(data){
@@ -409,15 +412,55 @@ exports.categorymanagement=async(req,res)=>{
   const categorydata=await categories.find();
   res.render("admin/page-categories",{categorydata})
 }
-exports.categoryadd=async(req,res)=>{
-  console.log("this is category data=>", req.body.name)
-  
-   const  name=req.body.name
+exports.categoryadd = async (req, res) => {
+  console.log("this is category data =>", req.body.name);
 
+  const name = req.body.name.toUpperCase();
+
+  const categoryOffer = req.body.offer;
+  const offerValidFrom=req.body.startdate;
+  const offerValidTo=req.body.enddate
  
-  await categories.create({name});
-  res.redirect("/admin/categorymanagement")
+
+  await categories.create({ name, categoryOffer,offerValidFrom,offerValidTo }); // Include categoryoffer in the object
+  res.redirect("/admin/categorymanagement");
+};
+exports.categoriesupdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { name, categoryOffer,offerValidFrom,offerValidTo } = req.body;
+
+    // Find the category by its ID
+    const category = await categories.findOne({ _id: id });
+
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    // Update the category properties
+    category.name = name.toUpperCase()
+    category.categoryOffer = categoryOffer;
+    category.offerValidFrom=offerValidFrom
+    category.offerValidTo=offerValidTo
+   
+
+    // Save the updated category
+    await category.save();
+
+    res.redirect("/admin/categorymanagement")
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.categoryedit=async(req,res)=>{
+  const id=req.params.id;
+  const category=await categories.findOne({_id:id});
+  res.render("admin/editcategory",{category})
+
 }
+
 
 exports.categoryblock=async(req,res)=>{
   const id=req.params.id;

@@ -41,10 +41,9 @@
               SORT BY
             </h5>
             <ul class="categories">
-              <li><a href="shop-grid-right.html">POPULARITY</a></li>
-              <li><a href="shop-grid-right.html">AVERAGE RATING</a></li>
-              <li><a href="shop-grid-right.html">PRICE: LOW TO HIGH</a></li>
-              <li><a href="shop-grid-right.html">PRICE: HIGH TO LOW</a></li>
+             
+              <li><a href="/priceLowToHigh">PRICE: LOW TO HIGH</a></li>
+              <li><a href="/priceHighToLow">PRICE: HIGH TO LOW</a></li>
             </ul>
           </div>
           <!-- <div class="widget-category mb-30">
@@ -153,7 +152,7 @@
                         <% } else { %>
                           <!-- Hide the button when stock is less than 1 -->
                         <% } %>
-                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addtowishlist">
+                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addtowishlist/<%= product._id %>">
                           <i class="fi-rs-heart"></i>
                         </a>
                       </div>

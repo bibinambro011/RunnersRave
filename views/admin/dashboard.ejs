@@ -188,18 +188,23 @@
             </a>
           </li> -->
           <div id="monthsContainer" style="display: none;">
-            <p id="jan"><%= locals.orderCountsByMonth[0].count ? locals.orderCountsByMonth[0].count : '' %></p>
-            <p id="feb"><%= locals.orderCountsByMonth[1].count ? locals.orderCountsByMonth[1].count : '' %></p>
-            <p id="mar"><%= locals.orderCountsByMonth[2].count ? locals.orderCountsByMonth[2].count : '' %></p>
-            <p id="apr"><%= locals.orderCountsByMonth[3].count ? locals.orderCountsByMonth[3].count : '' %></p>
-            <p id="may"><%= locals.orderCountsByMonth[4].count ? locals.orderCountsByMonth[4].count : '' %></p>
-            <p id="jun"><%= locals.orderCountsByMonth[5].count ? locals.orderCountsByMonth[5].count : '' %></p>
-            <p id="jul"><%= locals.orderCountsByMonth[6].count ? locals.orderCountsByMonth[6].count : '' %></p>
-            <p id="aug"><%= locals.orderCountsByMonth[7].count ? locals.orderCountsByMonth[7].count : '' %></p>
-            <p id="sep"><%= locals.orderCountsByMonth[8].count ? locals.orderCountsByMonth[8].count : '' %></p>
-            <p id="oct"><%= locals.orderCountsByMonth[9].count ? locals.orderCountsByMonth[9].count : '' %></p>
-            <p id="nov"><%= locals.orderCountsByMonth[10].count ? locals.orderCountsByMonth[10].count : '' %></p>
-            <p id="dec"><%= locals.orderCountsByMonth[11].count ? locals.orderCountsByMonth[11].count : '' %></p>
+            <% const monthData = {}; %>
+            <% locals.orderCountsByMonth.forEach(entry => { %>
+              <% monthData[entry.month] = entry.count; %>
+            <% }); %>
+          
+            <p id="jan"><%= monthData[1] || 0 %></p>
+            <p id="feb"><%= monthData[2] || 0 %></p>
+            <p id="mar"><%= monthData[3] || 0 %></p>
+            <p id="apr"><%= monthData[4] || 0 %></p>
+            <p id="may"><%= monthData[5] || 0 %></p>
+            <p id="jun"><%= monthData[6] || 0 %></p>
+            <p id="jul"><%= monthData[7] || 0 %></p>
+            <p id="aug"><%= monthData[8] || 0 %></p>
+            <p id="sep"><%= monthData[9] || 0 %></p>
+            <p id="oct"><%= monthData[10] || 0 %></p>
+            <p id="nov"><%= monthData[11] || 0 %></p>
+            <p id="dec"><%= monthData[12] || 0 %></p>
 
           </div>
           <li class="menu-item ">
@@ -452,36 +457,25 @@
     ></script> -->
     <script>
       const ctx = document.getElementById('myChart').getContext('2d');
-      const jan = document.getElementById("jan").innerHTML || 0;
-const feb = document.getElementById("feb").innerHTML || 0;
-const mar = document.getElementById("mar").innerHTML || 0;
-const apr = document.getElementById("apr").innerHTML || 0;
-const may = document.getElementById("may").innerHTML || 0;
-const jun = document.getElementById("jun").innerHTML || 0;
-const jul = document.getElementById("jul").innerHTML || 0;
-const aug = document.getElementById("aug").innerHTML || 0;
-const sep = document.getElementById("sep").innerHTML || 0;
-const oct = document.getElementById("oct").innerHTML || 0;
-const nov = document.getElementById("nov").innerHTML || 0;
-const dec = document.getElementById("dec").innerHTML || 0;
-
-  
-  
-  
-  
-  
-  
+      
+      const monthsData = [
+        "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
+      ];
+      
       const data = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
           label: 'Sales',
-          data: [jan, feb, mar,apr,may,jun,jul,aug,sep,oct,nov,dec],
+          data: monthsData.map(month => {
+            const element = document.getElementById(month);
+            return element ? element.innerHTML : 0;
+          }),
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1
         }]
       };
-  
+    
       const config = {
         type: 'bar',
         data: data,
@@ -493,9 +487,10 @@ const dec = document.getElementById("dec").innerHTML || 0;
           }
         }
       };
-  
+    
       const myChart = new Chart(ctx, config);
     </script>
+    
   </body>
 
   <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->

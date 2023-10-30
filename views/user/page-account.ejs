@@ -189,6 +189,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/coupontemplate"><i class="fi-rs-sign-out mr-10"></i>coupons</a>
+                                        </li>
                                         <!-- <li class="nav-item">
                                             <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Change password</a>
                                         </li> -->
@@ -210,19 +213,18 @@
                                             </div> -->
                                            
                                         </div>
-                                        <div class="card col-lg-4   mt-5">
+                                        <div class="card col-lg-4 mt-5">
                                             <div class="card-body">
                                                 <p style="text-align: center;"><i class="fa-solid fa-user-tie fa-xl"></i></p>
-                                              <p ><b>name :</b> <%=data.username%></p>
-                                              <p><b> email :</b> <%=data.email%></p>
-                                              <p><b>contach number :</b> <%=data.phone%></p><br><br>
-                                              <!-- <a href="/coupontemplate">coupon</a> -->
-                                           <a href="/changepasswordpage" class="btn btn-success">changepassword</a>
+                                                <p><b>Name:</b> <%= data.username %></p>
+                                                <p><b>Email:</b> <%= data.email %></p>
+                                                <p><b>Contact Number:</b> <%= data.phone %></p>
+                                                <p><b>Referral Code:</b> <%= data.referralId %></p>
+                                        
+                                                <a href="/changepasswordpage" class="btn btn-success">Change Password</a>
                                             </div>
-                                          </div>
-                                          <div>
-                                           
-                                          </div>
+                                        </div>
+                                        
                                     </div>
                                     <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                                         <div class="card">

@@ -9,6 +9,19 @@ const categorySchema = new mongoose.Schema(
     active:{
         type:Boolean,
         default:true
+    },
+    categoryOffer:{
+      type:Number,
+      default:0
+    },
+    offerValidFrom:{
+      type:Date,
+      default:Date.now,
+      
+    },
+    offerValidTo:{
+      type:Date,
+      default:Date.now,
     }
 
     

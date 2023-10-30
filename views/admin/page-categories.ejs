@@ -20,6 +20,21 @@
                                     <input type="text" name="name" placeholder="Type here" class="form-control" id="product_name" />
                                     <span id="error-category" style="color: red;"></span>
                                 </div>
+                                <div class="form-group">
+                                    <label for="category_offer" class="form-label">Category Offer</label>
+                                    <input type="text" name="offer" placeholder="Type here" class="form-control" id="category_offer" />
+                                    <span id="error-offer" style="color: red;"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="startdate" class="form-label">offer From</label>
+                                    <input type="date" name="startdate" placeholder="Type here" class="form-control" id="offer-from" />
+                                    <span id="fromdatespan" style="color: red;"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enddate" class="form-label">offer To</label>
+                                    <input type="date" name="enddate" placeholder="Type here" class="form-control" id="offer-To" />
+                                    <span id="todatespan" style="color: red;"></span>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Create category</button>
                             </form>
                         </div>
@@ -36,6 +51,8 @@
                                             <th>ID</th>
                                             <th>Status</th>
                                             <th>Name</th>
+                                            <th>category offer</th>
+                                            <th>update</th>
                                             <th>Action</th>
                                             <!-- <th>Description</th>
                                             <th>Slug</th>
@@ -57,163 +74,29 @@
                                             <td><%= category._id %></td>
                                             <td><b><%= category.active %></b></td>
                                             <td><b><%= category.name %></b></td>
+                                            <td><b><%= category.categoryOffer %> %</b></td>
+                                            <td>
+                                                <a class="btn btn-secondary btn-sm font-sm" href="/admin/categoryedit/<%= category._id %>">Edit</a>
+                                            </td>
+                                            
+
                                            
                                             <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <!-- <a class="dropdown-item" href="#">View detail</a> -->
-                                                        <a class="dropdown-item text-success" href="/admin/categoryunblock/<%= category._id %>">unblock</a>
-                                                        <a class="dropdown-item text-danger" href="/admin/categoryblock/<%= category._id %>">Block</a>
+                                                <td class="text-end">
+                                                    <div class="d-flex">
+                                                        <% if (category.active) { %>
+                                                            <a class="btn btn-danger rounded btn-sm font-sm" href="/admin/categoryblock/<%= category._id %>">Block</a>
+                                                        <% } else { %>
+                                                            <a class="btn btn-success rounded btn-sm font-sm" href="/admin/categoryunblock/<%= category._id %>">Unblock</a>
+                                                        <% } %>
                                                     </div>
-                                                </div> <!-- dropdown //end -->
+                                                </td>
+                                                
                                             </td>
+                                            
                                         </tr>
                                         <% }); %>
-                                        <!-- <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" />
-                                                </div>
-                                            </td>
-                                            <td>2</td>
-                                            <td><b>Women fashion</b></td>
-                                            <td>Fashions for Women</td>
-                                            <td>/women</td>
-                                            <td>2</td>
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>  //end -->
-                                            </td>
-                                        </tr> 
-                                        <!-- <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" />
-                                                </div>
-                                            </td>
-                                            <td>3</td>
-                                            <td><b>Kids clothes</b></td>
-                                            <td>Clothes for kids</td>
-                                            <td>/kids</td>
-                                            <td>3</td>
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div> dropdown //end -->
-                                            </td>
-                                        </tr> 
-                                        <!-- <tr>
-                                            <td class="text-center"><i class="material-icons md-subdirectory_arrow_right text-muted"></i></td>
-                                            <td>4</td>
-                                            <td><b>Hot Gifts</b></td>
-                                            <td>Hot Gifts</td>
-                                            <td>/gifts</td>
-                                            <td>4</td>
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>  dropdown //end -->
-                                            </td>
-                                        </tr> 
-                                        <!-- <tr>
-                                            <td class="text-center"><i class="material-icons md-subdirectory_arrow_right text-muted"></i></td>
-                                            <td>5</td>
-                                            <td><b>Electronics</b></td>
-                                            <td>Electronics</td>
-                                            <td>/electr</td>
-                                            <td>5</td>
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div> dropdown //end -->
-                                            </td>
-                                        </tr> 
-                                        <!-- <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" />
-                                                </div>
-                                            </td>
-                                            <td>6</td>
-                                            <td><b>Accessories</b></td>
-                                            <td>Accessories</td>
-                                            <td>/accessories</td>
-                                            <td>6</td>
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div> dropdown //end -->
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <!-- <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" />
-                                                </div>
-                                            </td>
-                                            <td>7</td>
-                                            <td><b>Jewellery</b></td>
-                                            <td>Jewellery</td>
-                                            <td>/jewel</td>
-                                            <td>7</td>
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div> dropdown //end -->
-                                            <!-- </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" />
-                                                </div>
-                                            </td>
-                                            <td>8</td>
-                                            <td><b>Interiors</b></td>
-                                            <td>Interiors</td>
-                                            <td>/interior</td>
-                                            <td>8</td>
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">View detail</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div> dropdown //end -->
+                                       
                                             </td> 
                                         </tr>
                                      
@@ -228,17 +111,48 @@
       
         <%-include("../partials/adminfooter")-%>
         <script>
+           
             function validateForm() {
-                const name = document.getElementById('product_name').value;
-                const errormessage=document.getElementById("error-category")
+                const categoryOfferInput = document.getElementById('category_offer');
+                if (categoryOfferInput.value.trim() === '') {
+        categoryOfferInput.value = '0';
+    }
+
+
+                const name = document.getElementById('product_name').value
+          
+
+                const errormessage=document.getElementById("error-category");
+                const categoryoffer=document.getElementById("category_offer").value 
+                const erroroffer=document.getElementById("error-offer");
+                const offerfrom=document.getElementById("offer-from").value
+             
+                const offerto=document.getElementById("offer-To").value
+              
+                const fromdate=document.getElementById("fromdatespan");
+                const todate=document.getElementById("todatespan")
         
                 // Check if the name is empty
                 if (name.trim() === '') {
                     errormessage.innerHTML="category field cannot be empty"
                     return false;
+                }else if(categoryoffer<0){
+                    erroroffer.innerHTML="categery offer field cannot be less than 0";
+                    return false;
+                }else if(categoryoffer >75){
+                    erroroffer.innerHTML="categery offer cannot be greater than 75%";
+                    return false
+                }else if(categoryoffer >0 && offerfrom==""){
+                    fromdate.innerHTML="please select from date";
+                    return false;
+                }else if(offerfrom !="" && offerto==""){
+                    todate.innerHTML="please select To date";
+                    return false;
+                }else{
+                    return true;
                 }
         
-                return true; // Submit the form if validation passes
+                 // Submit the form if validation passes
             }
         </script>
         

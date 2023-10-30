@@ -28,12 +28,18 @@ router.post(
 );
 router.get("/verifyotp", controller.verify_otp);
 router.get("/productCategory/:id", controller.productCategory);
-router.get("/productBrand",controller.productBrand)
+router.get("/productBrand",controller.productBrand);
+router.get("/priceLowToHigh",controller.priceLowToHigh)
+router.get("/priceHighToLow",controller.priceHighToLow)
 router.get("/useraccount", middleware.islogin, controller.useraccount);
-router.get("/addtowishlist", middleware.cartAuth, controller.addtowishlist);
+router.get("/addtowishlist/:id", middleware.cartAuth, controller.addtowishlist);
+router.get("/fromwishlisttocart/:id",controller.fromwishlisttocart)
+
 router.post("/productsearch", controller.productsearch);
+router.get("/productsearch",controller.productsearch)
 router.get("/aboutpage", controller.aboutpage);
 router.get("/show_wishlist", middleware.cartAuth, controller.showwishlist);
+router.get("/deletewishlist/:id",controller.deletewishlist)
 router.get("/show_cart", middleware.cartAuth, cartController.showcart);
 router.post("/cartUpdate", middleware.islogin, cartController.cartUpdate);
 // router.get("/fromcartToLogin",middleware.cartAuth,controller.fromcartToLogin);

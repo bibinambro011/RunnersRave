@@ -12,6 +12,7 @@ require("dotenv").config();
 
 const accountSid = process.env.accountSid;
 const authToken = process.env.authToken;
+const serviceSid ="VA903ab7bfe96607e9a816c6e923510956"
 
 const client = twilio(accountSid, authToken);
 let generatedotp = "";
@@ -34,12 +35,16 @@ const user_registration = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const phone = req.body.phone;
+  const referalid=req.body.referralId
   data = {
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
+    referalid:req.body.referralId
+    
   };
+
 
   const recipientPhoneNumber = `+91${phone}`;
 
@@ -136,7 +141,30 @@ const verify_otp = async (req, res) => {
         phone: data.phone,
       });
 
-      await newUser.save();
+      let newuser = await newUser.save();
+     
+
+      if (data.referalid) {
+    
+        let users = await User.find({ referralId: data.referalid });
+       
+        if (users.length > 0) {
+          let user = users[0];
+          let balance = user.walletbalance;
+          let amount = balance + 50;
+       
+
+          await User.updateOne({ referralId: data.referalid }, {
+            $set: { walletbalance: amount } // Update operation using $set
+          });
+        }
+        newuser.walletbalance = 50;
+        await newuser.save();
+      }
+     
+
+      let users = await User.find();
+
       const isAuthenticated = true;
       res.redirect("/login");
     } catch (error) {
@@ -144,6 +172,7 @@ const verify_otp = async (req, res) => {
     }
   }
 };
+
 const loginpage = async (req, res) => {
   res.render("user/login.ejs");
 };
@@ -388,6 +417,63 @@ const productBrand = async (req, res) => {
   }
 };
 
+const priceLowToHigh = async (req, res) => {
+  const page = parseInt(req.query.page) || 1; // Get the requested page number
+
+  try {
+    const isAuthenticated = true;
+    const categorydata = await category.find();
+    const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
+
+    const products = await Product.find()
+      .sort({ selling_price: 1 }) // Sort by price in ascending order (low to high)
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE);
+
+    // Count total products for calculating total pages
+    const totalProductsCount = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
+
+    res.render("user/shop.ejs", {
+      products,
+      categorydata,
+      isAuthenticated,
+      currentPage: page,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(500).send("Error fetching products.");
+  }
+};
+const priceHighToLow=async(req,res)=>{
+  const page = parseInt(req.query.page) || 1; // Get the requested page number
+
+  try {
+    const isAuthenticated = true;
+    const categorydata = await category.find();
+    const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
+
+    const products = await Product.find()
+      .sort({ selling_price: -1 }) // Sort by price in ascending order (low to high)
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE);
+
+    // Count total products for calculating total pages
+    const totalProductsCount = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProductsCount / ITEMS_PER_PAGE);
+
+    res.render("user/shop.ejs", {
+      products,
+      categorydata,
+      isAuthenticated,
+      currentPage: page,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(500).send("Error fetching products.");
+  }
+}
+
 const useraccount = async (req, res) => {
   if (req.session.user) {
     const user_id = req.session.user[0]._id;
@@ -423,13 +509,108 @@ const useraccount = async (req, res) => {
 };
 const addtowishlist = async (req, res) => {
   if (req.session.user) {
+    const id = req.params.id;
+    const userId = req.session.user[0]._id;
+
+    const user = await User.findById(userId);
+
+    if (user && !user.wishlist.includes(id)) {
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $push: { wishlist: id } },
+        { new: true }
+      );
+      console.log(updatedUser);
+    }
+
     const isAuthenticated = true;
-    res.render("user/wishlist.ejs", { isAuthenticated });
+    res.redirect("/shop");
   } else {
-    isAuthenticated = false;
-    res.render("user/wishlist.ejs", { isAuthenticated });
+    const isAuthenticated = false;
+    res.render("user/login.ejs", { isAuthenticated });
   }
 };
+const fromwishlisttocart = async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const productId = req.params.id;
+    const userId = req.session.user[0]._id;
+
+    // Find the product in the wishlist
+    const exproduct = await Product.findById(productId);
+
+    if (!exproduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Check if the product is in stock
+    if (exproduct.stock <= 0) {
+      return res.status(400).json({ error: "Product is out of stock" });
+    }
+
+    const size = exproduct.size;
+    const getimage = exproduct.images[0];
+
+    let cart = await cartCollection.findOne({ userId });
+
+    if (!cart) {
+      const newCart = new cartCollection({
+        userId,
+        products: [
+          {
+            productId,
+            size: size,
+            images: getimage,
+            quantity: 1,
+            price: exproduct.selling_price,
+          },
+        ],
+      });
+      await newCart.save();
+    } else {
+      const existingProduct = cart.products.find(
+        (product) =>
+          product.productId.toString() === productId && product.size === size
+      );
+
+      if (existingProduct) {
+        if (exproduct.stock > existingProduct.quantity) {
+          existingProduct.quantity++;
+        }
+      } else {
+        cart.products.push({
+          productId,
+          size: size,
+          quantity: 1,
+          images: getimage,
+          price: exproduct.selling_price,
+        });
+      }
+
+      await cart.save();
+    }
+
+    // Remove the product from the wishlist
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { wishlist: productId } },
+      { new: true }
+    );
+
+    // Redirect to the wishlist page or send a success response
+    res.redirect("/show_wishlist");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+
 const profileafteredit = async (req, res) => {
   console.log(req.body);
   const userId = req.session.user[0]._id;
@@ -500,12 +681,59 @@ const aboutpage = async (req, res) => {
 const showwishlist = async (req, res) => {
   if (req.session.user) {
     const isAuthenticated = true;
-    res.render("user/wishlist.ejs", { isAuthenticated });
+
+    try {
+      // Find the user and populate the wishlist field
+      const user = await User.findById(req.session.user[0]._id).populate('wishlist');
+
+      // Access the populated wishlist
+      const wishlistWithProductDetails = user.wishlist;
+
+      res.render("user/wishlist.ejs", { isAuthenticated, products: wishlistWithProductDetails });
+    } catch (error) {
+      // Handle any errors
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
   } else {
     isAuthenticated = false;
     res.render("user/wishlist.ejs", { isAuthenticated });
   }
 };
+
+const deletewishlist = async (req, res) => {
+  if (req.session.user) {
+    const id = req.params.id;
+    const userId = req.session.user[0]._id;
+
+    try {
+      // Find the user and use $pull to remove the product ID from the wishlist
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { wishlist: id } },
+        { new: true }
+      );
+
+      if (updatedUser) {
+        // Successfully removed the product from the wishlist
+        console.log(`Product with ID ${id} removed from the wishlist.`);
+        res.redirect('/show_wishlist'); // Redirect to the wishlist page or wherever you want to go after removal.
+      } else {
+        // Handle the case where the user or product ID is not found.
+        res.status(404).send('Product or user not found.');
+      }
+    } catch (error) {
+      // Handle any errors
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  } else {
+    // Handle the case where the user is not logged in.
+    res.status(403).send('Unauthorized');
+  }
+};
+
+
 
 const loginpage1 = async (req, res) => {
   res.render("user/login");
@@ -672,6 +900,8 @@ module.exports = {
   user_registration,
   aboutpage,
   showwishlist,
+  deletewishlist,
+  fromwishlisttocart,
   // showcart,
   // cartadd,
   // fromcartToLogin,
@@ -691,4 +921,7 @@ module.exports = {
   paymentsuccesfull,
   productBrand,
   changepasswordpage,
+  priceLowToHigh,
+  priceHighToLow,
+  
 };

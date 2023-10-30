@@ -33,7 +33,7 @@
               </div>
         
               <div class="col-md-2 col-6">
-                <button class="btn btn-sm btn-info" onclick="getSalesReport()" style="max-width: 80px;max-height: 60px;">submit</button>
+                <button class="btn btn-sm btn-info" onclick="getSalesReport()" style="max-width: 80px;max-height: 60px;" id="submit">submit</button>
               </div>
         
               <!-- <div class="col-md-2 col-6">
@@ -48,7 +48,7 @@
                 </div>
               </div> -->
         
-              <div class="col-md-1 col-4 ml-auto">
+              <div class="col-md-1 col-4 ml-auto" id="dail">
                 <button class="btn btn-secondary" id="daily">daily</button>
               </div>
         
@@ -79,6 +79,8 @@
                                 </div>
                             </th>
                             <th class="align-middle" scope="col">Order ID</th>
+                         
+
                             <th class="align-middle" scope="col">Billing Name</th>
                             <th class="align-middle" scope="col">Date</th>
                             <th class="align-middle" scope="col">Total</th>
@@ -97,6 +99,7 @@
                                     </div>
                                 </td>
                                 <td><a href="#" class="fw-bold">#<%= data.ord %></a> </td>
+                              
                                 <td><%= data.address.name %></td>
                                 <td>
                                   <script>
@@ -246,6 +249,14 @@ document.getElementById('yearly').addEventListener('click', function() {
 
 
 document.getElementById("invoice").addEventListener("click",()=>{
+
+  document.getElementById("weekly").style.display="none";
+  document.getElementById("yearly").style.display="none";
+  document.getElementById("startDate").style.display="none";
+  document.getElementById("endDate").style.display="none";
+  document.getElementById("submit").style.display="none"
+  document.getElementById("invoice").style.display="none"
+  document.getElementById("daily").style.display="none";
   window.print()
 })
 

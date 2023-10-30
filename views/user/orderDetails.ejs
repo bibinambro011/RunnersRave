@@ -46,17 +46,21 @@
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
                             <% if (order.orderStatus === 'Cancelled') { %>
                                 <span class="badge rounded-pill bg-danger">Order is Cancelled</span>
+                            <% } else if (order.orderStatus === 'Return') { %>
+                                <span class="badge rounded-pill bg-info">Return request Confirmed</span>
                             <% } else { %>
                                 <select id="orderStatusSelect" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
                                     <% if (order.orderStatus === 'delivered') { %>
                                         <option value="Return">Return</option>
-                                        
                                     <% } else if (order.orderStatus === 'Confirmed') { %>
-                                        <option value="Cancelled">Cancell</option>
+                                        <option value="Cancelled">Cancel</option>
                                     <% } %>
                                 </select>
-                                <button class="btn btn-primary" id="saveStatus">Save</button>
+                                <% if (order.orderStatus !== 'Return') { %>
+                                    <button class="btn btn-primary" id="saveStatus">Save</button>
+                                <% } %>
                             <% } %>
+                            
                             <a class="btn btn-secondary print ms-2" id="invoice"><i class="icon material-icons md-print"></i></a>
                         </div>
                         
@@ -255,7 +259,10 @@ console.log('Please select a valid status.');
 }
 });
 
-document.getElementById("invoice").addEventListener("click",()=>{
+
+</script>
+<script>
+    document.getElementById("invoice").addEventListener("click",()=>{
     window.print()
 })
 </script>

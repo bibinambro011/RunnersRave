@@ -177,7 +177,7 @@
                             <table class="table shopping-summery text-center">
                                 <thead>
                                     <tr class="main-heading">
-                                        <th scope="col" colspan="2">Product</th>
+                                        <th scope="col">Product</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Stock Status</th>
                                         <th scope="col">Action</th>
@@ -185,53 +185,39 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="image product-thumbnail"><img src="/imgs/shop/product-1-1.jpg" alt="#"></td>
-                                        <td class="product-des product-name">
-                                            <h5 class="product-name"><a href="shop-product-right.html">J.Crew Mercantile Women's Short-Sleeve</a></h5>
-                                            <p class="font-xs">Maboriosam in a tonto nesciung eget<br> distingy magndapibus.
-                                            </p>
-                                        </td>
-                                        <td class="price" data-title="Price"><span>$65.00 </span></td>
-                                        <td class="text-center" data-title="Stock">
-                                            <span class="color3 font-weight-bold">In Stock</span>
-                                        </td>
-                                        <td class="text-right" data-title="Cart">
-                                            <button class="btn btn-sm"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</button>
-                                        </td>
-                                        <td class="action" data-title="Remove"><a href="#"><i class="fi-rs-trash"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="image"><img src="/imgs/shop/product-2-1.jpg" alt="#"></td>
-                                        <td class="product-des">
-                                            <h5 class="product-name"><a href="shop-product-right.html">Amazon Essentials Women's Tank</a></h5>
-                                            <p class="font-xs">Sit at ipsum amet clita no est,<br> sed amet sadipscing et gubergren</p>
-                                        </td>
-                                        <td class="price" data-title="Price"><span>$75.00 </span></td>
-                                        <td class="text-center" data-title="Stock">
-                                            <span class="color3 font-weight-bold">In Stock</span>
-                                        </td>
-                                        <td class="text-right" data-title="Cart">
-                                            <button class="btn btn-sm"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</button>
-                                        </td>
-                                        <td class="action" data-title="Remove"><a href="#"><i class="fi-rs-trash"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="image"><img src="/imgs/shop/product-3-1.jpg" alt="#"></td>
-                                        <td class="product-des">
-                                            <h5 class="product-name"><a href="shop-product-right.html">Amazon Brand - Daily Ritual Women's Jersey </a></h5>
-                                            <p class="font-xs">Erat amet et et amet diam et et.<br> Justo amet at dolore
-                                            </p>
-                                        </td>
-                                        <td class="price" data-title="Price"><span>$62.00 </span></td>
-                                        <td class="text-center" data-title="Stock">
-                                            <span class="text-danger font-weight-bold">Out of stock</span>
-                                        </td>
-                                        <td class="text-right" data-title="Cart">
-                                            <button class="btn btn-sm btn-secondary"><i class="fi-rs-headset mr-5"></i>Contact Us</button>
-                                        </td>
-                                        <td class="action" data-title="Remove"><a href="#"><i class="fi-rs-trash"></i></a></td>
-                                    </tr>
+                                    <% if (products.length > 0) { %>
+                                        <% products.forEach(product => { %>
+                                            <tr>
+                                                <td class="image product-thumbnail">
+                                                    <img src="<%= product.images[0] %>" alt="<%= product.name %>">
+                                                </td>
+                                                <td class="price" data-title="Price"><span>$<%= product.selling_price %></span></td>
+                                                <td class="text-center" data-title="Stock">
+                                                    <% if (product.stock > 0) { %>
+                                                      <span class="color3 font-weight-bold"><%= product.stock %></span>
+                                                    <% } else { %>
+                                                      <span class="text-danger font-weight-bold">Out of Stock</span>
+                                                    <% } %>
+                                                  </td>
+                                                  
+                                                  <td class="text-right" data-title="Cart">
+                                                    <% if (product.stock > 0) { %>
+                                                      <a class="btn btn-sm" href="/fromwishlisttocart/<%= product._id %>"><i class="fi-rs-shopping-bag mr-5" ></i>Add to cart</a>
+                                                    <% } else { %>
+                                                      <button class="btn btn-sm" disabled>add to cart</button>
+                                                    <% } %>
+                                                  </td>
+                                                  
+                                                <td class="action" data-title="Remove">
+                                                    <a href="deletewishlist/<%= product._id %>"><i class="fi-rs-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="text-center">There are no products in your wishlist.</td>
+                                        </tr>
+                                    <% } %>
                                 </tbody>
                             </table>
                         </div>
@@ -239,5 +225,6 @@
                 </div>
             </div>
         </section>
+        
     </main>
     <%-include("../partials/userfooter")-%>

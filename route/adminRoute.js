@@ -51,6 +51,8 @@ router.get(
   controller.categorymanagement
 );
 router.post("/categoryadd", middleware.islogin, controller.categoryadd);
+router.get("/categoryedit/:id",middleware.islogin,controller.categoryedit);
+router.post("/categories/:id",middleware.islogin,controller.categoriesupdate)
 router.get("/categoryblock/:id", middleware.islogin, controller.categoryblock);
 router.get(
   "/categoryunblock/:id",

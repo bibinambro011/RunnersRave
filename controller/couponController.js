@@ -22,7 +22,8 @@ const createCoupon=async(req,res)=>{
  res.redirect("/admin/AddCoupons")
 }
 const coupontemplate=async(req,res)=>{
-    const allCoupon=await Coupon.find({isActive:true});
+  const currentDateTime = new Date();
+    const allCoupon=await Coupon.find({isActive:true,validFor: { $gt: currentDateTime },});
     
     res.render("user/coupontemp",{allCoupon,isAuthenticated:true})
 }
@@ -44,9 +45,10 @@ const applyCoupon = async (req, res) => {
 
   // Get the coupon code from the form
   const { Couponcode } = req.body;
+  let coupcode=Couponcode.trim()
 
   // Find the coupon in your database
-  const appliedCoupon = await Coupon.findOne({ couponCode: Couponcode });
+  const appliedCoupon = await Coupon.findOne({ couponCode: coupcode });
 
   let discountAmount = "";
   let originaltotal = "";
@@ -61,7 +63,7 @@ const applyCoupon = async (req, res) => {
       
         discountAmount: 0,
         originaltotal:totalPrice,
-        code: Couponcode,
+        code: coupcode,
         error: 'Coupon already used by this user', // Add an error message
       });
     }else{
@@ -88,8 +90,10 @@ const applyCoupon = async (req, res) => {
         Coupon: CouponList,
         discountAmount: discountAmount,
         originaltotal,
-        code: Couponcode,
+        code: coupcode,
       });
+    }else{
+      res.redirect('/placeOrder'); 
     }
     // Calculate the discount and deduct it from the total amount
    

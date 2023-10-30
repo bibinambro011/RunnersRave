@@ -67,6 +67,7 @@ const orderdetails = async (req, res) => {
       date: Date.now(),
       totalAmount: totalPrice-amount,
       couponDiscount:amount,
+      couponCode:couponcode,
       actualTotalAmount: originalPrice,
       paymentMethod: paymentype,
       products: cartDetails.products,
@@ -269,7 +270,7 @@ const updateorderstatus = async (req, res) => {
     { new: true }
   );
   if(updatedData.orderStatus=="delivered"){
-    console.log("hello world")
+   
     await Order.findByIdAndUpdate(
       id,
       { paymentStatus: "paid" },
@@ -278,7 +279,7 @@ const updateorderstatus = async (req, res) => {
 
   }
   if(updatedData.orderStatus=="Cancelled"){
-    console.log("hello world")
+   
     await Order.findByIdAndUpdate(
       id,
       { admincancellreason: "failure in delivering the product" },
@@ -358,7 +359,7 @@ let orderdetails=await Order.findOne({_id:req.params.id})
   if(updatedData.orderStatus=="Return"){
     let userdata=await User.find({_id:req.session.user[0]._id});
   
-    console.log("userdeata==>",userdata);
+ 
  
     walletbal=userdata[0].walletbalance+orderdetails.totalAmount;
     console.log(walletbal)
@@ -410,6 +411,7 @@ let orderdetails=await Order.findOne({_id:req.params.id})
           // Save the updated product in the product collection
           await product.save();
       }
+
   }
 
 
@@ -430,6 +432,30 @@ let orderdetails=await Order.findOne({_id:req.params.id})
   { new: true }
 );
 
+  }
+  if(canceledOrder.paymentStatus=="paid"){
+  
+    let userdet=await User.find({_id:req.session.user[0]._id})
+    let bal=canceledOrder.totalAmount+userdet[0].walletbalance;
+    let balance=Number(bal);
+   
+    let userdat={
+      walletbalance:balance,
+     
+    }
+    let updateuserdata = await User.findByIdAndUpdate(
+  {
+    _id: req.session.user[0]._id,
+   
+  
+  },
+  userdat,
+  { new: true }
+);
+let data={
+  paymentStatus:'refunded'
+}
+let updateddata=await Order.findByIdAndUpdate(req.params.id,data,{new:true})
   }
 
   }
@@ -458,6 +484,46 @@ const paymentFailureHandler = async (req, res) => {
     },
     { new: true }
   );
+  const order = await Order.findOne({ _id: orderId });
+  if (order.orderStatus === "payment Failed") {
+    // Iterate through the products in the order
+    for (const product of order.products) {
+      // Retrieve the product from the database
+      const existingProduct = await Product.findOne({ _id: product.productId });
+
+      if (existingProduct) {
+        console.log("existing product",existingProduct)
+        // Increment the product's stock by the quantity ordered
+        existingProduct.stock += product.quantity;
+
+        // Save the updated product
+        await existingProduct.save();
+      }
+    }
+  }
+  if (order.couponCode) {
+    const couponCode = order.couponCode;
+  
+    // Search for the coupon in the Mongoose model using couponCode
+    Coupon.findOne({ couponCode: couponCode })
+      .exec()
+      .then((coupon) => {
+        if (coupon) {
+          // Decrement the redeemedUsers count
+          const userIndex = coupon.redeemedusers.indexOf(order.userId);
+          if (userIndex !== -1) {
+            coupon.redeemedusers.splice(userIndex, 1);
+          }
+  
+          // Save the updated coupon
+          return coupon.save();
+        }
+      })
+      
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
   
 
   return res.status(200).json({
