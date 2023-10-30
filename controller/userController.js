@@ -12,7 +12,7 @@ require("dotenv").config();
 
 const accountSid = process.env.accountSid;
 const authToken = process.env.authToken;
-const serviceSid ="VA903ab7bfe96607e9a816c6e923510956"
+
 
 const client = twilio(accountSid, authToken);
 let generatedotp = "";
