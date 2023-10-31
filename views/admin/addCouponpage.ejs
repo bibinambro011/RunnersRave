@@ -1,111 +1,169 @@
 <%-include("../partials/adminheader")-%>
-   
-        <section class="content-main">
-            <div class="content-header">
-                <div>
-                    <h2 class="content-title card-title">Add Coupon </h2>
-                    <p>Add, edit or delete a Coupon</p>
-                </div>
-                <div>
-                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <form method="post" action="/admin/createCoupon">
-                                <div class="mb-4">
-                                    <label for="product_name" class="form-label">CouponCode</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="CouponCode" name="couponcode"/>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="product_slug" class="form-label">Coupon Description</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="Coupon Description" name="coupondescription" />
-                                </div>
-                                <div class="mb-4">
-                                    <label for="product_slug" class="form-label">MIn OrderAmount</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="minAmount"  name="minorder"/>
-                                </div>
-                             
-                                <div class="mb-4">
-                                    <label for="product_slug" class="form-label">Max discount Amount</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="maxAmount"  name="maxdiscount"/>
-                                </div>
-                               
-                                <div class="mb-4">
-                                    <label for="validfrom" class="form-label">Valid from</label>
-                                    <input type="date" class="form-control" id="validfrom" name="validfrom" />
-                                </div>
-                                
-                                <div class="mb-4">
-                                    <label for="validfrom" class="form-label">Valid To</label>
-                                    <input type="date" class="form-control" id="validfrom" name="validto" />
-                                </div>
-                                
-                                <div class="d-grid">
-                                    <button class="btn btn-primary">Create Coupon</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                          
-                                            <th>couponCode</th>
-                                            <th>Description</th>
-                                            <th>discount percentage</th>
 
-                                            <th>from date</th>
-                                            <th>expiry date</th>
-                                            <th>Status</th>
-                                           
-                                            <th class="text-end">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% allCoupon.forEach((data, index) => { %>
-                                        <tr>
-                                          
-                                            <td><%= data.couponCode %></td>
-                                            <td><b><%= data.couponDiscription %></b></td>
-                                            <td><%= data.discountPercentage %></td>
-                                            <td><%= data.validFor %></td>
-                                            <td><%= data.createdOn %></td>
-                                            <td>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Add Coupon</h2>
+            <p>Add, edit, or delete a Coupon</p>
+        </div>
+        <div>
+            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form method="post" action="/admin/createCoupon" onsubmit="return validateCouponForm()">
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Coupon Code</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="CouponCode" name="couponcode"/>
+                            <span id="namespan" class="error-message" style="color: red;"></span> <!-- Error message element -->
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_slug" class="form-label">Coupon Description</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="CouponDescription" name="coupondescription" />
+                            <span id="descriptionspan" class="error-message" style="color: red;"></span> <!-- Error message element -->
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_slug" class="form-label">Min Order Amount</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="minAmount"  name="minorder"/>
+                            <span id="minorderspan" class="error-message" style="color: red;"></span> <!-- Error message element -->
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_slug" class="form-label">discount percentage</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="maxAmount"  name="maxdiscount"/>
+                            <span id="discountspan" class="error-message" style="color: red;"></span> <!-- Error message element -->
+                        </div>
+                        <div class="mb-4">
+                            <label for="validfrom" class="form-label">Valid from</label>
+                            <input type="date" class="form-control" id="validfrom" name="validfrom" />
+                            <span id="validfromspan" class="error-message" style="color: red;"></span> <!-- Error message element -->
+                        </div>
+                        <div class="mb-4">
+                            <label for="validto" class="form-label">Valid To</label>
+                            <input type="date" class="form-control" id="validto" name="validto" />
+                            <span id="validtospan" class="error-message" style="color: red;"></span> <!-- Error message element -->
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary">Create Coupon</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Coupon Code</th>
+                                    <th>Description</th>
+                                    <th>Discount Percentage</th>
+                                    <th>From Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% allCoupon.forEach((data, index) => { %>
+                                <tr>
+                                    <td><%= data.couponCode %></td>
+                                    <td><b><%= data.couponDiscription %></b></td>
+                                    <td><%= data.discountPercentage %></td>
+                                    <td><%= data.validFor %></td>
+                                    <td><%= data.createdOn %></td>
+                                    <td>
+                                        <% if (data.isActive) { %>
+                                            <span class="badge rounded-pill bg-success">Active</span>
+                                        <% } else { %>
+                                            <span class="badge rounded-pill bg-danger">Inactive</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
+                                                <i class="material-icons md-more_horiz"></i>
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="/admin/couponedit/<%= data._id %>">Edit info</a>
                                                 <% if (data.isActive) { %>
-                                                    <span class="badge rounded-pill bg-success">Active</span>
+                                                    <a class="dropdown-item text-danger" href="/admin/deactivateCoupon/<%= data._id %>">Deactivate</a>
                                                 <% } else { %>
-                                                    <span class="badge rounded-pill bg-danger">Inactive</span>
+                                                    <a class="dropdown-item text-success" href="/admin/activateCoupon/<%= data._id %>">Activate</a>
                                                 <% } %>
-                                            </td>
-                                            
-                                            <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                      
-                                                        <a class="dropdown-item" href="/admin/couponedit/<%= data._id %>">Edit info</a>
-                                                        <% if (data.isActive) { %>
-                                                            <a class="dropdown-item text-danger" href="/admin/deactivateCoupon/<%= data._id %>">Deactivate</a>
-                                                        <% } else { %>
-                                                            <a class="dropdown-item text-success" href="/admin/activateCoupon/<%= data._id %>">Activate</a>
-                                                        <% } %>
-                                                        
-                                                    </div>
-                                                </div> <!-- dropdown //end -->
-                                            </td>
-                                        </tr>
-                                        <% }); %>
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> <!-- .col// -->
-                    </div> <!-- .row // -->
-                </div> <!-- card body .// -->
-            </div> <!-- card .// -->
-        </section> <!-- content-main end// -->
-        <%-include("../partials/adminfooter")-%>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section> <!-- content-main end// -->
+<script>
+    function validateCouponForm() {
+        const couponCode = document.getElementById('CouponCode').value;
+        const desc=document.getElementById("CouponDescription").value
+        const minAmount = parseFloat(document.getElementById('minAmount').value);
+        const maxAmount = parseFloat(document.getElementById('maxAmount').value);
+        const validFrom = document.getElementById('validfrom').value;
+        const validTo = document.getElementById('validto').value;
+        const errorCouponCode = document.getElementById("error-couponcode");
+
+        let namespan=document.getElementById("namespan");
+        let descspan=document.getElementById("descriptionspan");
+        let minorder=document.getElementById("minorderspan");
+        let discountspan=document.getElementById("discountspan");
+        let validfromspan=document.getElementById("validfromspan");
+        let validtospan=document.getElementById("validtospan");
+
+       // Reset the error message
+
+        if (couponCode.trim() === '') {
+            namespan.innerHTML = "Coupon Code cannot be empty";
+            return false;
+        }
+        if(desc==""){
+            descspan.innerHTML="description field cannot be empty";
+            return false;
+        }if(minAmount==""){
+            minorder.innerHTML = "Min Order Amount field cannot be empty.";
+            return false;
+        }
+
+        if (isNaN(minAmount) || minAmount < 0) {
+            minorder.innerHTML = "Min Order Amount should be a non-negative number.";
+            return false;
+        }
+        if(maxAmount >75){
+            discountspan.innerHTML = "discount percentage cannot be greater than 75%.";
+            return false;
+        }
+
+        if (isNaN(maxAmount) || maxAmount < 0 ) {
+            discountspan.innerHTML = "Max Discount Amount should be a non-negative number.";
+            return false;
+        }
+
+        if (validFrom === '' || validTo === '') {
+            validfromspan.innerHTML = "Valid From and Valid To dates are required.";
+            return false;
+        }
+
+        const fromDate = new Date(validFrom);
+        const toDate = new Date(validTo);
+
+        if (fromDate >= toDate) {
+            validtospan.innerHTML = "Valid To date should be greater than Valid From date.";
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+<%-include("../partials/adminfooter")-%>

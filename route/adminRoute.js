@@ -3,7 +3,8 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controller/adminController");
 const orderController = require("../controller/orderController");
-const couponController=require("../controller/couponController")
+const couponController=require("../controller/couponController");
+const offerController=require("../controller/offerController")
 const middleware = require("../middleware/adminAuth");
 const multer = require("multer");
 const Product = require("../model/productSchema");
@@ -101,6 +102,12 @@ router.post("/createCoupon",middleware.islogin,couponController.createCoupon);
 router.get("/couponedit/:id",middleware.islogin,couponController.couponedit);
 router.post("/couponupdate/:id",middleware.islogin,couponController.couponupdate);
 router.get("/deactivateCoupon/:id",middleware.islogin,couponController.deactivateCoupon);
-router.get("/activateCoupon/:id",middleware.islogin,couponController.activateCoupon)
+router.get("/activateCoupon/:id",middleware.islogin,couponController.activateCoupon);
+
+
+
+
+router.get("/referraloffer",middleware.islogin,offerController.referraloffer);
+router.post("/referralOfferadd",middleware.islogin,offerController.referralOfferadd)
 
 module.exports = router;

@@ -8,7 +8,7 @@
           <h1>Order list</h1>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover" id="example">
+                        <table class="table table-hover" >
                             <thead>
                                 <tr>
                                     <th>#ID</th>
@@ -22,24 +22,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <% order.forEach(order => { %>
-                                        <% order.products.forEach(product => { %>
-                                    <td>#<%= order.ord %></td>
-                                    <td><b><%= order.userId.username %></b></td>
-                                    <td><%= order.userId.email %></td>
-                                    <td><%= product.quantity * product.productId.selling_price %></td>
-                                    <td><span class="badge rounded-pill alert-warning"></span><%= order.orderStatus %></td>
-                                    <td><span class="badge rounded-pill alert-warning"></span><%= product.productId.description %></td>
-                                    <td><%= order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
-                                    <td class="text-end">
-                                        <a href="/admin/order_details/<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
-                                    
-                                    </td>
-                                </tr>
-                                <% }); %>
-                                <% }); %>
-                            
+                                <% orders.forEach(order => { %>
+                                    <% order.products.forEach(product => { %>
+                                      <tr>
+                                        <td>#<%= order.ord %></td>
+                                        <td><b><%= order.userId.username %></b></td>
+                                        <td><%= order.userId.email %></td>
+                                        <td><%= product.quantity * product.productId.selling_price %></td>
+                                        <td><span class="badge rounded-pill alert-warning"></span><%= order.orderStatus %></td>
+                                        <td><span class="badge rounded-pill alert-warning"></span><%= product.productId.description %></td>
+                                        <td><%= order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                                        <td class="text-end">
+                                          <a href="/admin/order_details/<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                        </td>
+                                      </tr>
+                                    <% }); %>
+                                  <% }); %>
+                                  
                             </tbody>
                         </table>
                     </div> <!-- table-responsive //end -->

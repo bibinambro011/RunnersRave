@@ -60,7 +60,7 @@ const addtocart = async (req, res) => {
     const isAuthenticated = true;
     const products = await Product.find({ status: "unblocked" });
     // res.render("user/home", { isAuthenticated, products });
-    res.redirect("/userhome")
+    res.redirect("/shop")
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
@@ -163,7 +163,7 @@ const placeorder=async(req,res)=>{
     originaltotal=totalPrice
     const isAuthenticated = true;
     const Coupon=await coupon.find();
-    console.log('before placeorder coupons are==>',Coupon);
+   
   
 
     res.render("user/placeOrder", { isAuthenticated, cart,carttototal,Coupon,originaltotal });
@@ -214,9 +214,8 @@ const cartUpdate = async (req, res) => {
 const checkoutpage = async (req, res) => {
   const discountamount=req.query.discountAmount;
   const couponcode=req.query.code
-  console.log("coupon code is===>",couponcode , "and its data type is ===>",typeof couponcode);
-  
-  console.log("the discount amount is===>",discountamount);
+ 
+
 
     if (req.session.user) {
       const userId = req.session.user[0]._id;
@@ -236,7 +235,7 @@ const checkoutpage = async (req, res) => {
         }
       const subtotal=totalPrice-discountamount
       const userData = await addressSchema.find({ userId: userId });
-  console.log(cart)
+ 
       let isAuthenticated = true;
       res.render("user/checkout", {
         isAuthenticated,

@@ -1,4 +1,7 @@
-<%-include("../partials/userheader")-%>
+
+<div id="headdiv">
+    <%-include("../partials/userheader")-%>
+</div>
 
 <!DOCTYPE HTML>
 <html lang="en">
@@ -30,7 +33,7 @@
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Order detail</h2>
-                    <p>Details for Order ID: 3453012</p>
+                  
                 </div>
             </div>
             <div class="card">
@@ -198,18 +201,29 @@
                             <div class="box shadow-sm bg-light">
                                 <h6 class="mb-15">Payment info</h6>
                                 <p>
-                                    <img src="/adminassets/assets/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 4768 <br>
-                                    Business name: Grand Market LLC <br>
-                                    Phone: +1 (800) 555-154-52
+                                    <% if ( order.paymentType === 'online payment') { %>
+                                        <img src="/adminassets/assets/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 4768 <br>
+                                        Business name: Grand Market LLC <br>
+                                        <p>payment type :  <%= order.paymentMethod %> </p>
+                                        <p>paymentStatus : <%= order.paymentStatus %></p>
+                                        
+                                    <% } else { %>
+                                        <p>payment type :  <%= order.paymentMethod %> </p>
+                                      <p>paymentStatus : <%= order.paymentStatus %></p> 
+                                      <p>orderStatus : <%= order.orderStatus %></p>
+                                    <% } %>
                                 </p>
                             </div>
-                            <div class="h-25 pt-4">
+                        </div>
+                        
+                        
+                            <!-- <div class="h-25 pt-4">
                                 <div class="mb-3">
                                     <label>Notes</label>
                                     <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
                                 </div>
                                 <button class="btn btn-primary">Save note</button>
-                            </div>
+                            </div> -->
                         </div> <!-- col// -->
                     </div>
                 </div> <!-- card-body end// -->
@@ -262,7 +276,15 @@ console.log('Please select a valid status.');
 
 </script>
 <script>
+    let div=document.getElementById("headdiv");
+   
+    let invoice=document.getElementById("invoice");
     document.getElementById("invoice").addEventListener("click",()=>{
+        div.style.display="none"
+       
+        invoice.style.display="none"
+
+
     window.print()
 })
 </script>

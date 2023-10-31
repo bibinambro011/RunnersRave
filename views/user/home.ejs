@@ -124,67 +124,76 @@
                 <!--End nav-tabs-->
                 <div class="container">
                     <div class="tab-content wow fadeIn animated" id="myTabContent">
-                      <% products.forEach((product, index) => { %> 
-                        <% if (index % 3 === 0) { %>
-                          <div class="row product-grid-3">
-                        <% } %>
-                        <div class="col-lg-4 col-md-4 col-12 col-sm-6">
-                          <div class="product-cart-wrap mb-30">
-                            <div class="product-img-action-wrap img-fluid mx-auto" style="width: 350px; height: 310px;">
-                              <div class="product-img product-img-zoom">
-                                <a href="/product/<%= product._id %>">
-                                  <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded"/>
-                                </a>
+                        <div class="row product-grid-4">
+                            <% let count = 0; %>
+                            <% products.forEach(function(product) { %>
+                           
+                               
+                            
+                              <div class="col-lg-4 col-md-4 col-12 col-sm-6">
+                                <div class="product-cart-wrap mb-30">
+                                  <div class="product-img-action-wrap img-fluid" style="width: 350px; height: 310px;">
+                                    <div class="product-img product-img-zoom">
+                                      <a href="/product/<%= product._id %>">
+                                        <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="img-fluid rounded"/>
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class="product-content-wrap">
+                                    <div class="product-category">
+                                      <!-- <a href="#"><%= product.category %></a> -->
+                                    </div>
+                                    <h2>
+                                      <a href="shop-product-right.html"><%= product.name %></a>
+                                    </h2>
+                                    <div class="rating-result" title="90%">
+                                      <span>
+                                        <span>90%</span>
+                                      </span>
+                                    </div>
+                                    <div class="product-price">
+                                      <span>Rs<%= product.selling_price %></span>
+                                      <span class="old-price">Rs<%= product.price %></span>
+                                      <% if (product.stock < 1) { %>
+                                        <span class="old-price text-danger">Out of stock</span>
+                                      <% } %>
+                                    </div>
+                                    <div class="product-action-1 show">
+                                      <% if (product.stock >= 1) { %>
+                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="/addtocart/<%= product._id %>">
+                                          <i class="fi-rs-shopping-bag-add"></i>
+                                        </a>
+                                      <% } else { %>
+                                        <!-- Hide the button when stock is less than 1 -->
+                                      <% } %>
+                                      <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addtowishlist/<%= product._id %>">
+                                        <i class="fi-rs-heart"></i>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                            <div class="product-content-wrap">
-                              <div class="product-category">
-                                <!-- <a href="#"><%= product.category %></a> -->
+                              <% if (++count % 3 === 0) { %>
                               </div>
-                              <h2>
-                                <a href="shop-product-right.html"><%= product.name %></a>
-                              </h2>
-                              <div class="rating-result" title="90%">
-                                <span>
-                                  <span>90%</span>
-                                </span>
-                              </div>
-                              <div class="product-price">
-                                <span>Rs<%= product.selling_price %></span>
-                                <span class="old-price">Rs<%= product.price %></span>
-                                <% if (product.stock < 1) { %>
-                                  <span class="old-price text-danger">Out of stock</span>
-                                <% } %>
-                              </div>
-                              <div class="product-action-1 show">
-                                <% if (product.stock >= 1) { %>
-                                  <a aria-label="Add To Cart" class="action-btn hover-up" href="/addtocart/<%= product._id %>">
-                                    <i class="fi-rs-shopping-bag-add"></i>
-                                  </a>
-                                <% } else { %>
-                                  <!-- Hide the button when stock is less than 1 -->
-                                <% } %>
-                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addtowishlist/<%= product._id %>" >
-                                  <i class="fi-rs-heart"></i>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <% if (index % 3 === 2 || index === products.length - 1) { %>
-                          </div>
-                        <% } %> 
-                      <% }); %>
-                    </div>
-                    <div class="pagination-container">
-                        <ul class="pagination">
-                          <% for (let i = 1; i <= totalPages; i++) { %>
-                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-                              <a class="page-link" href="?page=<%= i %>" ><%= i %></a>
-                            </li>
+                              <% if (count < products.length) { %>
+                                  <div class="row product-grid-4">
+                              <% } %>
                           <% } %>
-                        </ul>
-                      </div>
+                      <% }) %>
+                          </div>
+                        
+                          <!-- Pagination -->
+                          <div class="pagination-container">
+                            <ul class="pagination">
+                                <% const totalPages = Math.ceil(products.length / 6); %>
+                                <!-- Page links -->
+                                <% for (let i = 1; i <= totalPages; i++) { %>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" data-page="<%= i %>"><%= i %></a>
+                                    </li>
+                                <% } %>
+                            </ul>
+                        </div>
                  
                 </div>
                         
@@ -216,21 +225,31 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-6">
                         <div class="banner-img wow fadeIn animated">
-                            <img src="/imgs/banner/banner-1.png" alt="">
+                            <img src="/imgs/banner/woman3.jpg" alt="">
                             <div class="banner-text">
-                                <span>Smart Offer</span>
-                                <h4>Save 20% on <br>Woman Bag</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                                <span style="color: white;">Smart Offer</span>
+                                <h4 style="color: white;">Save 20% on <br>Woman shoes</h4>
+                                <a href="/shop" style="color: white;">Shop Now <i class="fi-rs-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="banner-img wow fadeIn animated">
-                            <img src="/imgs/banner/banner-2.png" alt="">
+                            <img src="/imgs/banner/woman4.jpg" alt="">
                             <div class="banner-text">
-                                <span>Sale off</span>
-                                <h4>Great Summer <br>Collection</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                                <span style="color: white;">Sale off</span>
+                                <h4 style="color: white;">Great Track <br>Collection</h4>
+                                <a href="/shop" style="color: white;">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="banner-img wow fadeIn animated">
+                            <img src="/imgs/banner/men2.jpeg" alt="">
+                            <div class="banner-text">
+                                <span style="color: white;">Sale off</span>
+                                <h4 style="color: white;">Great Retro-9 <br>shoes</h4>
+                                <a href="/shop" style="color: white;">Shop Now <i class="fi-rs-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -261,7 +280,7 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6 mb-sm-5 mb-md-0">
                         <div class="banner-img wow fadeIn animated mb-md-4 mb-lg-0">
-                            <img src="/imgs/banner/banner-10.jpg" alt="">
+                            <img src="/imgs/banner/woman1.png" alt="">
                             <div class="banner-text">
                                 <span>Shoes Zone</span>
                                 <h4>Save 17% on <br>All Items</h4>
@@ -274,43 +293,43 @@
                         <div class="product-list-small wow fadeIn animated">
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-3.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1695444899543.jpeg" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Fish Print Patched T-shirt</a>
+                                        <a href="shop-product-right.html">retro-9 shoes</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 11999 </span>
+                                        <span class="old-price">RS :8999</span>
                                     </div>
                                 </div>
                             </article>
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-4.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1695444881418.webp" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Vintage Floral Print Dress</a>
+                                        <a href="shop-product-right.html">retro 9 running shoes</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 7999 </span>
+                                        <span class="old-price">Rs : 9999</span>
                                     </div>
                                 </div>
                             </article>
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-5.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1695444850105.webp" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Multi-color Stripe Circle Print T-Shirt</a>
+                                        <a href="shop-product-right.html">Multi-color Stripe shoes</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 8000 </span>
+                                        <span class="old-price">Rs :10000</span>
                                     </div>
                                 </div>
                             </article>
@@ -321,43 +340,43 @@
                         <div class="product-list-small wow fadeIn animated">
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-6.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1695542167980.webp" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Geometric Printed Long Sleeve Blosue</a>
+                                        <a href="shop-product-right.html">Geometric Printed angle boots</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 13000 </span>
+                                        <span class="old-price">Rs : 15999</span>
                                     </div>
                                 </div>
                             </article>
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-7.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1695566774198.webp" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Print Patchwork Maxi Dress</a>
+                                        <a href="shop-product-right.html">Print Patchwork Maxi spikes</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 11000 </span>
+                                        <span class="old-price">Rs : 13999</span>
                                     </div>
                                 </div>
                             </article>
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-8.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1695542127930.jpeg" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Daisy Floral Print Straps Jumpsuit</a>
+                                        <a href="shop-product-right.html">Daisy Floral Print soccer boots</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 11500 </span>
+                                        <span class="old-price">Rs : 9500</span>
                                     </div>
                                 </div>
                             </article>
@@ -368,43 +387,43 @@
                         <div class="product-list-small wow fadeIn animated">
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-9.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1696948731086.jpeg" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Floral Print Casual Cotton Dress</a>
+                                        <a href="shop-product-right.html">Floral Print running spikes</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 11999 </span>
+                                        <span class="old-price">Rs : 9999</span>
                                     </div>
                                 </div>
                             </article>
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-1.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1697040890583.webp" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Ruffled Solid Long Sleeve Blouse</a>
+                                        <a href="shop-product-right.html">Ruffled Solid running spikes</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 12999 </span>
+                                        <span class="old-price">Rs : 14999</span>
                                     </div>
                                 </div>
                             </article>
                             <article class="row align-items-center">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="shop-product-right.html"><img src="/imgs/shop/thumbnail-2.jpg" alt=""></a>
+                                    <a href="shop-product-right.html"><img src="/uploads/1697554351755.webp" alt=""></a>
                                 </figure>
                                 <div class="col-md-8 mb-0">
                                     <h4 class="title-small">
-                                        <a href="shop-product-right.html">Multi-color Print V-neck T-Shirt</a>
+                                        <a href="shop-product-right.html">Darreb black retro9 boots</a>
                                     </h4>
                                     <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
+                                        <span>Rs : 12999 </span>
+                                        <span class="old-price">Rs : 11900</span>
                                     </div>
                                 </div>
                             </article>
@@ -416,29 +435,7 @@
     </main>
     <footer class="main">
         <section class="newsletter p-30 text-white wow fadeIn animated">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-7 mb-md-3 mb-lg-0">
-                        <div class="row align-items-center">
-                            <div class="col flex-horizontal-center">
-                                <img class="icon-email" src="/imgs/theme/icons/icon-email.svg" alt="">
-                                <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
-                            </div>
-                            <div class="col my-4 my-md-0 des">
-                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <!-- Subscribe Form -->
-                        <form class="form-subcriber d-flex wow fadeIn animated">
-                            <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
-                            <button class="btn bg-dark text-white" type="submit">Subscribe</button>
-                        </form>
-                        <!-- End Subscribe Form -->
-                    </div>
-                </div>
-            </div>
+           
         </section>
         <section class="section-padding footer-mid">
             <div class="container pt-15 pb-20">
@@ -551,6 +548,40 @@
     <!-- Template  JS -->
     <script src="/js/main.js"></script>
     <script src="/js/shop.js"></script>
+    <script>
+         $(document).ready(function() {
+        const products = $('.product-cart-wrap');
+        const itemsPerPage = 6;
+        let currentPage = 1;
+        const totalPages = Math.ceil(products.length / itemsPerPage);
+
+        // Show the first page, hide the rest
+        showPage(currentPage);
+
+        // Handle pagination clicks
+        $('.page-link').on('click', function(e) {
+            e.preventDefault();
+            const targetPage = parseInt($(this).data('page'));
+            if (targetPage === currentPage) return; // Clicked on the current page
+
+            // Show the clicked page
+            showPage(targetPage);
+        });
+
+        function showPage(page) {
+            // Calculate the range of products to display for the given page
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, products.length);
+
+            // Show/hide products based on the page
+            products.hide();
+            products.slice(startIndex, endIndex).show();
+
+            // Update the current page
+            currentPage = page;
+        }
+    });
+    </script>
 
    
 </body>

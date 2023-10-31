@@ -289,11 +289,11 @@
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
-                <div class="breadcrumb">
+                <!-- <div class="breadcrumb">
                     <a href="index.html" rel="nofollow">Home</a>
                     <span></span> Fashion
                     <span></span> Abstract Print Patchwork Dress
-                </div>
+                </div> -->
             </div>
         </div>
         <section class="mt-50 mb-50">
@@ -432,7 +432,7 @@
                                                   <span style="color: red;">Out of stock</span>
                                                   <% } %>
                                                   
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/wishlist"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addtowishlist/<%= product._id %>"><i class="fi-rs-heart"></i></a>
                                                 <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                             </div>
                                         </div>
@@ -572,9 +572,9 @@
                                             <li class="social-linkedin"><a href="#"><img src="/imgs/theme/icons/icon-pinterest.svg" alt=""></a></li>
                                         </ul>
                                     </div>
-                                    <h3 class="section-title style-1 mb-30 mt-30">Reviews (3)</h3>
+                                    <!-- <h3 class="section-title style-1 mb-30 mt-30">Reviews (3)</h3> -->
                                     <!--Comments-->
-                                    <div class="comments-area style-2">
+                                    <!-- <div class="comments-area style-2">
                                         <div class="row">
                                             <div class="col-lg-8">
                                                 <h4 class="mb-30">Customer questions & answers</h4>
@@ -600,9 +600,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                     <!--single-comment -->
-                                                    <div class="single-comment justify-content-between d-flex">
+                                                    <!-- <div class="single-comment justify-content-between d-flex">
                                                         <div class="user justify-content-between d-flex">
                                                             <div class="thumb text-center">
                                                                 <img src="/imgs/page/avatar-7.jpg" alt="">
@@ -623,9 +623,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                     <!--single-comment -->
-                                                    <div class="single-comment justify-content-between d-flex">
+                                                    <!-- <div class="single-comment justify-content-between d-flex">
                                                         <div class="user justify-content-between d-flex">
                                                             <div class="thumb text-center">
                                                                 <img src="/imgs/page/avatar-8.jpg" alt="">
@@ -646,9 +646,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                     <!--single-comment -->
-                                                </div>
+                                                <!-- </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <h4 class="mb-30">Customer reviews</h4>
@@ -682,9 +682,9 @@
                                                 <a href="#" class="font-xs text-muted">How are ratings calculated?</a>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!--comment form-->
-                                    <div class="comment-form">
+                                    <!-- <div class="comment-form">
                                         <h4 class="mb-15">Add a review</h4>
                                         <div class="product-rate d-inline-block mb-30">
                                         </div>
@@ -720,7 +720,7 @@
                                                 </form>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="row mt-60">
@@ -740,7 +740,7 @@
                                                     </div>
                                                     <div class="product-action-1">
                                                         <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
-                                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
+                                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="/addtowishlist/<%= product._id %>" tabindex="0"><i class="fi-rs-heart"></i></a>
                                                         <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
                                                     </div>
                                                     <div class="product-badges product-badges-position product-badges-mrg">
@@ -804,7 +804,7 @@
                                                     <div class="product-action-1">
                                                         <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal
 "><i class="fi-rs-search"></i></a>
-                                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
+                                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="/addtowishlist/<%= product._id %>" tabindex="0"><i class="fi-rs-heart"></i></a>
                                                         <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
                                                     </div>
                                                     <div class="product-badges product-badges-position product-badges-mrg">
@@ -836,7 +836,7 @@
                                                     <div class="product-action-1">
                                                         <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal
 "><i class="fi-rs-search"></i></a>
-                                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
+                                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="/addtowishlist/<%= product._id %>" tabindex="0"><i class="fi-rs-heart"></i></a>
                                                         <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
                                                     </div>
                                                     <div class="product-badges product-badges-position product-badges-mrg">
@@ -860,10 +860,10 @@
                                 </div>
                             </div>
                             <div class="banner-img banner-big wow fadeIn f-none animated mt-50">
-                                <img class="border-radius-10" src="/imgs/banner/banner-4.png" alt="">
+                                <img class="border-radius-10" src="/imgs/banner/sportsbanner1.jpg" alt="">
                                 <div class="banner-text">
                                     <h4 class="mb-15 mt-40">Repair Services</h4>
-                                    <h2 class="fw-600 mb-20">We're an Apple <br>Authorised Service Provider</h2>
+                                    <h2 class="fw-600 mb-20">We're an Adidas <br>Authorised Service Provider</h2>
                                 </div>
                             </div>
                         </div>

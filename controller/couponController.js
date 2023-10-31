@@ -17,7 +17,7 @@ const createCoupon=async(req,res)=>{
     validFor:validto,
     createdOn:validfrom,
  });
- console.log('Coupon Data is : ',couponData);
+
  const addedCoupon = await couponData.save();
  res.redirect("/admin/AddCoupons")
 }
@@ -105,9 +105,9 @@ const applyCoupon = async (req, res) => {
 
 const couponedit=async(req,res)=>{
   let data=req.params.id;
-  console.log("coupon id is==>",data)
+ 
   const details=await Coupon.findById(data);
-  console.log(details);
+ 
   res.render("admin/couponupdate",{details})
 }
 

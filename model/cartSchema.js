@@ -35,17 +35,9 @@ const cartModel = new mongoose.Schema({
       },
     },
   ],
-  // totalSum:{
-  //   type:Number,
-  //   default:0
-  // }
+  
 });
 
-// cartModel.pre("save", function (next) {
-//     this.totalSum = this.products.reduce((sum, product) => {
-//       return sum + product.total;
-//     }, 0);
-//     next();
-//   });
+
 
 module.exports = mongoose.model("Cart", cartModel);

@@ -11,7 +11,7 @@ let orderId = "";
 const orderdetails = async (req, res) => {
   const userId=req.session.user[0]._id
   const { address, city, pincode, mobil, paymentype,amount,couponcode } = req.body;
-  console.log( "coupon code is===> ",couponcode);
+ 
   const appliedCoupon = await Coupon.findOne({ couponCode: couponcode });
   if(appliedCoupon){
     appliedCoupon.redeemedusers.push(userId);
@@ -107,13 +107,13 @@ const orderdetails = async (req, res) => {
         });
       }
       else if(newOrder.paymentMethod=="walletpayment"){
-        console.log("inside wallet payment block");
+       
       
         let userdata=await User.findOne({_id:req.session.user[0]._id});
-        console.log("userdata details are==>",userdata)
+       
        
         if(userdata.walletbalance<newOrder.totalAmount){
-          console.log("inside lowwalletbalance");
+        
        
           return res.json({
             status: "walletpayment",
@@ -122,16 +122,16 @@ const orderdetails = async (req, res) => {
           });
         }else{
           let userdata=await User.findOne({_id:req.session.user[0]._id});
-         console.log("userdata ius==>",userdata)
+        
          let balance=userdata.walletbalance-newOrder.totalAmount;
          let updatedbalance=Number(balance);
-         console.log("wallet balance is==>",updatedbalance)
+      
           let id=userdata._id
           let updatedata={
             walletbalance:updatedbalance
           };
           let updateddata = await User.findByIdAndUpdate(id, updatedata, { new: true });
-          console.log("updated data is ===>", updateddata);
+      
           if (cartDetails) {
             cartDetails.products = [];
             await cartDetails.save();
@@ -148,7 +148,7 @@ const orderdetails = async (req, res) => {
         userHelper
           .generateRazorPay(newOrder._id, newOrder.totalAmount)
           .then((response) => {
-            console.log("razorpay response is===>", response);
+          
             return res.json({ status: "RAZORPAY", response: response });
           });
         
@@ -167,19 +167,31 @@ const orderdetails = async (req, res) => {
   }
 };
 
+// Backend code to fetch and send orders
 const ordernfo = async (req, res) => {
-  const order = await Order.find({})
-    .populate({
-      path: "products.productId", // Populate the 'productId' field
-      model: "productCollection", // Replace with the correct model name for products
-    })
-    .populate({
-      path: "userId", // Populate the 'userId' field
-      model: "runnerslogins", // Replace with the correct model name for users
-    }).sort({ date: 1 });
+  try {
+    const orders = await Order.find({})
+      .populate({
+        path: "products.productId",
+        model: "productCollection",
+      })
+      .populate({
+        path: "userId",
+        model: "runnerslogins",
+      })
+      .sort({ date: -1 });
 
-  res.render("admin/page-orders", { order });
+    res.render("admin/page-orders", { orders: orders });
+  } catch (error) {
+    // Handle any errors here
+    console.error("Error fetching orders:", error);
+    res.status(500).send("Internal Server Error");
+  }
 };
+
+module.exports = ordernfo;
+
+
 const cancelOrder = async (req, res) => {
   const orderId = req.params.orderId;
   const order = await Order.findById(orderId).populate({
@@ -219,7 +231,7 @@ const cancelOrder = async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    console.log("before updation");
+   
     res.redirect("/useraccount");
   } catch (error) {
     console.error("Error cancelling order:", error);
@@ -262,7 +274,7 @@ const updateorderstatus = async (req, res) => {
   const updatedData = req.body;
 
   const id = req.params.orderId;
-  console.log(id);
+ 
 
   const updatedOrder = await Order.findByIdAndUpdate(
     id,
@@ -294,7 +306,7 @@ const updateorderstatus = async (req, res) => {
 };
 const showUserOrder = async (req, res) => {
   const orderId = req.params.id;
-  console.log(orderId);
+ 
   const order = await Order.findById(orderId).populate({
     path: "products.productId", // Populate the 'productId' field
     model: "productCollection", // Replace with the correct model name for products
@@ -322,14 +334,14 @@ const showUserOrder = async (req, res) => {
 const verifyOnlinePayment = async (req, res) => {
   let data = req.body;
   let cart = await Cart.findOne({ userId: req.session.user[0]._id });
-  console.log("cart details are===>", cart);
+ 
   cart.products = [];
   await cart.save();
   let receiptId = data.order.receipt;
   userHelper
     .verifyOnlinePayment(data)
     .then(() => {
-      console.log("this is a payment success block");
+    
 
       let paymentSuccess = true;
       userHelper.updatePaymentStatus(receiptId, paymentSuccess).then(() => {
@@ -337,10 +349,9 @@ const verifyOnlinePayment = async (req, res) => {
       });
     })
     .catch((err) => {
-      console.log("this is a payment failure block");
-      console.log("Rejected");
+      
       if (err) {
-        console.log(err.message);
+      
 
         let paymentSuccess = false;
         userHelper.updatePaymentStatus(receiptId, paymentSuccess);
@@ -349,8 +360,8 @@ const verifyOnlinePayment = async (req, res) => {
 };
 
 const orderUpdatedStatusDetails = async (req, res) => {
-  console.log(req.body);
-  console.log(req.params.id);
+ 
+ 
 
   const updatedData = req.body;
 
@@ -362,7 +373,7 @@ let orderdetails=await Order.findOne({_id:req.params.id})
  
  
     walletbal=userdata[0].walletbalance+orderdetails.totalAmount;
-    console.log(walletbal)
+  
     let bal=Number(walletbal)
     data={
       walletbalance:bal
@@ -473,7 +484,7 @@ let updateddata=await Order.findByIdAndUpdate(req.params.id,data,{new:true})
 };
 const paymentFailureHandler = async (req, res) => {
   // let data=await Order.findOne({_id:orderId});
-  console.log("order details are==>", orderId);
+ 
   let data = await Order.findOneAndUpdate(
     { _id: orderId }, // Query to find the document
     { 
@@ -492,7 +503,7 @@ const paymentFailureHandler = async (req, res) => {
       const existingProduct = await Product.findOne({ _id: product.productId });
 
       if (existingProduct) {
-        console.log("existing product",existingProduct)
+       
         // Increment the product's stock by the quantity ordered
         existingProduct.stock += product.quantity;
 

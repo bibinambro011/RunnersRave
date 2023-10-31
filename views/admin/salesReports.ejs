@@ -48,7 +48,7 @@
                 </div>
               </div> -->
         
-              <div class="col-md-1 col-4 ml-auto" id="dail">
+              <div class="col-md-1 col-4 ml-auto me-2" id="dail">
                 <button class="btn btn-secondary" id="daily">daily</button>
               </div>
         
@@ -59,7 +59,7 @@
               <div class="col-md-1 col-4 ms-5">
                 <button class="btn btn-secondary" id="yearly">Yearly</button>
               </div>
-              <div class="col-md-1 col-4 ms-3">
+              <div class="col-md-1 col-4 ">
                 <button class="btn btn-secondary ms-5 ps-5 pe-5 " data-toggle="tooltip" title="download invoice" data-placement="top" id="invoice" > invoice</button>
               </div>
             </div>
@@ -116,7 +116,7 @@
                                         <span class="badge badge-pill badge-soft-success"><%= data.paymentStatus %></span>
                                       <% } else if (data.paymentStatus === 'pending') { %>
                                         <span class="badge badge-pill badge-soft-warning"><%= data.paymentStatus %></span>
-                                      <% } else if (data.paymentStatus === 'payment failed') { %>
+                                      <% } else if (data.paymentStatus === 'failed') { %>
                                         <span class="badge badge-pill badge-soft-danger"><%= data.paymentStatus %></span>
                                       <% } else { %>
                                         <!-- Handle other cases if needed -->
@@ -138,18 +138,7 @@
         </div> <!-- table-responsive end// -->
     </div>
 </div>
-<!-- <div class="pagination-area mt-30 mb-50">
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-start">
-            <li class="page-item active"><a class="page-link" href="#">01</a></li>
-            <li class="page-item"><a class="page-link" href="#">02</a></li>
-            <li class="page-item"><a class="page-link" href="#">03</a></li>
-            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-            <li class="page-item"><a class="page-link" href="#">16</a></li>
-            <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-        </ul>
-    </nav>
-</div> -->
+
 </section> <!-- content-main end// -->
 
 <script>
@@ -193,8 +182,21 @@ async function getSalesReports(startDate, endDate) {
 
 //date range 
   async function getSalesReport() {
-  const startDate = document.getElementById("startDate").value;
-  const endDate = document.getElementById("endDate").value;
+    
+    const startDateInput = document.getElementById('startDate');
+  const endDateInput = document.getElementById('endDate');
+
+  const startDate = new Date(startDateInput.value);
+  const endDate = new Date(endDateInput.value);
+
+  if (startDateInput.value === '' || endDateInput.value === '') {
+    alert('Please select both a start and end date.');
+  } else if (startDate > endDate) {
+    alert('Start date should be before or equal to end date.');
+  } else {
+    // Dates are valid, you can submit the form or call getSalesReport() here
+    
+  
 
   const response = await fetch('/admin/generateSalesReport', {
     method: 'POST',
@@ -213,6 +215,7 @@ async function getSalesReports(startDate, endDate) {
   }
 }
 
+  }
 
 //daily 
 

@@ -15,7 +15,7 @@ const sessions = require("express-session");
 const { v4: uuidv4 } = require("uuid");
 
 const publicfolder = path.join(__dirname + "/assets");
-console.log(publicfolder);
+
 
 app.use(nocache());
 app.use(loger("dev"));
@@ -37,11 +37,11 @@ app.set("view engine", "ejs");
 
 app.use("/admin", adminroutes);
 app.use("/", userRoute);
-// app.get('*', (req, res) => {
-//   res.render("user/page-404")
-// });
+app.get('*', (req, res) => {
+  res.render("user/page-404")
+});
 
 db.connectToDatabase();
 app.listen(3000, () => {
-  console.log("connected succesfully");
+  
 });

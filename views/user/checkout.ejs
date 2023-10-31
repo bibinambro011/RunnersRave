@@ -367,7 +367,7 @@
         let subtotal=document.getElementById("subtotal").innerHTML;
         let discountAmount=document.getElementById("discountAmount").innerHTML;
         let Couponcode=document.getElementById("code").innerHTML;
-        alert(Couponcode)
+       
        
         function sendSelectedAddress(address,city,pincode,mobile){
             let paymentType = document.querySelector('input[name="payment_option"]:checked').value;
@@ -404,7 +404,7 @@
             return
         }
           
-            console.log(data);
+           
             const apiUrl = '/orderdetails';
     
     fetch(apiUrl, {
@@ -420,7 +420,7 @@
     
    
     if(data.status==="COD"){
-        console.log("redirectUrl===>",data.redirectUrl)
+    
         window.location.href = data.redirectUrl;
     }else if(data.status=="RAZORPAY"){
        
@@ -496,10 +496,7 @@ razorpay.open();
                 },
                 body: JSON.stringify({ payment, order }),
             })
-            // .then((data)=>{
-            //   alert(data.redirectUrl,data.message)
-            //     window.location.href=data.redirectUrl
-            // })
+           
 
             
             const result = await response.json();

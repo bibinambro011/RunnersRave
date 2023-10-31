@@ -3,6 +3,7 @@ const addressSchema = require("../model/addresses");
 const User = require("../model/userSchema");
 const category = require("../model/categorySchema");
 const cartCollection = require("../model/cartSchema");
+const offerCollection=require("../model/referralOfferSchema")
 const bcrypt = require("bcrypt");
 const twilio = require("twilio");
 const { userexist } = require("../middleware/userAuth");
@@ -12,22 +13,13 @@ require("dotenv").config();
 
 const accountSid = process.env.accountSid;
 const authToken = process.env.authToken;
+const serviceSid=process.env.serviceSid;
 
 
 const client = twilio(accountSid, authToken);
 let generatedotp = "";
 
-function generateOtp() {
-  const length = 6;
-  const charset = "1234567890";
-  otp = "";
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    otp += charset[randomIndex];
-  }
-  generatedotp = otp;
-  return otp;
-}
+
 let data;
 
 const user_registration = async (req, res) => {
@@ -55,7 +47,7 @@ const user_registration = async (req, res) => {
     });
   }
 
-  let otp = generateOtp();
+
 
   try {
     // Hash the user's password
@@ -68,17 +60,18 @@ const user_registration = async (req, res) => {
       phone,
     });
 
-    await client.messages.create({
-      body: `Your OTP is: ${otp}`,
-      from: "(469) 557-2151", // Replace with your Twilio phone number
-      to: recipientPhoneNumber,
+    const message = await client.verify.v2.services(serviceSid)
+    .verifications
+    .create({
+      to: '+91' + phone,
+      channel: 'sms',
     });
 
     setTimeout(() => {
       generatedotp = null;
     }, 30000);
 
-    res.render("user/otp.ejs", { otp }); // Render the OTP page
+    res.render("user/otp.ejs", { otp:message }); // Render the OTP page
   } catch (error) {
     console.error("Error sending OTP:", error);
     res.render("user/login.ejs", {
@@ -97,16 +90,17 @@ const regenerateOtp = async (req, res) => {
     });
   }
 
-  let otp = generateOtp();
+  // let otp = generateOtp();
 
   try {
-    await client.messages.create({
-      body: `Your OTP is: ${otp}`,
-      from: "(469) 557-2151", // Replace with your Twilio phone number
-      to: recipientPhoneNumber,
+    const message = await client.verify.v2.services(serviceSid)
+    .verifications
+    .create({
+      to: '+91' + data. phone,
+      channel: 'sms',
     });
 
-    res.render("user/otp.ejs", { otp }); // Render the OTP page
+    res.render("user/otp.ejs", { otp :message}); // Render the OTP page
   } catch (error) {
     console.error("Error sending OTP:", error);
     res.render("user/register.ejs", {
@@ -116,12 +110,17 @@ const regenerateOtp = async (req, res) => {
 };
 
 const verify_otp = async (req, res) => {
-  const receivedOtp = req.query.otp;
 
-  if (receivedOtp !== generatedotp) {
-    return res.render("user/otp.ejs", { errordata: "Invalid OTP" });
-  } else {
-    try {
+
+  const otp = req.query.otp;
+    const verifyOTP = await client.verify.v2
+      .services(serviceSid)
+      .verificationChecks.create({
+        to: `+91${data.phone}`,
+        code: otp,
+      })
+    if (verifyOTP.valid) {
+      isOtpVerified = true;
       const hashedPassword = await bcrypt.hash(data.password, 10); // Hash the password
 
       const existingUser = await User.findOne({ email: data.email });
@@ -145,21 +144,27 @@ const verify_otp = async (req, res) => {
      
 
       if (data.referalid) {
+        let referraldata = await offerCollection.find().sort({ _id: -1 }).limit(1);
+       
+        let refOffer=referraldata[0].referraloffer;
+        let referredOffer=referraldata[0].referredoffer
+        
     
         let users = await User.find({ referralId: data.referalid });
        
         if (users.length > 0) {
           let user = users[0];
           let balance = user.walletbalance;
-          let amount = balance + 50;
+          let amount = balance + referredOffer;
        
 
           await User.updateOne({ referralId: data.referalid }, {
             $set: { walletbalance: amount } // Update operation using $set
           });
+          newuser.walletbalance = refOffer;
+          await newuser.save();
         }
-        newuser.walletbalance = 50;
-        await newuser.save();
+       
       }
      
 
@@ -167,12 +172,15 @@ const verify_otp = async (req, res) => {
 
       const isAuthenticated = true;
       res.redirect("/login");
-    } catch (error) {
-      res.status(500).send("Internal Server Error");
+    } else {
+      isOtpVerified = false;
+      return res.render("user/otp.ejs", { errordata: "Invalid OTP" });
     }
-  }
-};
-
+   
+    
+  
+  } 
+    
 const loginpage = async (req, res) => {
   res.render("user/login.ejs");
 };
@@ -241,9 +249,13 @@ const userlogin = async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error);
     const isAuthenticated = false;
-    return res.status(500).send("Internal Server Error");
+    return res.render("user/login.ejs", {
+      errordata: "Invalid credentials please try again",
+      isAuthenticated,
+    });
   }
 };
+
 const userlogout = async (req, res) => {
   res.redirect("/login");
 };
@@ -276,8 +288,8 @@ const userhome = async (req, res) => {
       const isAuthenticated = true;
       const skip = (page - 1) * ITEM_PER_PAGE; // Calculate the number of items to skip
       const products = await Product.find({ status: "unblocked" })
-        .skip(skip)
-        .limit(ITEM_PER_PAGE);
+        // .skip(skip)
+        // .limit(ITEM_PER_PAGE);
 
       // Count total products for calculating total pages
       const totalProductsCount = await Product.countDocuments({
@@ -295,8 +307,8 @@ const userhome = async (req, res) => {
       const isAuthenticated = false;
       const skip = (page - 1) * ITEM_PER_PAGE; // Calculate the number of items to skip
       const products = await Product.find({ status: "unblocked" })
-        .skip(skip)
-        .limit(ITEM_PER_PAGE);
+        // .skip(skip)
+        // .limit(ITEM_PER_PAGE);
 
       // Count total products for calculating total pages
       const totalProductsCount = await Product.countDocuments({
@@ -327,8 +339,8 @@ const shop = async (req, res) => {
 
     const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
     const products = await Product.find({ status: "unblocked" })
-      .skip(skip)
-      .limit(ITEMS_PER_PAGE);
+      // .skip(skip)
+      // .limit(ITEMS_PER_PAGE);
 
     // Count total products for calculating total pages
     const totalProductsCount = await Product.countDocuments({
@@ -362,12 +374,12 @@ const productCategory = async (req, res) => {
     let products;
     if (req.session.user) {
       products = await Product.find({ category: id })
-        .skip(skip)
-        .limit(ITEMS_PER_PAGE);
+        // .skip(skip)
+        // .limit(ITEMS_PER_PAGE);
     } else {
       products = await Product.find({ category: id, status: "unblocked" })
-        .skip(skip)
-        .limit(ITEMS_PER_PAGE);
+        // .skip(skip)
+        // .limit(ITEMS_PER_PAGE);
     }
 
     // Count total products for calculating total pages
@@ -398,8 +410,8 @@ const productBrand = async (req, res) => {
     const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
 
     const products = await Product.find({ brand: brand })
-      .skip(skip)
-      .limit(ITEMS_PER_PAGE);
+      // .skip(skip)
+      // .limit(ITEMS_PER_PAGE);
 
     // Count total products for calculating total pages
     const totalProductsCount = await Product.countDocuments({ brand: brand });
@@ -427,8 +439,8 @@ const priceLowToHigh = async (req, res) => {
 
     const products = await Product.find()
       .sort({ selling_price: 1 }) // Sort by price in ascending order (low to high)
-      .skip(skip)
-      .limit(ITEMS_PER_PAGE);
+      // .skip(skip)
+      // .limit(ITEMS_PER_PAGE);
 
     // Count total products for calculating total pages
     const totalProductsCount = await Product.countDocuments();
@@ -455,8 +467,8 @@ const priceHighToLow=async(req,res)=>{
 
     const products = await Product.find()
       .sort({ selling_price: -1 }) // Sort by price in ascending order (low to high)
-      .skip(skip)
-      .limit(ITEMS_PER_PAGE);
+      // .skip(skip)
+      // .limit(ITEMS_PER_PAGE);
 
     // Count total products for calculating total pages
     const totalProductsCount = await Product.countDocuments();
@@ -520,7 +532,7 @@ const addtowishlist = async (req, res) => {
         { $push: { wishlist: id } },
         { new: true }
       );
-      console.log(updatedUser);
+    
     }
 
     const isAuthenticated = true;
@@ -612,7 +624,7 @@ const fromwishlisttocart = async (req, res) => {
 
 
 const profileafteredit = async (req, res) => {
-  console.log(req.body);
+  
   const userId = req.session.user[0]._id;
   const { username, email, phone } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
@@ -649,8 +661,8 @@ const productsearch = async (req, res) => {
     const isAuthenticated = req.session.user ? true : false;
     const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
     const products = await Product.find({ name: { $regex: regex } })
-      .skip(skip)
-      .limit(ITEMS_PER_PAGE);
+      // .skip(skip)
+      // .limit(ITEMS_PER_PAGE);
 
     // Count total products for calculating total pages
     const totalProductsCount = await Product.countDocuments({
@@ -716,7 +728,7 @@ const deletewishlist = async (req, res) => {
 
       if (updatedUser) {
         // Successfully removed the product from the wishlist
-        console.log(`Product with ID ${id} removed from the wishlist.`);
+
         res.redirect('/show_wishlist'); // Redirect to the wishlist page or wherever you want to go after removal.
       } else {
         // Handle the case where the user or product ID is not found.
@@ -793,19 +805,19 @@ const user_address = async (req, res) => {
 
 const editaddress_id = async (req, res) => {
   const id = req.params.id;
-  console.log(typeof id);
+
   const d = id.trim();
-  console.log("id is ===>", d);
+
 
   const details = await addressSchema.find({ _id: d });
-  console.log(details);
+  
   const isAuthenticated = true;
 
   res.render("user/editaddress", { isAuthenticated, details });
 };
 const updatedAddress = async (req, res) => {
-  console.log("hello world");
-  console.log(req.body);
+
+ 
   const id = req.params.id;
   const {
     name,
@@ -818,7 +830,7 @@ const updatedAddress = async (req, res) => {
     alt_mobile,
     type,
   } = req.body;
-  console.log("type is ===>", type);
+
 
   try {
     const updateFields = {
@@ -884,7 +896,7 @@ module.exports = {
   addtowishlist,
   useraccount,
   productCategory,
-  // addtocart,
+  
   profileafteredit,
   passwordchange,
   shop,
@@ -902,22 +914,18 @@ module.exports = {
   showwishlist,
   deletewishlist,
   fromwishlisttocart,
-  // showcart,
-  // cartadd,
-  // fromcartToLogin,
-  // userInCart,
+  
   loginpage1,
-  //checkoutpage,
+  
   cartRedirection,
-  // cartproductdelete,
-  // gotoshopcart,
+  
   editaddress,
   addAddress,
   user_address,
   editaddress_id,
   updatedAddress,
   deleteaddress,
-  // addtocartfromshop,
+ 
   paymentsuccesfull,
   productBrand,
   changepasswordpage,

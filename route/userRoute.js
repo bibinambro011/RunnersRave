@@ -42,14 +42,13 @@ router.get("/show_wishlist", middleware.cartAuth, controller.showwishlist);
 router.get("/deletewishlist/:id",controller.deletewishlist)
 router.get("/show_cart", middleware.cartAuth, cartController.showcart);
 router.post("/cartUpdate", middleware.islogin, cartController.cartUpdate);
-// router.get("/fromcartToLogin",middleware.cartAuth,controller.fromcartToLogin);
-// router.get("/userInCart",middleware.cartAuth,controller.userInCart);
+
 router.get(
   "/cartproductdelete/:id",
   middleware.islogin,
   cartController.cartproductdelete
 );
-// router.get("/gotoshopcart",middleware.islogin,controller.gotoshopcart)
+
 router.get("/checkoutpage", middleware.islogin, cartController.checkoutpage);
 router.get("/editaddress", controller.editaddress);
 router.get("/editaddress/:id", middleware.islogin, controller.editaddress_id);

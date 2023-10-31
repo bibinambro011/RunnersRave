@@ -53,6 +53,21 @@
       text-decoration: none;
       padding: 5px 0;
     }
+    @media (max-width: 768px) {
+    .header-bottom {
+        padding: 10px; /* Adjust the padding as needed for mobile view */
+    }
+
+    .main-menu {
+        display: none; /* Hide the main menu for mobile view */
+    }
+
+    .header-action-right {
+        display: block; /* Display the header action icons for mobile view */
+    }
+    
+    /* Add CSS for making your header action icons, search bar, and other mobile-specific elements look good */
+}
   </style>
     
 </head>
@@ -103,9 +118,8 @@
                 </div>
             </div>
         </div> -->
-    <header class="header-area header-style-5">
-       
-        <div class="header-bottom sticky-bar sticky-white-bg" style="background-color: #dddbd3ea; padding: 40px;">
+        <header class="header-area header-style-5">
+        <div class="header-bottom sticky-bar sticky-white-bg" style="background-color: #dddbd3ea; padding: 10px;">
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1">
@@ -142,7 +156,7 @@
                     <div class="header-action-right">
                         <div >
                             <form action="/productsearch" method="post">
-                                <input type="text" name="search" placeholder="search your product" style=" width: 500px;">
+                                <input type="text" name="search" placeholder="search your product" class="form-control">
                                
                             </form>
                         </div>
@@ -187,7 +201,7 @@
                                 </a>
                                 <div class="menu-options">
                                   <a href="/coupontemplate">Coupons</a>
-                                  <a href="/wallet">Wallet</a>
+                                 
                                 </div>
                               </div>
                               

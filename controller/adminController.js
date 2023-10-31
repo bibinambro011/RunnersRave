@@ -55,6 +55,8 @@ let finalmonthlytotal=monthlyorders.forEach((product)=>{
   monthlytotal+=product.totalAmount;
 })
 
+
+
 let total=0;
 const totalRevenue=revenue.forEach((product)=>{
   total+=product.totalAmount
@@ -77,10 +79,7 @@ const orders = await Order.find();
   });
   
 
-  console.log("orderCountsByMonth==>",orderCountsByMonth)
-  console.log('october',orderCountsByMonth[2])
-  console.log('jan',orderCountsByMonth[0])
-  console.log('Data Array:',orderCountsByMonth);
+ 
 
 
   const data = await adminCollection.findOne({ email: req.body.email });
@@ -134,7 +133,7 @@ const monthlyorders = await Order.find({
 });
 
 
-console.log("monthly orders are===> ",monthlyorders)
+
 let monthlytotal=0;
 let finalmonthlytotal=monthlyorders.forEach((product)=>{
   monthlytotal+=product.totalAmount;
@@ -165,7 +164,7 @@ const orders = await Order.find();
 
   
   res.render("admin/dashboard.ejs",{totalRevenue:total,productlength,orederlength,categorieslength,orderCountsByMonth,monthlytotal});
-  console.log(orderCountsByMonth[0].count)
+  
 }
 
 exports.productlist = async (req, res) => {
@@ -178,7 +177,7 @@ exports.addproduct = async (req, res) => {
   res.render("admin/addproduct.ejs",{categorydata});
 };
 exports.productadd = async (req, res) => {
-  console.log("reached");
+
 
   try {
     const { name, description, price, selling_price, category, size, gender, brand, stock, status } = req.body;
@@ -220,7 +219,7 @@ exports.productadd = async (req, res) => {
       images: imageUrls
     });
 
-    console.log("category id is =>" + category);
+   
 
     await product.save();
 
@@ -321,7 +320,7 @@ exports.updateProduct = async (req, res) => {
 };
 
 exports.remove_image=async(req,res)=>{
-  console.log("body is===>",req.body);
+ 
   return
 }
 
@@ -334,7 +333,7 @@ exports.blockproduct = async (req, res) => {
 };
 exports.admindelete = async (req, res) => {
   const id = req.params.id;
-  console.log("id is ",id)
+ 
   await Product.findByIdAndUpdate(
     { _id: id },
     {
@@ -372,16 +371,16 @@ exports.usermanagement=async(req,res)=>{
 }
 exports.deleteUser = async (req, res) => {
   const id = req.params.id;
-  console.log(id)
+ 
 
   try {
     const found = await user.findByIdAndUpdate(id, { status: false });
 
     if (found) {
-      console.log("Product found and updated:", found);
+     
       return res.redirect("/admin/usermanagement");
     } else {
-      console.log("Product not found");
+    
       return res.status(404).send("Product not found");
     }
   } catch (error) {
@@ -391,7 +390,7 @@ exports.deleteUser = async (req, res) => {
 };
 exports.unblockUser=async(req,res)=>{
   const id = req.params.id;
-  console.log(id)
+
 
   try {
     const found = await user.findByIdAndUpdate(id, { status: true });
@@ -413,7 +412,7 @@ exports.categorymanagement=async(req,res)=>{
   res.render("admin/page-categories",{categorydata})
 }
 exports.categoryadd = async (req, res) => {
-  console.log("this is category data =>", req.body.name);
+ 
 
   const name = req.body.name.toUpperCase();
 
@@ -486,7 +485,7 @@ exports.SalesReport=async(req,res)=>{
   const data = await Order.find({
     orderStatus: { $in: ["payment Failed", "delivered", "Confirmed","Placed"] }
   })
-  console.log("confirmed orders are==>",data)
+
   res.render("admin/salesReports",{data})
 }
 exports.getSalesReports = async (req, res) => {
@@ -512,7 +511,7 @@ exports.sortedByDateredirect=async(req,res)=>{
   
   try {
     dataObject = JSON.parse(dataString);
-    console.log('Data parsed successfully:', dataObject);
+    
   } catch (error) {
     console.error('Error parsing data:', error);
   }

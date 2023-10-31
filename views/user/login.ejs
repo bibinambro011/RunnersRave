@@ -225,7 +225,24 @@
               <div class="padding_eight_all bg-white">
                 <div class="heading_s1">
                   <h3 class="mb-30">Login</h3>
-                  <p id="para"><%=locals.errordata ? errordata:''%></p>
+                 <!-- Add SweetAlert library and CSS to your HTML -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+<!-- Your existing HTML -->
+<!-- <p id="para" style="color: red;"><%= locals.errordata ? errordata : '' %></p> -->
+
+<% if (locals.errordata) { %>
+  <script>
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: '<%= locals.errordata %>',
+    });
+  </script>
+<% } %>
+
+
                  
                 </div>
               
@@ -238,11 +255,11 @@
   onsubmit="return validateform();"
 >
   <div class="form-group">
-    <input type="text" name="email" placeholder="Your Email"  value="niyas@gmail.com"/>
+    <input type="text" name="email" placeholder="Your Email"  />
     <span id="emailerror" style="color: red;"></span>
   </div>
   <div class="form-group">
-    <input type="password" name="password" placeholder="Password"  value="123456789"/>
+    <input type="password" name="password" placeholder="Password"  />
     <span id="passworderror" style="color: red;"></span>
   </div>
   <div class="login_footer form-group">
