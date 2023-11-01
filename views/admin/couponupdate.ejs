@@ -10,11 +10,11 @@
             <input type="text" placeholder="Type here" class="form-control" value="<%= details.couponDiscription %>" id="coupondescription" name="coupondescription" />
         </div>
         <div class="mb-4">
-            <label for="minAmount" class="form-label">Min Order Amount</label>
+            <label for="minAmount" class="form-label">Minimum Order Amount</label>
             <input type="text" placeholder="Type here" class="form-control" value="<%= details.minOrderAmount %>" id="minAmount" name="minorder" />
         </div>
         <div class="mb-4">
-            <label for="maxAmount" class="form-label">Max Discount Amount</label>
+            <label for="maxAmount" class="form-label">Maximum Discount Amount</label>
             <input type="text" placeholder="Type here" class="form-control" value="<%= details.discountPercentage %>" id="maxAmount" name="maxdiscount" />
         </div>
         <div class="mb-4">
@@ -30,4 +30,5 @@
         </div>
     </form>
 </div>
+
 <%-include("../partials/adminfooter")-%>
