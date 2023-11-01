@@ -10,7 +10,7 @@ const adminCollection = require("../model/adminSchema");
 const categories=require("../model/categorySchema");
 const Order=require("../model/orderSchema")
 
-const Excel=require("exceljs")
+const Excel = require("exceljs");
 
 const workbook = new Excel.Workbook();
 const worksheet = workbook.addWorksheet('Sales List');
