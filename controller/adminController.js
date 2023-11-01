@@ -82,10 +82,10 @@ exports.generatesalesreport=async(req,res)=>{
     bold: true,
     size: 13,
   };
-  const exportPath = path.resolve(__dirname, 'countries.xlsx');
+  const exportPath = path.resolve(__dirname, 'salesData.xlsx');
 
 await workbook.xlsx.writeFile(exportPath);
-res.download(exportPath,"countries.xlsx")
+res.download(exportPath,"salesData.xlsx")
 }
 exports.dashboard = async (req, res) => {
   const orderCountsByMonth = [];
