@@ -184,6 +184,96 @@ const verify_otp = async (req, res) => {
 const loginpage = async (req, res) => {
   res.render("user/login.ejs");
 };
+const forgotpassword=async(req,res)=>{
+  res.render("user/forgetpassword")
+};
+let existuser=''
+const forgetpasswordotp = async (req, res) => {
+  console.log(req.body);
+  const { email, phone } = req.body;
+
+  try {
+    const user = await User.find({
+      $and: [
+        { email: email },
+        { phone: phone }
+      ]
+    });
+    console.log("USER==>",user)
+    existuser=user;
+    // Do something with the 'user' variable here
+    console.log("existuser",existuser)
+
+    if(user){
+      const message = await client.verify.v2.services(serviceSid)
+      .verifications
+      .create({
+        to: '+91' + phone,
+        channel: 'sms',
+      });
+
+  res.render("user/forgetpasswordverifyotp")
+    }
+    else{
+      const error = encodeURIComponent("Invalid email or phone number");
+res.redirect(`/forgotpassword?error=${error}`);
+    }
+    // For example, return it as a response
+   
+  } catch (error) {
+    // Handle any errors that may occur during the database query
+    console.error(error);
+    const errors = encodeURIComponent("Invalid email or phone number");
+    res.redirect(`/forgotpassword?error=${errors}`)
+  }
+}
+
+const resetPassword = async (req, res) => {
+  const { otp, password, confirmPassword } = req.body;
+
+  // You should have the user data from the previous step
+  const data = existuser/* Get the user data from your previous step */;
+  console.log("data is==>",data)
+  const user = await User.findOne({
+    email: data[0].email,
+   
+  });
+console.log("user details are==>",user)
+  // Verify the OTP using Twilio
+  try {
+    const verificationCheck = await client.verify.v2.services(serviceSid)
+      .verificationChecks
+      .create({
+        to: '+91' + user.phone, // Use the phone number from the user data
+        code: otp,
+      });
+
+    if (verificationCheck.status === 'approved') {
+      // OTP is correct, and the user is verified
+      if (password === confirmPassword) {
+        // Passwords match, update the user's password
+        const hashedPassword = await bcrypt.hash(password, 10); // Hash the password with a salt factor of 10
+
+        user.password = hashedPassword; // Set the hashed password
+        await user.save(); // Save the changes to the user document
+        res.redirect("/login")
+      
+      } else {
+        res.status(400).json({ error: 'Passwords do not match' });
+      }
+    } else {
+      const errors = encodeURIComponent("otp doesnt match please try again" );
+      res.redirect(`/forgotpassword?error=${errors}`)
+    
+    }
+  } catch (error) {
+    // Handle any errors that may occur during OTP verification
+    console.error(error);
+    const errors = encodeURIComponent("something went wrong");
+    res.redirect(`/forgotpassword?error=${errors}`)
+  }
+};
+
 
 const registerpage = async (req, res) => {
   if (req.session.user) {
@@ -916,6 +1006,9 @@ module.exports = {
   fromwishlisttocart,
   
   loginpage1,
+  forgotpassword,
+  forgetpasswordotp,
+  resetPassword,
   
   cartRedirection,
   

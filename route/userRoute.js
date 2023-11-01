@@ -17,12 +17,20 @@ router.get("/", middleware.islogin, controller.userhome);
 router.get("/userhome",  controller.userhome);
 router.get("/signup", controller.registerpage);
 router.get("/login", middleware.userexist, controller.loginpage);
+
+router.get("/forgotpassword",controller.forgotpassword);
+router.post("/forgetpasswordotp",controller.forgetpasswordotp);
+router.post("/reset_password",controller.resetPassword)
+
+
+
 router.post("/login", middleware.userexist, controller.userlogin);
 router.get("/logout", middleware.islogout, controller.userlogout);
 router.post("/user_registration", controller.user_registration);
 router.get("/shop", controller.shop);
 router.get("/product/:id", controller.productpage);
 router.get("/placeorder", middleware.islogin, cartController.placeorder);
+
 
 router.post(
   "/addtocart/:id",
