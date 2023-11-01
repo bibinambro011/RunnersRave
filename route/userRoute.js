@@ -8,6 +8,9 @@ const walletController=require("../controller/walletController")
 const orderController = require("../controller/orderController");
 const nocache = require("nocache");
 
+
+
+
 router.use(nocache());
 
 router.get("/", middleware.islogin, controller.userhome);

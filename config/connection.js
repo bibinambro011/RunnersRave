@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-console.log("env =>", process.env.MongoURL);
+console.log("env =>", process.env. DB_URL);
 
 const dbOptions = {
   useNewUrlParser: true,
@@ -9,7 +9,7 @@ const dbOptions = {
 
 const connectToDatabase = () => {
   mongoose
-    .connect(process.env.MongoURL, {
+    .connect(process.env. DB_URL, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     })

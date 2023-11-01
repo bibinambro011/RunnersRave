@@ -10,14 +10,83 @@ const adminCollection = require("../model/adminSchema");
 const categories=require("../model/categorySchema");
 const Order=require("../model/orderSchema")
 
+const Excel=require("exceljs")
 
+const workbook = new Excel.Workbook();
+const worksheet = workbook.addWorksheet('Sales List');
 
 const upload=require("../helper/multerfile")
 
 exports.login = async (req, res) => {
   res.render("admin/login");
 };
+exports.generatesalesreport=async(req,res)=>{
+  const data=await Order.find({})  .populate({
+    path: "products.productId",
+    model: "productCollection",
+  })
+  .populate({
+    path: "userId",
+    model: "runnerslogins",
+  });
 
+  const salesReportColumns  = [
+    { key: "ord", header: "Order ID" },
+    { key: "username", header: "Customer Name" },
+    { key: "email", header: "Customer Email" },
+    { key: "name", header: "Product Details" },
+    { key: "address", header: "Customer Address" },
+    { key: "couponDiscount", header: "Discount" },
+    { key: "totalAmount", header: "Total Amount" },
+    { key: "date", header: "Order Date" },
+    { key: "orderStatus", header: "Order Status" },
+    { key: "paymentMethod", header: "Payment Method" },
+    { key: "paymentStatus", header: "Payment Status" },
+  
+    
+  ];
+  
+  data.forEach((order) => {
+    order.products.forEach((product) => {
+      
+      const salesData = {
+        ord: order.ord,
+        username: order.userId.username,
+        email: order.userId.email,
+        name: `${product.productId.name}, Price: ${product.price}, Quantity: ${product.quantity}`,
+        address: order.address.homeAddress,
+        couponDiscount: order.couponDiscount,
+        totalAmount: order.totalAmount,
+        date: order.date,
+        orderStatus: order.orderStatus,
+        paymentMethod: order.paymentMethod,
+        paymentStatus: order.paymentStatus,
+        
+      };
+      worksheet.addRow(salesData);
+    });
+  });
+  worksheet.columns = salesReportColumns;
+  data.forEach((datas) => {
+    worksheet.addRow(datas);
+
+  });
+  worksheet.columns.forEach((sheetColumn) => {
+    sheetColumn.font = {
+      size: 12,
+    };
+    sheetColumn.width = 30;
+  });
+
+  worksheet.getRow(1).font = {
+    bold: true,
+    size: 13,
+  };
+  const exportPath = path.resolve(__dirname, 'countries.xlsx');
+
+await workbook.xlsx.writeFile(exportPath);
+res.download(exportPath,"countries.xlsx")
+}
 exports.dashboard = async (req, res) => {
   const orderCountsByMonth = [];
   const order=await Order.find();

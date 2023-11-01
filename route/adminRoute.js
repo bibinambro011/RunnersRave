@@ -22,6 +22,7 @@ const upload = multer({ storage: storage });
 
 router.get("/", middleware.adminexist, controller.login);
 router.post("/login", controller.dashboard);
+router.get("/generatesalesreport",controller.generatesalesreport)
 router.get("/home", middleware.islogin, controller.homepage);
 router.get("/login", controller.loginpage);
 router.get("/productlist", middleware.islogin, controller.productlist);
