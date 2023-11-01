@@ -1,0 +1,84 @@
+<%- include("../partials/adminheader") %>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">ADD NEW REFERRAL OFFER</h2>
+        </div>
+       
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form action="/admin/referralOfferadd" method="post" onsubmit="return validateForm()">
+                        <div class="form-group">    
+                            <label for="product_name" class="form-label">referral offer amount</label>
+                            <input type="number" name="referraloffer" placeholder="Type here" class="form-control" id="referraloffer" />
+                            <span id="error-category" style="color: red;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="category_offer" class="form-label">referred Offer</label>
+                            <input type="number" name="referredoffer" placeholder="Type here" class="form-control" id="referredoffer" />
+                            <span id="error-offer" style="color: red;"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add offer</button>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <!-- Card 1 - Referral Amount -->
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Referral Amount</h5>
+                                    <p class="card-text"><%= refOffer %></p> <!-- Replace with your referral amount data -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 - Referred Amount -->
+                        <div class="col-md-6 mb-3">
+                            <div class ="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Referred Amount</h5>
+                                    <p class="card-text"><%= referredOffer %></p> <!-- Replace with your referred amount data -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function validateForm() {
+        const referraloff = document.getElementById('referraloffer').value;
+        const referredoff = document.getElementById('referredoffer').value;
+
+        const errorCategory = document.getElementById("error-category");
+        const errorOffer = document.getElementById("error-offer");
+
+        errorCategory.innerHTML = ""; // Reset the error messages
+        errorOffer.innerHTML = "";
+
+        if (referraloff.trim() == '') {
+            errorCategory.innerHTML = "Referral offer field cannot be empty";
+            return false;
+        } else if (referraloff < 0) {
+            errorCategory.innerHTML = "Referral offer field cannot be less than 0";
+            return false;
+        }
+
+        if (referredoff.trim() == '') {
+            errorOffer.innerHTML = "Referred offer field cannot be empty";
+            return false;
+        } else if (referredoff < 0) {
+            errorOffer.innerHTML = "Referred offer field cannot be less than 0";
+            return false;
+        }
+
+        return true;
+    }
+</script>
+<%- include("../partials/adminfooter") %>

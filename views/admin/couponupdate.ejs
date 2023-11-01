@@ -1,0 +1,33 @@
+<%-include("../partials/adminheader")-%>
+<div class="col-md-9">
+    <form method="post" action="/admin/couponupdate/<%= details._id %>">
+        <div class="mb-4">
+            <label for="CouponCode" class="form-label">Coupon Code</label>
+            <input type="text" placeholder="Type here" class="form-control" value="<%= details.couponCode %>" id="CouponCode" name="couponcode" />
+        </div>
+        <div class="mb-4">
+            <label for="coupondescription" class="form-label">Coupon Description</label>
+            <input type="text" placeholder="Type here" class="form-control" value="<%= details.couponDiscription %>" id="coupondescription" name="coupondescription" />
+        </div>
+        <div class="mb-4">
+            <label for="minAmount" class="form-label">Min Order Amount</label>
+            <input type="text" placeholder="Type here" class="form-control" value="<%= details.minOrderAmount %>" id="minAmount" name="minorder" />
+        </div>
+        <div class="mb-4">
+            <label for="maxAmount" class="form-label">Max Discount Amount</label>
+            <input type="text" placeholder="Type here" class="form-control" value="<%= details.discountPercentage %>" id="maxAmount" name="maxdiscount" />
+        </div>
+        <div class="mb-4">
+            <label for="validfrom" class="form-label">Valid from</label>
+            <input type="date" class="form-control" value="<%= details.createdOn %>" id="validfrom" name="validfrom" />
+        </div>
+        <div class="mb-4">
+            <label for="validto" class="form-label">Valid To</label>
+            <input type="date" class="form-control" value="<%= details.validFor %>" id="validto" name="validto" />
+        </div>
+        <div class="d-grid">
+            <button class="btn btn-primary">Update Coupon</button>
+        </div>
+    </form>
+</div>
+<%-include("../partials/adminfooter")-%>

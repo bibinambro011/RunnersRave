@@ -1,0 +1,132 @@
+<%- include("../partials/adminheader") -%>
+<link rel="stylesheet" href="/public/css/style.css">
+<style>
+body {
+margin-top: 30px;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  margin-top: 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+</style>
+
+<body>
+    <div class="container">
+        <h1>Edit Category</h1>
+        <form action="/admin/categories/<%= category._id %>" method="POST" onsubmit="return validateForm()">
+            <label for="name">Category Name:</label>
+            <input type="text" name="name" id="name" value="<%= category.name %>">
+            <span id="namespan" style="color: red;"></span>
+    
+            <label for="categoryOffer">Category Offer:</label>
+            <input type="number" id="offer" name="categoryOffer" value="<%= category.categoryOffer %>">
+            <span id="spanoffer" style="color: red;"></span>
+    
+            <label for="offerValidFrom">Offer Valid From:</label>
+            <input type="date" id="offerValidFrom" name="offerValidFrom" value="<%= category.offerValidFrom.toISOString().split('T')[0] %>">
+            <span id="spanOfferValidFrom" style="color: red;"></span>
+    
+            <label for="offerValidTo">Offer Valid To:</label>
+            <input type="date" id="offerValidTo" name="offerValidTo" value="<%= category.offerValidTo.toISOString().split('T')[0] %>">
+            <span id="spanOfferValidTo" style="color: red;"></span>
+    
+            <button type="submit">Update Category</button>
+        </form>
+    </div>
+</body>
+
+<script>
+    function validateForm() {
+        const name = document.getElementById('name').value;
+        const categoryOffer = document.getElementById('offer').value;
+        const offerValidFrom = document.getElementById('offerValidFrom').value;
+        const offerValidTo = document.getElementById('offerValidTo').value;
+        const nameSpan = document.getElementById('namespan');
+        const offerSpan = document.getElementById('spanoffer');
+        const offerValidFromSpan = document.getElementById('spanOfferValidFrom');
+        const offerValidToSpan = document.getElementById('spanOfferValidTo');
+
+        // Reset error messages
+        nameSpan.innerHTML = "";
+        offerSpan.innerHTML = "";
+        offerValidFromSpan.innerHTML = "";
+        offerValidToSpan.innerHTML = "";
+
+        // Check if the name is empty
+        if (name.trim() === '') {
+            nameSpan.innerHTML = "Category field cannot be empty";
+            return false;
+        }
+
+        // Check if the category offer is not a negative number
+        if (parseFloat(categoryOffer) < 0) {
+            offerSpan.innerHTML = "Category offer cannot be less than 0";
+            return false;
+        }
+
+        // Check if the category offer is not greater than 75%
+        if (parseFloat(categoryOffer) > 75) {
+            offerSpan.innerHTML = "Category offer cannot be greater than 75%";
+            return false;
+        }
+
+        // Check if both 'offerValidFrom' and 'offerValidTo' dates are selected
+        if (categoryOffer >0 && (!offerValidFrom)) {
+            offerValidFromSpan.innerHTML = "Please select 'Offer From' date";
+            return false;
+        }
+
+        if ( offerValidFrom !="" && (!offerValidTo)) {
+            offerValidToSpan.innerHTML = "Please select 'Offer To' date";
+            return false;
+        }
+
+        return true; // Submit the form if validation passes
+    }
+</script>
+
+<%- include("../partials/adminfooter") -%>
