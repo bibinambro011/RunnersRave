@@ -96,13 +96,13 @@ button:hover {
         offerValidFromSpan.innerHTML = "";
         offerValidToSpan.innerHTML = "";
 
-        // Check if the name is empty
+      
         if (name.trim() === '') {
             nameSpan.innerHTML = "Category field cannot be empty";
             return false;
         }
 
-        // Check if the category offer is not a negative number
+        
         if (parseFloat(categoryOffer) < 0) {
             offerSpan.innerHTML = "Category offer cannot be less than 0";
             return false;
