@@ -116,77 +116,88 @@
   </div>
 </section>
 </main>
+<!-- Your HTML form and elements remain the same -->
+
 <script>
   function validateForm() {
-    const username = document.getElementById('username').value;
-    const city = document.getElementById('city').value;
-    const state = document.getElementById('state').value;
-    const address = document.getElementsByName('address')[0].value;
-    const pincode = document.getElementById('pincode').value;
-    const landmark = document.getElementById('landmark').value;
-    const mobile = document.getElementById('tel').value;
-    const altMobile = document.getElementById('alternate-tel').value;
-    const type = document.getElementsByName('type')[0].value;
-
+    var isValid = true;
+    
+    // Get form input elements
+    var name = document.getElementById("username");
+    var city = document.getElementById("city");
+    var state = document.getElementById("state");
+    var address = document.getElementsByName("address")[0];
+    var pincode = document.getElementById("pincode");
+    var landmark = document.getElementById("landmark");
+    var mobile = document.getElementById("tel");
+    var altMobile = document.getElementById("alternate-tel");
+    
+    // Get error message elements
+    var nameError = document.getElementById("username-error");
+    var cityError = document.getElementById("city-error");
+    var stateError = document.getElementById("state-error");
+    var textareaError = document.getElementById("textarea-error");
+    var pincodeError = document.getElementById("pincode-error");
+    var landmarkError = document.getElementById("landmark-error");
+    var mobileError = document.getElementById("tel-error");
+    var altMobileError = document.getElementById("alternatetel-error");
+    
     // Reset error messages
-    resetErrorMessages();
-
-    let hasErrors = false;
-
-    if (!username) {
-      document.getElementById('username-error').innerText = 'Please enter your username';
-      hasErrors = true;
+    nameError.textContent = "";
+    cityError.textContent = "";
+    stateError.textContent = "";
+    textareaError.textContent = "";
+    pincodeError.textContent = "";
+    landmarkError.textContent = "";
+    mobileError.textContent = "";
+    altMobileError.textContent = "";
+    
+    // Perform validation
+    if (name.value.trim() === "") {
+      nameError.textContent = "Name is required";
+      return isValid = false;
     }
-
-    if (!city) {
-      document.getElementById('city-error').innerText = 'Please enter your city';
-      hasErrors = true;
+    
+   else if (city.value.trim() === "") {
+      cityError.textContent = "City is required";
+     return isValid = false;
     }
-    if (!state) {
-      document.getElementById('state-error').innerText = 'Please enter your state';
-      hasErrors = true;
+    
+    else if (state.value.trim() === "") {
+      stateError.textContent = "State is required";
+      return isValid = false;
     }
-    if (!address) {
-      document.getElementById('textarea-error').innerText = 'Please enter your address';
-      hasErrors = true;
+    
+    else if (address.value.trim() === "") {
+      textareaError.textContent = "Address is required";
+     return isValid = false;
     }
-    if (!pincode) {
-      document.getElementById('pincode-error').innerText = 'Please enter your pincode';
-      hasErrors = true;
+    
+   else if (pincode.value.trim() === "" || !/^\d{6}$/.test(pincode.value.trim())) {
+      pincodeError.textContent = "Valid 6-digit pincode is required";
+      return isValid = false;
     }
-    if (!landmark) {
-      document.getElementById('landmark-error').innerText = 'Please enter your landmark';
-      hasErrors = true;
+    
+    else if (landmark.value.trim() === "") {
+      landmarkError.textContent = "Landmark is required";
+     return  isValid = false;
     }
-
-    // ... Repeat similar checks for other fields ...
-
-    if (!/^[0-9]{10}$/.test(mobile)) {
-      document.getElementById('tel-error').innerText = 'Please enter a valid 10-digit mobile number';
-      hasErrors = true;
+    
+    else if (mobile.value.trim() === "" || !/^\d{10}$/.test(mobile.value.trim())) {
+      mobileError.textContent = "Valid 10-digit mobile number is required";
+      return isValid = false;
     }
-
-    if (!/^[0-9]{10}$/.test(altMobile)) {
-      document.getElementById('alternatetel-error').innerText = 'Please enter a valid 10-digit alternate mobile number';
-      hasErrors = true;
+    
+    else if (altMobile.value.trim() === "" || !/^\d{10}$/.test(mobile.value.trim())) {
+      altMobileError.textContent = "Valid 10-digit alternate mobile number is required";
+      return isValid = false;
     }
-
-    if (hasErrors) {
-      return false;
-    }
-
-    // Additional validation can be added for pincode, etc.
-
-    return true; // Submit the form if all validations pass
+      return isValid;
+    
+    
+    
   }
-
-  function resetErrorMessages() {
-    const errorElements = document.querySelectorAll('[id$="-error"]');
-    errorElements.forEach(element => {
-      element.innerText = '';
-    });
-  }
-</script>
-
+  </script>
+  
 
 <%-include("../partials/userfooter")-%>
