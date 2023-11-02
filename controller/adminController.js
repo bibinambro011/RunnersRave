@@ -565,25 +565,21 @@ exports.getSalesReports = async (req, res) => {
     date: { $gte: new Date(startDate), $lte: new Date(endDate) }
   });
 
-  const encodedData = encodeURIComponent(JSON.stringify(data));
+  
+  req.session.salesData = data;
 
-  const redirectURL = `/admin/sortedByDateredirect?data=${encodedData}`;
+  const redirectURL = `/admin/sortedByDateredirect`;
 
   return res.status(200).json({
     redirectURL,
-    encodedData
+    
   });
 };
 exports.sortedByDateredirect=async(req,res)=>{
-  const dataString = req.query.data; // Assuming data is a JSON string
-  let dataObject;
   
-  try {
-    dataObject = JSON.parse(dataString);
-    
-  } catch (error) {
-    console.error('Error parsing data:', error);
-  }
+  let data = req.session.salesData;
+  
+  
 
-  res.render("admin/salesReports",{data:dataObject})
+  res.render("admin/salesReports",{data})
 }

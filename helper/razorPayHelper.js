@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay');
 const Crypto = require('crypto');
 const Order = require('../model/orderSchema');
+require("dotenv").config();
 
 var instance = new Razorpay({
     key_id:'rzp_test_Q7ihmFOtXoqBDe',
