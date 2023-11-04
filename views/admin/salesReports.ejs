@@ -69,7 +69,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <div class="table-responsive">
-                <table class="table align-middle table-nowrap mb-0">
+                <table class="table align-middle table-nowrap mb-0" id="example">
                     <thead class="table-light">
                         <tr>
                             <th scope="col" class="text-center">
@@ -267,6 +267,15 @@ document.getElementById("invoice").addEventListener("click",()=>{
 
 
 </script>
+<script>
+  $(document).ready(function () {
+      new DataTable('#example');
+
+  })
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
 

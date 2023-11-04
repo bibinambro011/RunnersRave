@@ -1,21 +1,20 @@
 const Product = require("../model/productSchema");
 const User = require("../model/userSchema");
-const addressSchema=require("../model/addresses")
+const addressSchema = require("../model/addresses");
 const Cart = require("../model/cartSchema");
-const Order=require("../model/orderSchema");
-const coupon=require("../model/couponSchema")
+const Order = require("../model/orderSchema");
+const coupon = require("../model/couponSchema");
 
 const addtocart = async (req, res) => {
   const productId = req.params.id;
   const userId = req.session.user[0]._id;
   const exproduct = await Product.findById(productId);
-  const exiStock=exproduct.stock;
+  const exiStock = exproduct.stock;
   const size = exproduct.size;
-  const getimage=exproduct.images[0]
+  const getimage = exproduct.images[0];
 
   try {
     let cart = await Cart.findOne({ userId });
-    
 
     if (!cart) {
       const newCart = new Cart({
@@ -24,12 +23,10 @@ const addtocart = async (req, res) => {
           {
             productId,
             size: size,
-            images:getimage,
+            images: getimage,
             quantity: 1,
             price: exproduct.selling_price,
-
-
-          }
+          },
         ],
       });
       await newCart.save();
@@ -40,17 +37,16 @@ const addtocart = async (req, res) => {
       );
 
       if (existingProduct) {
-        if(exiStock>existingProduct.quantity){
-        existingProduct.quantity++;
+        if (exiStock > existingProduct.quantity) {
+          existingProduct.quantity++;
         }
-        
       } else {
         cart.products.push({
           productId,
           size: size,
           quantity: 1,
-          images:getimage,
-          price: exproduct.selling_price 
+          images: getimage,
+          price: exproduct.selling_price,
         });
       }
 
@@ -60,12 +56,11 @@ const addtocart = async (req, res) => {
     const isAuthenticated = true;
     const products = await Product.find({ status: "unblocked" });
     // res.render("user/home", { isAuthenticated, products });
-    res.redirect("/shop")
+    res.redirect("/shop");
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 const addtocartfrompage = async (req, res) => {
   const { productId, size, quantity } = req.body;
@@ -84,14 +79,12 @@ const addtocartfrompage = async (req, res) => {
             productId,
             size: size,
             quantity: quantity,
-            price: exproduct.selling_price 
+            price: exproduct.selling_price,
           },
         ],
       });
-      
-        await newCart.save();
-    
-    
+
+      await newCart.save();
     } else {
       const existingProduct = cart.products.find(
         (product) =>
@@ -100,13 +93,12 @@ const addtocartfrompage = async (req, res) => {
 
       if (existingProduct) {
         existingProduct.quantity += quantity;
-        
       } else {
         cart.products.push({
           productId,
           quantity: quantity,
           size: size,
-          price: exproduct.selling_price 
+          price: exproduct.selling_price,
         });
       }
 
@@ -121,73 +113,71 @@ const addtocartfrompage = async (req, res) => {
   }
 };
 
-
 const showcart = async (req, res) => {
   const userId = req.session.user[0]._id;
   const cart = await Cart.findOne({ userId: userId }).populate({
     path: "products.productId",
     model: "productCollection",
   });
-  if(cart){
-    const carttototal=cart.totalSum;
-   
+  if (cart) {
+    const carttototal = cart.totalSum;
+
     const isAuthenticated = true;
-    res.render("user/cart", { isAuthenticated, cart,carttototal });
-    
-  }else{
-    const carttototal=0
-   
+    res.render("user/cart", { isAuthenticated, cart, carttototal });
+  } else {
+    const carttototal = 0;
+
     const isAuthenticated = true;
-    res.render("user/cart", { isAuthenticated, cart,carttototal });
+    res.render("user/cart", { isAuthenticated, cart, carttototal });
   }
- 
 };
 
-let originaltotal="";
-const placeorder=async(req,res)=>{
-    const userId = req.session.user[0]._id;
-    const cart = await Cart.findOne({ userId: userId }).populate({
-      path: "products.productId",
-      model: "productCollection",
+let originaltotal = "";
+const placeorder = async (req, res) => {
+  const userId = req.session.user[0]._id;
+  const cart = await Cart.findOne({ userId: userId }).populate({
+    path: "products.productId",
+    model: "productCollection",
+  });
+  let totalPrice = 0;
+  if (cart && cart.products.length > 0) {
+    cart.products.forEach((product) => {
+      const quantity = product.quantity;
+      const price = product.productId.selling_price;
+      const productTotal = quantity * price;
+      totalPrice += productTotal;
     });
-    let totalPrice=0;
-    if (cart && cart.products.length > 0) {
-        cart.products.forEach(product => {
-          const quantity = product.quantity;
-          const price = product.productId.selling_price;
-          const productTotal = quantity * price;
-          totalPrice += productTotal;
-        });
-      }
-    const  carttototal=totalPrice;
-    originaltotal=totalPrice
-    const isAuthenticated = true;
-    const Coupon=await coupon.find();
-   
-  
+  }
+  const carttototal = totalPrice;
+  originaltotal = totalPrice;
+  const isAuthenticated = true;
+  const Coupon = await coupon.find();
 
-    res.render("user/placeOrder", { isAuthenticated, cart,carttototal,Coupon,originaltotal });
-}
+  res.render("user/placeOrder", {
+    isAuthenticated,
+    cart,
+    carttototal,
+    Coupon,
+    originaltotal,
+  });
+};
 
-const cartproductdelete=async(req,res)=>{
-    const userid=req.session.user[0]._id;
-    const id=req.params.id
-    await Cart.updateOne(
-            {
-                userId: userid,
-            },
-            {
-              $pull: { products: { productId: id } },
-            }
-          );
-         
-          res.redirect("/show_cart")
-}
+const cartproductdelete = async (req, res) => {
+  const userid = req.session.user[0]._id;
+  const id = req.params.id;
+  await Cart.updateOne(
+    {
+      userId: userid,
+    },
+    {
+      $pull: { products: { productId: id } },
+    }
+  );
+
+  res.redirect("/show_cart");
+};
 
 //applying coupon
-
-
-
 
 const cartUpdate = async (req, res) => {
   try {
@@ -212,43 +202,48 @@ const cartUpdate = async (req, res) => {
   }
 };
 const checkoutpage = async (req, res) => {
-  const discountamount=req.query.discountAmount;
-  const couponcode=req.query.code
- 
+  const discountamount = req.query.discountAmount;
+  const couponcode = req.query.code;
 
+  if (req.session.user) {
+    const userId = req.session.user[0]._id;
+    const cart = await Cart.findOne({ userId: userId }).populate({
+      path: "products.productId",
+      model: "productCollection",
+    });
 
-    if (req.session.user) {
-      const userId = req.session.user[0]._id;
-      const cart = await Cart.findOne({ userId: userId }).populate({
-        path: "products.productId",
-        model: "productCollection",
+    let totalPrice = 0;
+    if (cart && cart.products.length > 0) {
+      cart.products.forEach((product) => {
+        const quantity = product.quantity;
+        const price = product.productId.selling_price;
+        const productTotal = quantity * price;
+        totalPrice += productTotal;
       });
-     
-      let totalPrice=0;
-      if (cart && cart.products.length > 0) {
-          cart.products.forEach(product => {
-            const quantity = product.quantity;
-            const price = product.productId.selling_price;
-            const productTotal = quantity * price;
-            totalPrice += productTotal;
-          });
-        }
-      const subtotal=totalPrice-discountamount
-      const userData = await addressSchema.find({ userId: userId });
- 
-      let isAuthenticated = true;
-      res.render("user/checkout", {
-        isAuthenticated,
-        userData,
-        cart,
-        discountamount,
-        code:couponcode,
-        subtotal
-        
-      });
-    } else {
-      let isAuthenticated = false;
-      res.render("user/checkout", { isAuthenticated });
     }
-  };
-module.exports = { addtocart, addtocartfrompage, showcart, cartUpdate,placeorder,cartproductdelete,checkoutpage };
+    const subtotal = totalPrice - discountamount;
+    const userData = await addressSchema.find({ userId: userId });
+
+    let isAuthenticated = true;
+    res.render("user/checkout", {
+      isAuthenticated,
+      userData,
+      cart,
+      discountamount,
+      code: couponcode,
+      subtotal,
+    });
+  } else {
+    let isAuthenticated = false;
+    res.render("user/checkout", { isAuthenticated });
+  }
+};
+module.exports = {
+  addtocart,
+  addtocartfrompage,
+  showcart,
+  cartUpdate,
+  placeorder,
+  cartproductdelete,
+  checkoutpage,
+};

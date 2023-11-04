@@ -1,7 +1,25 @@
 
         
         <%-include("../partials/userheader")-%>
-        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+              // Get the URL parameters
+const urlParams = new URLSearchParams(window.location.search);
+const reason = urlParams.get("reason");
+
+// Check if the reason is "blocked by admin"
+if (reason === "blocked by admin") {
+  // Trigger a SweetAlert with the blocked message
+  Swal.fire({
+    icon: 'error',
+    title: 'Blocked by Admin',
+    text: 'You have been blocked by an admin. Please contact support for more information.',
+  });
+}
+        </script>
+      
+
+
 
         
 
