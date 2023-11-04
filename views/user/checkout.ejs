@@ -243,7 +243,6 @@
                           <% userData.forEach((userDocument) => { %>
                             <div class="card">
                               <div class="card-body">
-<<<<<<< HEAD
                                 <!-- Display the data for each document -->
                                 <h5 class="card-title"><%= userDocument.name %></h5>
                                 <p class="card-text"><%= userDocument.state %></p>
@@ -253,22 +252,10 @@
                                 <p class="card-text">mobile: <%= userDocument.mobile %></p>
                       
                             
-=======
->>>>>>> newbranch
                                 <label class="radio-container">
-                                    <input type="radio" name="selectedDocument" value="<%= userDocument._id %>" onclick="sendSelectedAddress('<%= userDocument.address %>','<%= userDocument.city %>','<%= userDocument.pincode %>','<%= userDocument.mobile %>')"  >
-                                    <span class="checkmark"></span>
-                                    <div class="address-details"><br><br>
-                                        <p class="card-title"><%= userDocument.name %></p>
-                                        <p class="card-text"><%= userDocument.state %></p>
-                                        <p class="card-text"><%= userDocument.city %></p>
-                                        <p class="card-text"><%= userDocument.address %></p>
-                                        <p class="card-text"><%= userDocument.pincode %></p>
-                                        <p class="card-text">mobile: <%= userDocument.mobile %></p>
-                                    </div>
+                                  <input type="radio" name="selectedDocument" value="<%= userDocument._id %>" onclick="sendSelectedAddress('<%= userDocument.address %>','<%= userDocument.city %>','<%= userDocument.pincode %>','<%= userDocument.mobile %>')">
+                                  <span class="checkmark"></span>
                                 </label>
-                                
-                                
                               </div>
                             </div>
                           <% }); %>
@@ -329,16 +316,10 @@
     <%
     } else {
 %>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-  Swal.fire({
-    icon: 'info', // You can change 'info' to 'success', 'error', etc. for different icons.
-    title: 'Product already purchased',
-    showConfirmButton: false, // This option hides the "OK" button; you can remove it to show the button.
-    timer: 2000, // Auto-close the alert after 2 seconds (adjust this time as needed).
-  });
-</script>
-
+        <script>
+            alert('Product already purchased.');
+           
+        </script>
     <%
     }
 %>
