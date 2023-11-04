@@ -13,7 +13,7 @@ const islogin = async (req, res, next) => {
 };
 const cartislogin=async(req,res,next)=>{
   if(! req.session.user){
-    res.json({ redirectUrl: "/login" }); // Modify the URL as needed
+    res.json({ redirectUrl: "/login" }); 
   }else {
     next()
   }
@@ -38,7 +38,7 @@ const userexist=async(req,res,next)=>{
     isAuthenticated=true;
     const products = await Product.find({status:"unblocked"});
     
-  // res.render("user/home.ejs", { products,isAuthenticated, });
+  
   res.redirect("/userhome")
   }else{
     const isAuthenticated=false;
@@ -51,5 +51,32 @@ const userexist=async(req,res,next)=>{
   
 }
 
+const userblock=async(req,res,next)=>{
+  if(req.session.user){
+    let user=req.session.user;
+    console.log(user)
+    let email=user[0].email
+    const  data=await User.findOne({email:email});
+    console.log("status is==>",data)
+    if(data.status==true){
+      next()
+    }else{
+      const isAuthenticated=false;
+      const products = await Product.find({status:"unblocked"});
+      res.redirect("/userhome?reason=blocked by admin")
+    }
 
-module.exports = { islogin, islogout,userexist,cartAuth,userexist,cartislogin };
+  }else{
+    next()
+  }
+ 
+}
+
+
+module.exports = { islogin, 
+  islogout,
+  userexist,
+  cartAuth,
+  userexist,
+  cartislogin,
+  userblock };

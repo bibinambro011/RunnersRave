@@ -161,12 +161,7 @@
     </div>
     <main class="main">
         <div class="page-header breadcrumb-wrap">
-            <!-- <div class="container">
-                <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow">Home</a>
-                    <span></span> Pages
-                    <span></span> Account
-                </div> -->
+           
             </div>
         </div>
         <section class="pt-150 pb-150">
@@ -192,9 +187,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="/coupontemplate"><i class="fi-rs-sign-out mr-10"></i>coupons</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Change password</a>
-                                        </li> -->
+                                     
                                         <li class="nav-item">
                                             <a class="nav-link" href="/logout"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
                                         </li>
@@ -208,9 +201,7 @@
                                             <div class="card-header">
                                                 <h5 class="mb-0">Hello <%=locals.username ? username:''%> </h5>
                                             </div>
-                                            <!-- <div class="card-body">
-                                                <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details.</a></p>
-                                            </div> -->
+                                         
                                            
                                         </div>
                                         <div class="card col-lg-4 mt-5">
@@ -266,12 +257,7 @@
                                                                             <%= order.orderStatus %></td>
                                                                         <td ><%= product.price %></td>
                                                                         <td><%= product.quantity * product.price %></td>
-                                                                       
-                                                                        <!-- <% if (order.orderStatus !== 'delivered' && order.orderStatus !== 'Cancelled') { %>
-                                                                            <td id="buttonid"><button type="button"><a data-order-id="<%= order._id %>" data-product-id="<%= product.productId %>" class="btn-small d-block cancel-order-link">Cancel Order</a></button></td>
-                                                                        <% } else { %>
-                                                                            <td></td>
-                                                                        <% } %> -->
+                                                                    
                                                                         <td ><a href="showUserOrder/<%= order._id %>"><button type="button" class="btn btn-success"> details</button></a>
                                                                     </tr>
                                                                     
@@ -358,29 +344,7 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
-                                        <div class="col-lg-8">
-                                            <form class="contact-form-style mt-30 mb-50" action="/passwordchange" method="post" onsubmit="return validateForm()">
-                                                <div class="input-style mb-20">
-                                                    <label>Your current password</label>
-                                                    <input type="password" name="currentpassword" id="currentpassword" placeholder="Enter your current password" class="square">
-                                                    <span id="error-currentpassword" style="color: red;"></span>
-                                                </div>
-                                                <div class="input-style mb-20">
-                                                    <label>Enter new password</label>
-                                                    <input type="password" name="newpassword" id="newpassword" placeholder="Enter new password" class="square">
-                                                    <span id="error-newpassword" style="color: red;"></span>
-                                                </div>
-                                                <div class="input-style mb-20">
-                                                    <label>Confirm password</label>
-                                                    <input type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm your password" class="square">
-                                                    <span id="error-confirmpassword" style="color: red;"></span>
-                                                </div>
-                                                <button class="submit submit-auto-width" type="submit">Submit</button>
-                                            </form>
-                                        </div>
-                                    </div> -->
-                                    
+                                  
                         </div>
                     </div>
                 </div>
@@ -553,42 +517,12 @@
 
 
 
-//     const cancelOrderButtons = document.querySelectorAll('.cancel-order-link');
-
-// cancelOrderButtons.forEach(button => {
-//   button.addEventListener('click', async () => {
-//     const orderId = button.dataset.orderId;
-//     const statusElement = document.getElementById(`statusid_${orderId}`);
-//     const buttonid=document.getElementById("buttonid")
-    
-
-//     try {
-//       const response = await fetch(`/cancel-order/${orderId}`, {
-//         method: 'POST',
-//       });
-
-//       if (response.ok) {
-//         statusElement.innerHTML = "Cancelled";
-//         if( statusElement.innerHTML == "Cancelled"){
-//             buttonid.style.visibility="hidden"
-//         }
-        
-  
-
-//       } else {
-//         console.error('Failed to cancel order.');
-//       }
-//     } catch (error) {
-//       console.error('Error cancelling order:', error);
-//     }
-//   });
-// });
-
 
 </script>
 <script>
     $(document).ready(function () {
         new DataTable('#example');
+        
 
     })
 </script>
