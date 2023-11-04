@@ -251,7 +251,7 @@
                                 <p class="card-text"><%= userDocument.pincode %></p>
                                 <p class="card-text">mobile: <%= userDocument.mobile %></p>
                       
-                                <!-- Radio button to select this document -->
+                            
                                 <label class="radio-container">
                                   <input type="radio" name="selectedDocument" value="<%= userDocument._id %>" onclick="sendSelectedAddress('<%= userDocument.address %>','<%= userDocument.city %>','<%= userDocument.pincode %>','<%= userDocument.mobile %>')">
                                   <span class="checkmark"></span>
