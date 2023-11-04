@@ -15,11 +15,6 @@ router.get("/userhome", controller.userhome);
 router.get("/signup", controller.registerpage);
 router.get("/login", middleware.userexist, controller.loginpage);
 router.post("/user_registration", controller.user_registration);
-
-router.get("/forgotpassword", controller.forgotpassword);
-router.post("/forgetpasswordotp", controller.forgetpasswordotp);
-router.post("/reset_password", controller.resetPassword);
-
 router.post("/login", middleware.userexist, controller.userlogin);
 router.get("/logout", middleware.islogout, controller.userlogout);
 router.get(
@@ -163,10 +158,6 @@ router.get(
   middleware.islogin,
   orderController.showUserOrder
 );
-
-router.get("/regenerateotp", controller.regenerateOtp);
-
-router.get("/addtocart/:id", middleware.islogin, cartController.addtocart);
 
 router.post(
   "/orderUpdatedStatusDetails/:id",
