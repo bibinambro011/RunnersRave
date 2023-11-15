@@ -28,7 +28,7 @@ router.get(
 router.get("/shop", middleware.userblock, controller.shop);
 router.get(
   "/productCategory/:id",
-
+  middleware.userblock,
   controller.productCategory
 );
 router.get("/productBrand", middleware.userblock, controller.productBrand);
@@ -90,52 +90,22 @@ router.get(
   middleware.islogin,
   cartController.cartproductdelete
 );
-router.get(
-  "/cartRedirection",
-  middleware.userblock,
-  middleware.islogin,
-  controller.cartRedirection
-);
-router.get(
-  "/addtocart/:id",
-  middleware.userblock,
-  middleware.islogin,
-  cartController.addtocart
-);
+router.get("/cartRedirection",middleware.userblock, middleware.islogin, controller.cartRedirection);
+router.get("/addtocart/:id",middleware.userblock, middleware.islogin, cartController.addtocart);
 
 //address
 
-router.get("/editaddress", middleware.userblock, controller.editaddress);
-router.get(
-  "/editaddress/:id",
-  middleware.userblock,
-  middleware.islogin,
-  controller.editaddress_id
-);
-router.post(
-  "/user_address",
-  middleware.userblock,
-  middleware.islogin,
-  controller.user_address
-);
-router.get(
-  "/addAddress",
-  middleware.userblock,
-  middleware.islogin,
-  controller.addAddress
-);
+router.get("/editaddress",middleware.userblock, controller.editaddress);
+router.get("/editaddress/:id",middleware.userblock, middleware.islogin, controller.editaddress_id);
+router.post("/user_address",middleware.userblock, middleware.islogin, controller.user_address);
+router.get("/addAddress",middleware.userblock, middleware.islogin, controller.addAddress);
 router.post(
   "/updatedAddress/:id",
   middleware.userblock,
   middleware.islogin,
   controller.updatedAddress
 );
-router.get(
-  "/deleteaddress/:id",
-  middleware.userblock,
-  middleware.islogin,
-  controller.deleteaddress
-);
+router.get("/deleteaddress/:id",middleware.userblock, middleware.islogin, controller.deleteaddress);
 router.post(
   "/profileafteredit",
   middleware.userblock,
@@ -145,12 +115,7 @@ router.post(
 
 //payment
 
-router.get(
-  "/checkoutpage",
-  middleware.userblock,
-  middleware.islogin,
-  cartController.checkoutpage
-);
+router.get("/checkoutpage",middleware.userblock, middleware.islogin, cartController.checkoutpage);
 router.get(
   "/paymentsuccesfull",
   middleware.userblock,
@@ -163,11 +128,7 @@ router.post(
   middleware.islogin,
   orderController.verifyOnlinePayment
 );
-router.post(
-  "/paymentFailureHandler",
-  middleware.userblock,
-  orderController.paymentFailureHandler
-);
+router.post("/paymentFailureHandler",middleware.userblock, orderController.paymentFailureHandler);
 router.get(
   "/paymentFailure",
   middleware.userblock,
@@ -177,12 +138,7 @@ router.get(
 
 //orders
 
-router.post(
-  "/orderdetails",
-  middleware.userblock,
-  middleware.islogin,
-  orderController.orderdetails
-);
+router.post("/orderdetails",middleware.userblock, middleware.islogin, orderController.orderdetails);
 router.post(
   "/cancel-order/:orderId",
   middleware.userblock,
@@ -209,12 +165,7 @@ router.post(
   middleware.islogin,
   orderController.orderUpdatedStatusDetails
 );
-router.get(
-  "/placeorder",
-  middleware.userblock,
-  middleware.islogin,
-  cartController.placeorder
-);
+router.get("/placeorder",middleware.userblock, middleware.islogin, cartController.placeorder);
 
 //password change
 router.get(
@@ -237,20 +188,10 @@ router.get(
   middleware.islogin,
   couponController.coupontemplate
 );
-router.post(
-  "/applyCoupon",
-  middleware.userblock,
-  middleware.islogin,
-  couponController.applyCoupon
-);
+router.post("/applyCoupon",middleware.userblock, middleware.islogin, couponController.applyCoupon);
 
 //wallet
-router.get(
-  "/wallet",
-  middleware.userblock,
-  middleware.islogin,
-  walletController.userwallet
-);
+router.get("/wallet",middleware.userblock, middleware.islogin, walletController.userwallet);
 router.get(
   "/lowWalletbalance",
   middleware.userblock,
