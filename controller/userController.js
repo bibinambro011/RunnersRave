@@ -429,10 +429,7 @@ const shop = async (req, res) => {
 
     const skip = (page - 1) * ITEMS_PER_PAGE; // Calculate the number of items to skip
     const products = await Product.find({ status: "unblocked" })
-      // .skip(skip)
-      // .limit(ITEMS_PER_PAGE);
-
-    // Count total products for calculating total pages
+     
     const totalProductsCount = await Product.countDocuments({
       status: "unblocked",
     });
@@ -464,12 +461,10 @@ const productCategory = async (req, res) => {
     let products;
     if (req.session.user) {
       products = await Product.find({ category: id })
-        // .skip(skip)
-        // .limit(ITEMS_PER_PAGE);
+       
     } else {
       products = await Product.find({ category: id, status: "unblocked" })
-        // .skip(skip)
-        // .limit(ITEMS_PER_PAGE);
+        
     }
 
     // Count total products for calculating total pages
