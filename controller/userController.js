@@ -11,9 +11,9 @@ const { json } = require("express/lib/response");
 const Order = require("../model/orderSchema");
 require("dotenv").config();
 
-const accountSid = "AC7ed272bfc72e23f5ea62dde1140be05b";
-const authToken = "58b139fb5d740b49a36f8f967f3c0cc9";
-const serviceSid="VAe65c655cb619967cc167a5f1d80aa8f1";
+const accountSid = process.env.ACCOUNT_SID;
+const authToken = process.env.AUTH_TOKEN;
+const serviceSid=process.env.VERIFY_SID;
 
 const client = twilio(accountSid, authToken);
 let generatedotp = "";
