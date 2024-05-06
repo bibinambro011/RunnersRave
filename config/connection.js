@@ -9,7 +9,7 @@ const dbOptions = {
 
 const connectToDatabase = () => {
   mongoose
-    .connect(process.env.DB_URL, {
+    .connect("mongodb+srv://bibinambro011:2qDagDFW2ZkPAtaR@cluster0.kfuoxau.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     })
